@@ -1,6 +1,8 @@
 ## Standup Times
-Tuesdays 13:45. 
-Friday 13:00. 
+Tuesdays 13:45
+
+Friday 13:00
+
 Other two on slack 21:30. 
 
 ## Oink Guidelines
