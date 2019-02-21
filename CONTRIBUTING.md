@@ -10,3 +10,4 @@ Other two on slack 21:30.
 - Done means that it complies, that you have tested it at least once (and it works :), and compliles with the master branch.
 - Every feature is its own branch.
 - We will resolve any disputse with a democratic vote.
+- Standup procedure: scrum master takes attendanc, we document when and where, everyone answers three questions.
