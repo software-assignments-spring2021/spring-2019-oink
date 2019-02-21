@@ -34,8 +34,4 @@ For more detailed information, consult our [CONTRIBUTING.md](https://github.com/
 A link to the requirements of this project can be found in our [REQUIREMENTS.md](https://github.com/nyu-software-engineering/oink/blob/master/REQUIREMENTS.md) 
 
 ## Oink Team 
-Jessica Ingraham 
-Kevin Xu 
-Sam Phelan 
-Dorna Mu 
-Josephine Floyd
+Jessica Ingraham, Kevin Xu, Sam Phelan, Dorna Mu, Josephine Floyd
