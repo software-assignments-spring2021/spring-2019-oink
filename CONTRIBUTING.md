@@ -1,7 +1,7 @@
 ## Standup Times
-Tuesdays 13:45
-Friday 13:00
-Other two on slack 21:30
+Tuesdays 13:45. 
+Friday 13:00. 
+Other two on slack 21:30. 
 
 ## Oink Guidelines
 - If you don't think you will complete an issue, you must inform the rest of the team at least two days in advance.
