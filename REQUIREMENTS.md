@@ -43,3 +43,19 @@ All 4 of these diagrams are visually explained in the following UML diagram:
 ## Domain Model
 
 ![Domain Model](UML/Domain_Model.png)
+
+## Stakeholder Interviews
+Features to think about: 
+* If a bill has a tip, that also needs to be split
+
+This project would be best as a mobile app and an IOU feature would good. If we have time with the project, we should try to add payment information with a sanbox account or some way to create a fake account.
+
+This app can also be used for situations such as tracking money on a laundry card, groceries, apartment essentials, or furniture costs. 
+
+## Functional Requirements
+The system will let a user create an account and then log in. The system will let the user add friends, and add groups of friends, to their profile. The system will allow the user to split a new bill and create a new transaction for each person that bill is being split with. The system will track how much each user has paid and any trends between friends. The system will allow the user to see their payment history. All the information will be stored in the database for the system.
+
+We will use the MERN stack but with MySQL instead of Mongodb. We can use the NYU cims servers for a database server and deploy the app to Heroku.
+
+## Non-functional Requirements
+We may have to cut back on features if we run into any blocks with our system but that will be addressed as the project goes on and we can see our progress. We don't have the power to be able to make this project "scalable" and if we are able to implement a payment system, there are limitations with authorization, security, etc. This project should be able to port to different browers, and possibly different phones models as well.
