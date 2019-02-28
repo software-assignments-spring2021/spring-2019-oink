@@ -1,0 +1,31 @@
+{
+  "name": "oink",
+  "version": "1.0.0",
+  "description": "dependencies for Oink - a bill splitter",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nyu-software-engineering/oink.git"
+  },
+  "author": "Oink team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nyu-software-engineering/oink/issues"
+  },
+  "homepage": "https://github.com/nyu-software-engineering/oink#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.16",
+    "react": "^16.8.3"
+  },
+  "devDependencies": {
+    "mocha": "^6.0.2"
+  }
+}
