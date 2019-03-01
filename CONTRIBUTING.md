@@ -11,3 +11,17 @@ Mondays and Wednesdays 21:30.
 - Every feature is its own branch.
 - We will resolve any dispute with a democratic vote.
 - Standup procedure: scrum master takes attendance, documents when and where, poses three questions, everyone else answers in person and on the slack.
+
+## Style guidelines
+* 4 spaces for each indent
+* camel case for variable names and function names
+* curly braces will be 
+```javascript
+  function myFunction(){
+    if (condition){
+      /*body*/
+    }else{
+      /*body*/
+    }
+  }
+```
