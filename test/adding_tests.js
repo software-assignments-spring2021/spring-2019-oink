@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect; 
-const app = require("app.js");
+const app = require("../test_app.js");
 
 describe('Oink Adding Tests', function(){
 	// CHECK COLLISION FUNCTION TESTA
