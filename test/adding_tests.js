@@ -1,16 +1,17 @@
 const chai = require('chai');
 const expect = chai.expect; 
+const app = require("../app.js");
 
 describe('Oink Adding Tests', function(){
 	// CHECK COLLISION FUNCTION TESTA
 	describe('addFriend', function(){
 		// DOES NOT ALLOW HEAD OF SNAKE TO EQUAL ANY PART OF THE SNAKE'S BODY
-		it('returns Friend object of newly added Friend', function(){
+		it('returns true if Friend added correctly', function(){
 			const friend = {};
 			friend.username = "testName";
 			friend.email = "test@email.com";
 			const res = app.addFriend(friend.username);
-			expect(res).to.equal(friend);
+			expect(res).to.be.true;
 		});
 	});
 
