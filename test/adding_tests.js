@@ -26,4 +26,32 @@ describe('Oink Adding Tests', function(){
 			expect(res).to.be.true;
 		});	
 	});
+
+	describe('createUser', function(){
+		it('adds a new user to the database', function(){
+			const newUser = {username:"testUser", password:"salt and hash", email:"test@email.com"};
+			const res = app.createUser(newUser);
+			expect(res).to.be.true;
+		});
+
+		it("doesn't add the user if username or password is not present", function(){
+			const incorrect = {username:"no password"};
+			const res = app.createUser(incorrect);
+			expect(res).to.be.false;
+		});	
+	});
+
+	describe('findUser', function(){
+		it('finds and returns a user given a username', function(){
+			const username = "testUser";
+			const res = app.findUser(username);
+			expect(res).to.eql({username:username, friends:[], groups:[], bills:[]});
+		});
+
+		it("should return false if no username is given", function(){
+			const res = app.findUser();
+			expect(res).to.be.false;
+		});
+
+	});
 });
