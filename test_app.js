@@ -1,8 +1,12 @@
 function addFriend(friend){
+	if(friend == null)
+		return false;
 	return true;
 }
 
 function addGroup(name, group){
+	if(group == null)
+		return false;
 	return true;
 }
 

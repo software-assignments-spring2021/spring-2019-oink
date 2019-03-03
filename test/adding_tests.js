@@ -3,9 +3,7 @@ const expect = chai.expect;
 const app = require("../test_app.js");
 
 describe('Oink Adding Tests', function(){
-	// CHECK COLLISION FUNCTION TESTA
 	describe('addFriend', function(){
-		// DOES NOT ALLOW HEAD OF SNAKE TO EQUAL ANY PART OF THE SNAKE'S BODY
 		it('returns true if Friend added correctly', function(){
 			const friend = {};
 			friend.username = "testName";
@@ -13,10 +11,14 @@ describe('Oink Adding Tests', function(){
 			const res = app.addFriend(friend.username);
 			expect(res).to.be.true;
 		});
+
+		it('returns false if no parameters passed in', function(){
+			const res = app.addFriend();
+			expect(res).to.be.false;
+		});
 	});
 
 	describe('addGroup', function(){
-		// DOES NOT ALLOW SNAKE TO EXCEED BOUNDS OF CANVAS FRAME
 		it('returns true if group created successfully', function(){
 			const friend1 = {username: "testName", email: "test@email.com"};
 			const friend2 = {username: "testName2", email: "test2@email.com"};
@@ -25,6 +27,11 @@ describe('Oink Adding Tests', function(){
 			const res = app.addGroup(name, friends);
 			expect(res).to.be.true;
 		});	
+
+		it('returns false if no parameters passed in', function(){
+			const res = app.addGroup();
+			expect(res).to.be.false;
+		});
 	});
 
 	describe('createUser', function(){

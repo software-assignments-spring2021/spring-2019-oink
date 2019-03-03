@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const passportLocalMongoose = require('passport-local-mongoose');
 
 const TransactionSchema = new Schema({
 	//will be referenced by the bill
@@ -48,6 +48,10 @@ const UserSchema = new Schema({
 
 });
 
+//Plug-Ins
+UserSchema.plugin(passportLocalMongoose);
+
+//Models
 mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Bill', BillSchema);
 mongoose.model('Group', GroupSchema);

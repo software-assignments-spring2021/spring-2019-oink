@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-require('./schemas');
 
 //find all the routes
 const indexRouter = require('./routes/index');
