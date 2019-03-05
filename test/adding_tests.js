@@ -62,4 +62,40 @@ describe('Oink Adding Tests', function(){
 		});
 
 	});
+
+	describe('addBill', function(){
+		it('returns true if split Bill added correctly', function(){
+			const bill = {};
+			bill.amount = 12.34;
+			const friend1 = {username: "testName", email: "test@email.com"};
+			const friend2 = {username: "testName2", email: "test2@email.com"};
+			bill.splitWith = ["friend1", "friend2"];
+			bill.notSplit = false;
+			const res = app.addBill(bill.amount, bill);
+			expect(res).to.be.true;
+		});
+
+		it('returns true if unsplit Bill added correctly', function(){
+			const bill = {};
+			bill.amount = 12.34;
+			const friend1 = {username: "testName", email: "test@email.com"};
+			bill.notSplit = true;
+			bill.paidBy = "friend1";
+			const res = app.addBill(bill.amount, bill);
+			expect(res).to.be.true;
+		});
+
+		it('returns false if no parameters passed in', function(){
+			const res = app.addBill();
+			expect(res).to.be.false;
+		});
+	});
+
+	describe('createSession', function(){
+		it('returns true if session is created', function(){
+			const res = app.createSession();
+			expect(res).to.be.true;
+		});
+	});
+	
 });
