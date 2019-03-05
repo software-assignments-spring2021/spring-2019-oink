@@ -10,7 +10,9 @@ function addGroup(name, group){
 	return true;
 }
 
-function addBill(bill){
+function addBill(amount, bill){
+	if(bill == null)
+		return false;
 	return true;
 }
 
@@ -19,7 +21,24 @@ function addFriendToGroup(friend){
 }
 
 function createSession(){
-	return true;
+	var express = require('express');
+	var session = require('express-session')
+
+	try {
+		var app = express();
+		app.use(session({
+			//genid: function(req) {
+		  	//	const id = genuuid(); // use UUIDs for session IDs
+			//},
+			secret: 'shhh',
+			proxy: true,
+			resave: true,
+			saveUninitialized: true
+		}))
+		return true;
+	}
+	finally {
+	}
 }
 
 
