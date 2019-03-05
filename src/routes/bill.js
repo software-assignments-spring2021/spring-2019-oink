@@ -3,12 +3,12 @@ const router = express.Router();
 
 router.post('/add', (req, res, next) => {
   res.send('');
-  next();
+  //next();
 });
 
 router.post('/split', (req, res, next)=>{
 	res.send('');
-	next();
+	//next();
 });
 
 module.exports = router;

@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const router = express.Router(); 
 require('../schemas'); 
 
-
 const User = mongoose.model("User");
 
 const passport = require('passport');
@@ -18,7 +17,7 @@ passport.deserializeUser(User.deserializeUser());
 
 router.get('/register', (req, res, next) => {
 	res.send('Register Page');
-  	next();
+  	//next();
 });
 
 router.post('/register', (req, res) => {
@@ -33,7 +32,7 @@ router.post('/register', (req, res) => {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						res.redirect('/');
+						res.redirect('/:username');
 					}
 				});
 			});
@@ -43,7 +42,7 @@ router.post('/register', (req, res) => {
 
 router.get('/login', (req, res, next) => {
 	res.send('Login');
-  	next();
+  	//next();
 });
 
 router.post('/login', (req, res, next) => {
@@ -56,7 +55,7 @@ router.post('/login', (req, res, next) => {
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					res.redirect('/'); // REDIRECT TO HOME PAGE
+					res.redirect('/:username'); // REDIRECT TO HOME PAGE
 				}
 			});
 		}
@@ -65,14 +64,20 @@ router.post('/login', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
   	res.send('');
-  	next();
+  	//next();
 });
-/*
+
 router.get('/:username', (req, res, next) => {
 	const username = req.params.username;
-
-	res.send(`profile page for ${username}`);
-  	next();
+	User.findOne({'username': username}, function(err, user, count){
+		if(user != null){
+			res.send(`profile page for ${username}`);
+		}
+		else{
+			res.send('404 Error');
+		}
+		//next();	
+	});
 });
-*/
+
 module.exports = router;

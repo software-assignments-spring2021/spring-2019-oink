@@ -10,7 +10,9 @@ function addGroup(name, group){
 	return true;
 }
 
-function addBill(bill){
+function addBill(amount, bill){
+	if(bill == null)
+		return false;
 	return true;
 }
 
@@ -19,7 +21,24 @@ function addFriendToGroup(friend){
 }
 
 function createSession(){
-	return true;
+	var express = require('express');
+	var session = require('express-session')
+
+	try {
+		var app = express();
+		app.use(session({
+			//genid: function(req) {
+		  	//	const id = genuuid(); // use UUIDs for session IDs
+			//},
+			secret: 'shhh',
+			proxy: true,
+			resave: true,
+			saveUninitialized: true
+		}))
+		return true;
+	}
+	finally {
+	}
 }
 
 
@@ -62,6 +81,20 @@ function saveToDatabase(schemaName, object){
 
 }
 
+function splitBillEvenly (bill, number) {
+	//var totalCost = parseInt(bill);
+	//var n =  parseInt(number);
+	//var value = totalCost/n;
+	//return 25;
+	return bill/number;
+}
+
+function splitBillUnevenly (bill, percentage) {
+	return (bill*(percentage/100));
+	//return 50;
+}
+
+
 module.exports = {
 	addFriend: addFriend,
 	addGroup: addGroup,
@@ -69,5 +102,7 @@ module.exports = {
 	addFriendToGroup: addFriendToGroup,
 	createSession: createSession,
 	createUser:createUser,
-	findUser:findUser
+	findUser:findUser,
+	splitBillEvenly: splitBillEvenly,
+	splitBillUnevenly: splitBillUnevenly,
 };
