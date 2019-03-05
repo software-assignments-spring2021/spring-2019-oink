@@ -56,6 +56,12 @@ function findUser(username){
 
 }
 
+function calculateBill(){
+
+	return true;
+	
+}
+
 function saveToDatabase(schemaName, object){
 
 	return true;
