@@ -62,4 +62,23 @@ describe('Oink Adding Tests', function(){
 		});
 
 	});
+
+	describe('splitBillEvenly', function(){
+		it('returns how much each person should pay if the bill is split evenly among n people', function(){
+			const bill = 100;
+			const number = 4;
+			const res = app.splitBillEvenly(bill, number);
+			expect(res).to.eql(25);
+		})
+	})
+
+	describe('splitBillUnevenly', function(){
+		it('returns how the person should pay according to the specified percentage', function(){
+			const bill = 100;
+			const percentage = 50;
+			const res = app.splitBillUnevenly(bill, percentage);
+			expect(res).to.eql(50);
+		})
+	})
+	
 });

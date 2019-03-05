@@ -62,6 +62,20 @@ function saveToDatabase(schemaName, object){
 
 }
 
+function splitBillEvenly (bill, number) {
+	//var totalCost = parseInt(bill);
+	//var n =  parseInt(number);
+	//var value = totalCost/n;
+	//return 25;
+	return bill/number;
+}
+
+function splitBillUnevenly (bill, percentage) {
+	return (bill*(percentage/100));
+	//return 50;
+}
+
+
 module.exports = {
 	addFriend: addFriend,
 	addGroup: addGroup,
@@ -69,5 +83,7 @@ module.exports = {
 	addFriendToGroup: addFriendToGroup,
 	createSession: createSession,
 	createUser:createUser,
-	findUser:findUser
+	findUser:findUser,
+	splitBillEvenly: splitBillEvenly,
+	splitBillUnevenly: splitBillUnevenly,
 };

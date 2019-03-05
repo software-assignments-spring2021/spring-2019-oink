@@ -9,8 +9,8 @@
   "scripts": {
     "test": "mocha",
     "test-with-coverage": "nyc --reporter=text mocha",
-    "start":"node src/app.js",
-    "persist":"nodemon src/app.js"
+    "start": "node src/app.js",
+    "persist": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
