@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-require('./schemas');
 
 //find all the routes
 const indexRouter = require('./routes/index');
@@ -25,7 +24,10 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/bill', billRouter);
 
-
+// 404 Page Handler
+app.use((req, res) => {
+	res.send("404 Error");
+});
 
 
 app.listen(process.env.PORT || 3000, function(){
