@@ -48,6 +48,11 @@ const UserSchema = new Schema({
 
 });
 
+const FriendSchema = new Schema({
+	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+	balance: Number
+});
+
 //Plug-Ins
 UserSchema.plugin(passportLocalMongoose);
 
@@ -56,6 +61,7 @@ mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Bill', BillSchema);
 mongoose.model('Group', GroupSchema);
 mongoose.model('User', UserSchema);
+mongoose.model('Friend', FriendSchema);
 
 
 mongoose.connect('mongodb://localhost/oink_dev');
