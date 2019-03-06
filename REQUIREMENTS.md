@@ -40,6 +40,8 @@ All 4 of these diagrams are visually explained in the following UML diagram:
 
 ![Payer - Use Case Diagram](UML/Use_Cases.png)
 
+An additional diagram for Friend users, or the other users that are a part of a bill besides its creator, is below:
+
 ![Friend - Use Case Diagram](UML/friendUseCase.png)
 
 ## Domain Model
