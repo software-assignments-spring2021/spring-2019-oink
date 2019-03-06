@@ -15,9 +15,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-router.get('/register', (req, res, next) => {
+router.get('/register', (req, res) => {
 	res.send('Register Page');
-  	//next();
 });
 
 router.post('/register', (req, res) => {
@@ -40,12 +39,11 @@ router.post('/register', (req, res) => {
 	});
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/login', (req, res) => {
 	res.send('Login');
-  	//next();
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
   	passport.authenticate('local', function(err, user){
 		if(!user){
 			//res.render('login', {message: "Error processing Login request"});
@@ -59,15 +57,14 @@ router.post('/login', (req, res, next) => {
 				}
 			});
 		}
-	})(req, res, next);
+	})(req, res);
 });
 
-router.get('/logout', (req, res, next) => {
+router.get('/logout', (req, res) => {
   	res.send('');
-  	//next();
 });
 
-router.get('/:username', (req, res, next) => {
+router.get('/:username', (req, res) => {
 	const username = req.params.username;
 	User.findOne({'username': username}, function(err, user, count){
 		if(user != null){
@@ -76,7 +73,6 @@ router.get('/:username', (req, res, next) => {
 		else{
 			res.send('404 Error');
 		}
-		//next();	
 	});
 });
 
