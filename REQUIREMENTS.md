@@ -38,7 +38,9 @@ Fred and George decide to travel for spring break to different countries. They a
 
 All 4 of these diagrams are visually explained in the following UML diagram:
 
-![Use Case Diagram](UML/Use_Cases.png)
+![Payer - Use Case Diagram](UML/Use_Cases.png)
+
+![Friend - Use Case Diagram](UML/friendUseCase.png)
 
 ## Domain Model
 
