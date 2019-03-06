@@ -20,13 +20,16 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-	user = {username: req.body.username, email: req.body.email};
+	user = {username: req.body.username, email: req.body.email, password: req.body.password};
+	console.log(user, req.body.password);
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
+			res.send(err)
 			//res.render('register', {message: 'ERROR IN CREATING ACCOUNT'});
 			// If error, reload page with error message
 		}
 		else{
+			console.log("authenticating");
 			passport.authenticate('local')(req, res, function() {
 				req.session.regenerate((err) => {
 					if(!err){
