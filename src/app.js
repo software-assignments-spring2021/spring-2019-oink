@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const session = require('express-session');
+
 
 //find all the routes
 const indexRouter = require('./routes/index');
@@ -15,8 +17,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 //read in headers as objects
 app.use(express.urlencoded({ extended: false }));
 
+//add sessions
+app.use(session({
+    secret: 'secrets should be kept between friends',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 
+//for debugging
+app.use(function(req, res, next){
+
+	console.log(`request made to ${req.path}`)
+	next();
+});
 /*********************************/
 
 /*Set routes*/
