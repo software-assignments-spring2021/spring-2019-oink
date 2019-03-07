@@ -1,7 +1,7 @@
 ## Standup Times
 Tuesdays 13:45
 
-Friday 13:00
+Thursdays 13:45
 
 Mondays and Wednesdays 21:30. 
 
