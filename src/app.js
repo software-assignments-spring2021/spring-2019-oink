@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const session = require('express-session');
+
 
 //find all the routes
 const indexRouter = require('./routes/index');

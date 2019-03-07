@@ -20,8 +20,7 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-	user = {username: req.body.username, email: req.body.email, password: req.body.password};
-	console.log(user, req.body.password);
+	user = {username: req.body.username, email: req.body.email};
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
 			res.send(err)
@@ -34,7 +33,8 @@ router.post('/register', (req, res) => {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						res.redirect('/:username');
+						console.log(user);
+						res.redirect(`/user/${user.username}`);
 					}
 				});
 			});

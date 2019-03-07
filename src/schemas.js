@@ -41,7 +41,7 @@ const GroupSchema = new Schema({
 const UserSchema = new Schema({
 	username:{type: String, unique:true, required:true, index:true},
 	email:{type:String, unique:true, index:true},
-	password:{type:String, required:true},
+	//password:{type:String, required:true},
 	groups:[GroupSchema],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	friends:[String]
