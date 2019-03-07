@@ -28,12 +28,10 @@ router.post('/register', (req, res) => {
 			// If error, reload page with error message
 		}
 		else{
-			console.log("authenticating");
 			passport.authenticate('local')(req, res, function() {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						console.log(user);
 						res.redirect(`/user/${user.username}`);
 					}
 				});
@@ -49,6 +47,7 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   	passport.authenticate('local', function(err, user){
 		if(!user){
+			res.send("no user found");
 			//res.render('login', {message: "Error processing Login request"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
@@ -56,7 +55,7 @@ router.post('/login', (req, res) => {
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					res.redirect('/:username'); // REDIRECT TO HOME PAGE
+					res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
 				}
 			});
 		}
@@ -64,7 +63,16 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  	res.send('');
+
+  	req.session.destroy(function(err){
+		if(err){
+			console.log(err);
+		}
+		else{
+			res.redirect('/');
+		}
+	});
+	
 });
 
 router.get('/:username', (req, res) => {
