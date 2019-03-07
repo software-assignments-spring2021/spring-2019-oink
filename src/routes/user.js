@@ -24,7 +24,7 @@ router.post('/register', (req, res) => {
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
 			res.send(err)
-			//res.render('register', {message: 'ERROR IN CREATING ACCOUNT'});
+			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
 			// If error, reload page with error message
 		}
 		else{
@@ -48,7 +48,7 @@ router.post('/login', (req, res) => {
   	passport.authenticate('local', function(err, user){
 		if(!user){
 			res.send("no user found");
-			//res.render('login', {message: "Error processing Login request"});
+			//res.render('login', {errMessage: "Error processing Login request"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
@@ -62,6 +62,7 @@ router.post('/login', (req, res) => {
 	})(req, res);
 });
 
+
 router.get('/logout', (req, res) => {
 
   	req.session.destroy(function(err){
@@ -72,19 +73,26 @@ router.get('/logout', (req, res) => {
 			res.redirect('/');
 		}
 	});
-	
+
 });
 
 router.get('/:username', (req, res) => {
 	const username = req.params.username;
-	User.findOne({'username': username}, function(err, user, count){
-		if(user != null){
-			res.send(`profile page for ${username}`);
-		}
-		else{
-			res.send('404 Error');
-		}
-	});
+	//if it's the session user, there's no need to go to the database again
+	if(username === req.session.user.username){
+		res.send(`profile for session user ${username}`);
+	}
+	else{
+		User.findOne({'username': username}, function(err, user, count){
+			if(user != null){
+				res.send(`profile page for ${username}`);
+				//res.render('profile', {user:user})
+			}
+			else{
+				res.send('404 Error');
+			}
+		});
+	}
 });
 
 module.exports = router;

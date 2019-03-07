@@ -6,7 +6,8 @@ const TransactionSchema = new Schema({
 	//will be referenced by the bill
 	amount:{type: Number, required:true},
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
-	isPaid:{type:Boolean}
+	isPaid:{type:Boolean},
+	bill:{type: Schema.Types.ObjectId, ref:"Bill"}
 });
 
 const BillSchema = new Schema({
@@ -16,9 +17,6 @@ const BillSchema = new Schema({
 	//list of users including user that added the bill, 
 	//if the two involved will be working on a payback, this will be only two users
 	splitWith:[{type:String, required:true}],
-
-	//list of transactions the bill is split into, only one for "payback"
-	transactions:[{type: Schema.Types.ObjectId, ref:"Transaction"}], 
 
 	//if the bill is not being split and is added to two users running totals
 	
@@ -44,6 +42,7 @@ const UserSchema = new Schema({
 	//password:{type:String, required:true},
 	groups:[GroupSchema],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
+	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
 	friends:[String]
 
 });
@@ -57,8 +56,8 @@ const FriendSchema = new Schema({
 UserSchema.plugin(passportLocalMongoose);
 
 //Models
-mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Bill', BillSchema);
+mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Group', GroupSchema);
 mongoose.model('User', UserSchema);
 mongoose.model('Friend', FriendSchema);
