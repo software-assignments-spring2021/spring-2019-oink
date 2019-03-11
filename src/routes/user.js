@@ -23,7 +23,8 @@ router.post('/register', (req, res) => {
 	user = {username: req.body.username, email: req.body.email};
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
-			//res.render('register', {message: 'ERROR IN CREATING ACCOUNT'});
+			res.send(err)
+			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
 			// If error, reload page with error message
 		}
 		else{
@@ -31,7 +32,7 @@ router.post('/register', (req, res) => {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						res.redirect('/:username');
+						res.redirect(`/user/${user.username}`);
 					}
 				});
 			});
@@ -46,34 +47,51 @@ router.get('/login', (req, res) => {
 router.post('/login', (req, res) => {
   	passport.authenticate('local', function(err, user){
 		if(!user){
-			//res.render('login', {message: "Error processing Login request"});
+			res.send("no user found");
+			//res.render('login', {errMessage: "Error processing Login request"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					res.redirect('/:username'); // REDIRECT TO HOME PAGE
+					res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
 				}
 			});
 		}
 	})(req, res);
 });
 
+
 router.get('/logout', (req, res) => {
-  	res.send('');
+
+  	req.session.destroy(function(err){
+		if(err){
+			console.log(err);
+		}
+		else{
+			res.redirect('/');
+		}
+	});
+
 });
 
 router.get('/:username', (req, res) => {
 	const username = req.params.username;
-	User.findOne({'username': username}, function(err, user, count){
-		if(user != null){
-			res.send(`profile page for ${username}`);
-		}
-		else{
-			res.send('404 Error');
-		}
-	});
+	//if it's the session user, there's no need to go to the database again
+	if(username === req.session.user.username){
+		res.send(`profile for session user ${username}`);
+	}
+	else{
+		User.findOne({'username': username}, function(err, user, count){
+			if(user != null){
+				res.send(`profile page for ${username}`);
+			}
+			else{
+				res.send('404 Error');
+			}
+		});
+	}
 });
 
 module.exports = router;
