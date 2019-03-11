@@ -86,7 +86,6 @@ router.get('/:username', (req, res) => {
 		User.findOne({'username': username}, function(err, user, count){
 			if(user != null){
 				res.send(`profile page for ${username}`);
-				//res.render('profile', {user:user})
 			}
 			else{
 				res.send('404 Error');
