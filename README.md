@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/nyu-software-engineering/oink.svg?branch=master)](https://travis-ci.com/nyu-software-engineering/oink)
+
 # Oink: A Mobile Piggy Bank
 
 Bill splitters are useful for calculating bills and tips when you go out with friends, but most just calculate the bill without knowing anything about it. Unfortunately, current bill splitters leave many desirable questions unanswered. For example:
