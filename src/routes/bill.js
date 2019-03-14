@@ -11,10 +11,22 @@ router.get('/add', (req, res) => {
 
 	// Search bar will display the names of every friend on session user's friend-list
 	// Filtering will be implemented using client-side JS
+
+	// SPRINT 1 VERSION
+		// DISPLAY ALL USERS IN OINK DATABASE
+
+		// WILL EVENTUALLY ONLY SHOW FRIENDS OF USER
 	if(req.session.user){
-		const friends = req.session.user.friends;
-		res.send('home page for adding a bill');
-		//res.render('addBill', {'friends': friends});
+		//const users = req.session.user.friends;
+		User.find({}, function(err, users, count){
+			if(users != null){
+				res.send(users);
+				//res.render('addBill', {'friends': friends});
+			}
+			else{
+				res.send('No Users Yet');
+			}
+		});
 	}
 	else{
 		res.redirect('/user/login');
