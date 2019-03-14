@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
 
+const dbHelp = require('../helpers/db_helpers.js');
+
 router.get('/add', (req, res) => {
+
 	// Search bar will display the names of every friend on session user's friend-list
 	// Filtering will be implemented using client-side JS
 	if(req.session.user){
@@ -14,7 +17,7 @@ router.get('/add', (req, res) => {
 		//res.render('addBill', {'friends': friends});
 	}
 	else{
-		res.redirect('/login');
+		res.redirect('/user/login');
 	}
 });
 
@@ -24,46 +27,39 @@ router.post('/add', (req, res)=>{
 	//the bill is added to the database and then gets split into transactions based on amount/weights
 	//Bill: [{amount:90, splitWith:[user1, user2, user3]}]
 	//transactions: [{amount: $30, paidBy:user1, bill:bill_id}, {amount: $25, paidBy:user2, bill:bill_id}, {amount: $35: paidBy: user3, bill:bill_id}]
-	//The bill gets added to the user that added it, and the transactions
+	//The bill gets added to the user that added it, and the transactions get added to each user by username
 
 	//always want to add the bill to the session user, the can choose to split it among other users by using usernames
 
-	if(req.session.user){
-		console.log(req.body, req.session.user);
+	let user = req.session.user;
+	if(user){
 		const friendsToSplit = req.body.splitWith.split(','); friendsToSplit.push(req.session.user.username);
-		const bill = {amount:req.body.amount, splitWith:friendsToSplit, numOfSplits:friendsToSplit.length};
-		console.log(bill);
+		const bill = new Bill({
+			amount:req.body.amount,
+			splitWith:friendsToSplit});
 
-		//req.session.user.bills.add(new Bill())
+		bill.save((err, addedBill)=>{
+			if (err){
+				res.send("Error adding bill");
+				console.log(err);
+			}
+			else{
+				console.log("need to split bill into transactions");
+
+				User.findOne({username: user.username}, (err, doc)=>{
+					doc.bills.push(addedBill._id)
+					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/user/${user.username}`));
+				});
+			}
+		})
 
 
-		res.send("");
 	}
 
 	else{
-		res.redirect('/login');
+		res.redirect('/user/login');
 	}
 
 });
-
-// router.post('/add', (req, res) => {
-// 	const a = {};
-// 	if(req.query.searchUser !== "" && req.query.searchUser !== undefined){
-// 		a.username = req.query.searchUser;
-// 	}
-// 	User.find(a, function(err, data){
-// 		if(data === null){
-// 			res.send('404 CANNOT RETRIEVE');
-// 		}
-// 		else{
-// 			//res.render('reviews', {reviews: data});
-// 			res.send(a.username + " found!");
-// 		}
-// 	});
-// });
-
-// router.post('/split', (req, res)=>{
-// 	res.send('');
-// });
 
 module.exports = router;
