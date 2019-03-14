@@ -3,6 +3,11 @@ node_js:
   - "7"
   - "9"
 before_script:
-  "cd src"
+  "npm install"
+  "git pull origin master"
 script:
   "npm test"
+notifications:
+ slack:
+   rooms:
+      - nyu-agile-software:4Ll9V7RPK8fkqf2dGDvWiEGt#group_oink
