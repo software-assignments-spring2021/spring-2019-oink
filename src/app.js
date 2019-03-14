@@ -17,6 +17,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 //read in headers as objects
 app.use(express.urlencoded({ extended: false }));
 
+// read hbs
+app.set('view engine', 'hbs'); //enable hbs
+
 //add sessions
 app.use(session({
     secret: 'secrets should be kept between friends',

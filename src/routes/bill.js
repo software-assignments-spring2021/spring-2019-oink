@@ -21,7 +21,7 @@ router.get('/add', (req, res) => {
 		User.find({}, function(err, users, count){
 			if(users != null){
 				res.send(users);
-				//res.render('addBill', {'friends': friends});
+				//res.render('addBill', {'friends': users});
 			}
 			else{
 				res.send('No Users Yet');
