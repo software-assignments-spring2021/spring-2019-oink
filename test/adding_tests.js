@@ -1,35 +1,55 @@
 const chai = require('chai');
 const expect = chai.expect; 
 const app = require("../test_app.js");
+const api = require("../src/public/js/oink_api.js");
+
+const mongoose = require('mongoose');
+require('../src/schemas');
+const User = mongoose.model("User");
+const Group = mongoose.model("Group");
 
 describe('Oink Adding Tests', function(){
+
 	describe('addFriend', function(){
-		it('returns true if Friend added correctly', function(){
-			const friend = {};
-			friend.username = "testName";
-			friend.email = "test@email.com";
-			const res = app.addFriend(friend.username);
-			expect(res).to.be.true;
+		const user = new User({
+				username: "test",
+				email: "test@test.com",
+				password: "test"
+		});
+		it('returns true if correct username given', function(){
+			const username = "test";
+			const res = api.addFriend(username, function(bool){
+				expect(bool).to.be.true;
+			});
 		});
 
 		it('returns false if no parameters passed in', function(){
-			const res = app.addFriend();
+			const res = api.addFriend();
 			expect(res).to.be.false;
+		});
+
+		it('returns false if incorrect username given', function(){
+			const username = "fakeName";
+			const res = api.addFriend(username, function(bool){
+				expect(bool).to.be.false;
+			});
 		});
 	});
 
 	describe('addGroup', function(){
-		it('returns true if group created successfully', function(){
-			const friend1 = {username: "testName", email: "test@email.com"};
-			const friend2 = {username: "testName2", email: "test2@email.com"};
-			const friends = [friend1, friend2];
-			const name = "friends";
-			const res = app.addGroup(name, friends);
-			expect(res).to.be.true;
+		const group = new Group({
+			name: "test"
+		});
+		
+		it('returns true if group name unique', function(){
+			const name = "notTakenTest";
+			const res = api.addGroup(name, function(bool){
+				expect(bool).to.be.true;
+			});
 		});	
 
 		it('returns false if no parameters passed in', function(){
-			const res = app.addGroup();
+			const res = api.addGroup();
 			expect(res).to.be.false;
 		});
 	});
