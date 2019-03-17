@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "mocha --exit",
-    "test-with-coverage": "nyc --reporter=text mocha",
+    "test-with-coverage": "nyc --reporter=text mocha --exit",
     "start": "node src/app.js",
     "persist": "nodemon src/app.js"
   },
