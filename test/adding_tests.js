@@ -18,6 +18,7 @@ describe('Oink Adding Tests', function(){
 		});
 		it('returns true if correct username given', function(){
 			const username = "test";
+			const test = "test";
 			const res = api.addFriend(username, function(bool){
 				expect(bool).to.be.true;
 			});
