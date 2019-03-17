@@ -15,3 +15,8 @@ after_script:
   - mongo oink_dev --eval 'db.Bill.remove({"splitWith":"test"})"'
   - mongo oink_dev --eval 'db.Group.remove({"name":"test"})"'
   - mongo oink_dev --eval 'db.Friend.remove({"balance":-1000000})"'
+notifications:
+  slack:
+    rooms:
+      - nyu-agile-software:4Ll9V7RPK8fkqf2dGDvWiEGt#group_oink
+      - nyu-agile-software:4Ll9V7RPK8fkqf2dGDvWiEGt#travis-results
