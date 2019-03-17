@@ -2,8 +2,16 @@ language: node_js
 node_js:
   - "7"
   - "9"
+services:
+  - mongodb
 before_script:
   - "npm install"
   - "git pull origin master"
 script:
   - "npm test"
+after_script:
+  - mongo oink_dev --eval 'db.User.remove({"username":"test"})"'
+  - mongo oink_dev --eval 'db.Transaction.remove({"paidBy":"test"})"'
+  - mongo oink_dev --eval 'db.Bill.remove({"splitWith":"test"})"'
+  - mongo oink_dev --eval 'db.Group.remove({"name":"test"})"'
+  - mongo oink_dev --eval 'db.Friend.remove({"balance":-1000000})"'
