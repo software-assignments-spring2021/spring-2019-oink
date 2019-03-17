@@ -52,7 +52,7 @@ describe('Oink Adding Tests', function(){
 		});	*/
 
 		it('returns false if no parameters passed in', function(){
-			const res = api.addGroup();
+			const res = app.addGroup();
 			expect(res).to.be.false;
 		});
 	});
