@@ -38,7 +38,7 @@ describe('Oink Adding Tests', function(){
 	});
 
 	describe('addGroup', function(){
-		/*const group = new Group({
+		const group = new Group({
 			name: "test"
 		});
 		
@@ -47,7 +47,7 @@ describe('Oink Adding Tests', function(){
 			const res = api.addGroup(name, function(bool){
 				expect(bool).to.be.true;
 			});
-		});	*/
+		});	
 
 		it('returns false if no parameters passed in', function(){
 			const res = api.addGroup();
