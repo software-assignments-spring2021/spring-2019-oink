@@ -18,5 +18,4 @@ after_script:
 notifications:
   slack:
     rooms:
-      - nyu-agile-software:4Ll9V7RPK8fkqf2dGDvWiEGt#group_oink
       - nyu-agile-software:4Ll9V7RPK8fkqf2dGDvWiEGt#travis-results
