@@ -11,45 +11,43 @@ const Group = mongoose.model("Group");
 describe('Oink Adding Tests', function(){
 
 	describe('addFriend', function(){
-		/*const user = new User({
+		const user = new User({
 				username: "test",
 				email: "test@test.com",
 				password: "test"
-		});*/
-		/*it('returns true if correct username given', function(){
+		});
+		it('returns true if correct username given', function(){
 			const username = "test";
 			const res = api.addFriend(username, function(bool){
 				expect(bool).to.be.true;
 			});
-		});*/
+		});
 
 		it('returns false if no parameters passed in', function(){
-			const res = app.addFriend();
+			const res = api.addFriend();
 			expect(res).to.be.false;
 		});
 
 		it('returns false if incorrect username given', function(){
 			const username = "fakeName";
-			/*
+			
 			const res = api.addFriend(username, function(bool){
 				expect(bool).to.be.false;
-			});*/
-			const res = app.addFriend(username);
-			expect(res).to.be.true;
+			});
 		});
 	});
 
 	describe('addGroup', function(){
-		/*const group = new Group({
+		const group = new Group({
 			name: "test"
-		});*/
+		});
 		
-		/*it('returns true if group name unique', function(){
+		it('returns true if group name unique', function(){
 			const name = "notTakenTest";
 			const res = api.addGroup(name, function(bool){
 				expect(bool).to.be.true;
 			});
-		});	*/
+		});	
 
 		it('returns false if no parameters passed in', function(){
 			const res = api.addGroup();

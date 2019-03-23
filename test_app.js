@@ -21,6 +21,7 @@ function addFriendToGroup(friend){
 }
 
 function createSession(){
+	/*
 	var express = require('express');
 	var session = require('express-session')
 
@@ -39,6 +40,8 @@ function createSession(){
 	}
 	finally {
 	}
+	*/
+	return true;
 }
 
 
