@@ -16,7 +16,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 router.get('/register', (req, res) => {
-	res.send('Register Page');
+	res.render('registration');
 });
 
 router.post('/register', (req, res) => {
