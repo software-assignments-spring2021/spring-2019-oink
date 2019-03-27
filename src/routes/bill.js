@@ -16,6 +16,7 @@ router.get('/add', (req, res) => {
 		// DISPLAY ALL USERS IN OINK DATABASE
 
 		// WILL EVENTUALLY ONLY SHOW FRIENDS OF USER
+	/*
 	if(req.session.user){
 		//const users = req.session.user.friends;
 		User.find({}, function(err, users, count){
@@ -31,6 +32,8 @@ router.get('/add', (req, res) => {
 	else{
 		res.redirect('/user/login');
 	}
+	*/
+	res.render('addbill');
 });
 
 router.post('/add', (req, res)=>{
