@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-	res.send('Login');
+	res.render('Login');
 });
 
 router.post('/login', (req, res) => {
