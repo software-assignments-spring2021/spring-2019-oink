@@ -1,12 +1,23 @@
 <h1>Create a Bill:</h1>
 
+<button onclick="onClickUserDropdown()">Add User</button>
+<div id="friendsDropdown"">
+	<input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
+	{{#each friends as |f|}}
+		<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
+	{{/each}}
+</div>
 
-<form action="">
+<br><br><br>
+
+<form action="" method="post">
   Amount:<br>
   <input type="text" name="amount">
   <br>
   Split with:<br>
-  <input type="text" name="splitWith">
+  <input type="text" name="splitWith" id="splitWith">
   <br><br>
   <input type="submit" value="Split">
-</form> 
+</form>
+
+<script src="/js/search.js"></script>

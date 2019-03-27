@@ -16,13 +16,12 @@ router.get('/add', (req, res) => {
 		// DISPLAY ALL USERS IN OINK DATABASE
 
 		// WILL EVENTUALLY ONLY SHOW FRIENDS OF USER
-	/*
+	
 	if(req.session.user){
 		//const users = req.session.user.friends;
 		User.find({}, function(err, users, count){
 			if(users != null){
-				res.send(users);
-				//res.render('addBill', {'friends': users});
+				res.render('addbill', {'friends': users});
 			}
 			else{
 				res.send('No Users Yet');
@@ -32,8 +31,7 @@ router.get('/add', (req, res) => {
 	else{
 		res.redirect('/user/login');
 	}
-	*/
-	res.render('addbill');
+
 });
 
 router.post('/add', (req, res)=>{
@@ -62,8 +60,8 @@ router.post('/add', (req, res)=>{
 				console.log("need to split bill into transactions");
 
 				User.findOne({username: user.username}, (err, doc)=>{
-					doc.bills.push(addedBill._id)
-					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/user/${user.username}`));
+					doc.bills.push(addedBill._id);
+					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/created`));
 				});
 			}
 		})
@@ -75,6 +73,44 @@ router.post('/add', (req, res)=>{
 		res.redirect('/user/login');
 	}
 
+});
+
+router.get('/created', (req, res) => {
+	if(req.session.user){
+		const username = req.session.user.username;
+		User.findOne({"username": username}, (err, user) => {
+			if(user){
+				if(user.bills.length == 0){
+					res.send("No Bills Created Yet :(");
+				}
+				else{
+					const id = user.bills[user.bills.length-1];
+					Bill.findById(id, (err, bill)=>{
+						if(!err){
+							const value = bill.amount;
+							const sharees = [];
+							for(let i = 0; i < bill.splitWith.length; i++){
+								const usr = {};
+								usr.name = bill.splitWith[i];
+								usr.split = value / bill.splitWith.length;
+								sharees.push(usr);
+							}
+							res.render('billCreated', {"value": value, "splitWith": sharees});
+						}
+						else{
+							res.send('error');
+						}
+					});
+				}
+			}
+			else{
+				res.send('error');
+			}
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
 });
 
 module.exports = router;

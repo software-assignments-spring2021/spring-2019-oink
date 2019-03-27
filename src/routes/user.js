@@ -29,12 +29,12 @@ router.post('/register', (req, res) => {
 			// If error, reload page with error message
 		}
 		else{
-			
 			passport.authenticate('local')(req, res, function() {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						res.redirect(`/user/${user.username}`);
+						//res.redirect(`/user/${user.username}`);
+						res.redirect('/bill/add'); // Until User web pages created
 					}
 				});
 			});
@@ -57,7 +57,8 @@ router.post('/login', (req, res) => {
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
+					//res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
+					res.redirect('/bill/add'); // Until User web pages created
 				}
 			});
 		}
