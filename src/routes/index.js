@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router(); 
 
 router.get('/', (req, res) => {
-  res.send('Welcome to Oink. This app is currently under construction');
+  res.render('home');
+});
+
+router.get('/newpath', (req, res) => {
+  res.render('newpage');
 });
 
 module.exports = router;
