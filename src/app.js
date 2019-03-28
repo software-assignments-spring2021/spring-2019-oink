@@ -27,6 +27,12 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+//set local variables for hbs files
+app.use(function(req, res, next){
+	res.locals.user = req.session.user || '';
+	next();
+});
+
 
 //for debugging
 app.use(function(req, res, next){
