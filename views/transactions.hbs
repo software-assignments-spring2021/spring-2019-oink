@@ -1,0 +1,10 @@
+<h1>{{ user }}'s Transactions!</h1><br>
+<form method="get">
+	Search by User: <input type="text" name="searchUser"><br>
+	<input type="submit" value="Search">
+</form>
+<ul>
+	{{#each transactions as |t|}}
+		<li>Owe: {{ t.amount }} to: {{ t.paidTo }}</li>
+	{{/each}}
+</ul>

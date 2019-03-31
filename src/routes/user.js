@@ -4,6 +4,8 @@ const router = express.Router();
 require('../schemas'); 
 
 const User = mongoose.model("User");
+const Transaction = mongoose.model("Transaction");
+
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -34,7 +36,7 @@ router.post('/register', (req, res) => {
 					if(!err){
 						req.session.user = user;
 						//res.redirect(`/user/${user.username}`);
-						res.redirect('/bill/add'); // Until User web pages created
+						res.redirect('/user/'+req.session.user.username); // Until User web pages created
 					}
 				});
 			});
@@ -58,7 +60,7 @@ router.post('/login', (req, res) => {
 				if(!err){
 					req.session.user = user;
 					//res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
-					res.redirect('/bill/add'); // Until User web pages created
+					res.redirect('/user/'+req.session.user.username); // Until User web pages created
 				}
 			});
 		}
@@ -79,22 +81,51 @@ router.get('/logout', (req, res) => {
 
 });
 
-router.get('/:username', (req, res) => {
-	const username = req.params.username;
-	//if it's the session user, there's no need to go to the database again
-	if(username === req.session.user.username){
-		res.send(`profile for session user ${username}`);
+router.get('/transactions', (req, res) => {
+	if(req.session.user){
+		const transactionIDs = req.session.user.transactions;
+		const transactions = [];
+
+		let searchUser = "";
+		if(req.query.searchUser !== undefined)
+			searchUser = req.query.searchUser;
+		
+		for(let i = 0 ; i < transactionIDs.length; i++){
+			const id = transactionIDs[i];
+			Transaction.findById(id, (err, transaction)=>{
+				if(!err){
+					if(transaction.paidTo == searchUser || searchUser == ""){
+						if(transaction.isPaid == false) // only display current, non-paid transactions
+							transactions.push(transaction);
+					}
+				}
+				else{
+					res.send('error');
+				}
+			});
+		}
+		res.render("transactions", {"user": req.session.user.username, "transactions": transactions});
 	}
 	else{
-		User.findOne({'username': username}, function(err, user, count){
-			if(user != null){
-				res.send(`profile page for ${username}`);
-			}
-			else{
-				res.send('404 Error');
-			}
-		});
+		res.redirect('login');
 	}
+});
+
+router.get('/:username', (req, res) => {
+	if(req.session.user){
+		const username = req.params.username;
+		//if it's the session user, there's no need to go to the database again
+		if(username === req.session.user.username){
+			res.render('user', {"user": username});
+		}
+		else{
+			res.send("Error: User not found");
+		}
+	}
+	else{
+		res.redirect('login');
+	}
+
 });
 
 module.exports = router;

@@ -6,6 +6,7 @@ const TransactionSchema = new Schema({
 	//will be referenced by the bill
 	amount:{type: Number, required:true},
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
+	paidTo:{type:String, required:true},
 	isPaid:{type:Boolean},
 	bill:{type: Schema.Types.ObjectId, ref:"Bill"}
 });

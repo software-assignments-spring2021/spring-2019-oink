@@ -27,6 +27,17 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+app.use((req, res, next) => {
+	if(req.session.user){
+		app.set('view options', { layout: 'loggedInLayout' });
+		next();
+	}
+	else{
+		app.set('view options', { layout: 'layout' });
+		next();
+	}
+});
+
 
 //for debugging
 app.use(function(req, res, next){

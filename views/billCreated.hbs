@@ -1,4 +1,7 @@
 <h1>Value: {{ value }}</h1>
-{{#each splitWith as |s|}}
-	<h3>{{ s.name }} - ${{ s.split }}</h3>
-{{/each}}
+<form method="post">
+	{{#each splitWith as |s|}}
+		{{ s }}: <input type="text" name="{{ s }}" id="{{ s }}" class="splitWith" bill={{ bill }} ><br>
+	{{/each}}
+	<input type="submit" value="Split">
+</form>
