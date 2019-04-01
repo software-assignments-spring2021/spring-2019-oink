@@ -10,7 +10,8 @@
     "test": "mocha --exit",
     "test-with-coverage": "nyc --reporter=text mocha --exit",
     "start": "node src/app.js",
-    "persist": "nodemon src/app.js"
+    "persist": "nodemon src/app.js",
+    "sass": "sass --watch src/sass:src/public/stylesheets"
   },
   "repository": {
     "type": "git",
