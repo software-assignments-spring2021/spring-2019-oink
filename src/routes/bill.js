@@ -4,8 +4,11 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
+const Transaction = mongoose.model("Transaction");
 
 const dbHelp = require('../helpers/db_helpers.js');
+
+const async = require('async');
 
 router.get('/add', (req, res) => {
 
@@ -61,7 +64,7 @@ router.post('/add', (req, res)=>{
 
 				User.findOne({username: user.username}, (err, doc)=>{
 					doc.bills.push(addedBill._id);
-					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/created`));
+					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/bill/created`));
 				});
 			}
 		})
@@ -89,13 +92,13 @@ router.get('/created', (req, res) => {
 						if(!err){
 							const value = bill.amount;
 							const sharees = [];
+							
 							for(let i = 0; i < bill.splitWith.length; i++){
-								const usr = {};
-								usr.name = bill.splitWith[i];
-								usr.split = value / bill.splitWith.length;
+								const usr = bill.splitWith[i];
 								sharees.push(usr);
 							}
-							res.render('billCreated', {"value": value, "splitWith": sharees});
+							
+							res.render('billCreated', {"value": value, "splitWith": sharees, "bill": id});
 						}
 						else{
 							res.send('error');
@@ -107,6 +110,63 @@ router.get('/created', (req, res) => {
 				res.send('error');
 			}
 		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+});
+
+router.post('/created', (req, res) => {
+	req.body = JSON.parse(JSON.stringify(req.body));
+	if(req.session.user){
+		const friendsToSplit = [];
+		for(let key in req.body){
+			if(req.body.hasOwnProperty(key)){
+				const a = {}
+				a.user = key;
+				a.amount = req.body[key];
+				friendsToSplit.push(a);
+			}
+		}
+		const id = req.session.user.bills[req.session.user.bills.length-1];
+		
+		for(let i = 0; i < friendsToSplit.length; i ++){
+			//console.log(friendsToSplit[i].user);
+			let transaction;
+			if(i != friendsToSplit.length-1){
+				transaction = new Transaction({
+				amount:friendsToSplit[i].amount,
+				paidBy:friendsToSplit[i].user,
+				paidTo:friendsToSplit[friendsToSplit.length-1].user,
+				isPaid: false,
+				bill: id
+				});
+			}
+			else{ // ASSUMES USER CREATING BILL PAYS FOR IT
+				transaction = new Transaction({
+				amount:friendsToSplit[i].amount,
+				paidBy:friendsToSplit[i].user,
+				paidTo:friendsToSplit[friendsToSplit.length-1].user,
+				isPaid: true,
+				bill: id
+				});
+			}
+
+			transaction.save((err, addedTransaction)=>{
+				if (err){
+					res.send("Error adding Transaction");
+					console.log(err);
+				}
+				else{
+
+					User.findOne({username: friendsToSplit[i].user}, (err, doc)=>{
+						doc.transactions.push(addedTransaction._id);
+						doc.save();
+					});
+				}
+			})
+		}
+		res.redirect('/user/'+ req.session.user.username);
 	}
 	else{
 		res.redirect('/user/login');
