@@ -1,0 +1,116 @@
+@import "palette";
+@import "mixins";
+@import "fonts";
+
+*{
+    
+    padding:0;
+    margin:0;
+    font-size:100%;
+    box-sizing: border-box;
+    color:black;
+    list-style: none;
+    border:none;
+    text-decoration: none;
+    outline:none;
+    font-family: $default;
+
+}
+
+
+div.container{
+    transition: margin-left ease-in-out 0.5s;
+}
+    
+header{
+    width:100%;
+    position: sticky;
+    top:0; left:0;
+    
+    background-color:$light-red;
+    
+    @include flex(row, no-wrap, center, center, center);
+    
+    div.left-side-header, div.right-side-header{
+        width:50%;
+        padding:0 2%;
+        margin:0;
+        > *{
+            font-size:1.3em;
+        }
+    }
+    div.left-side-header{
+        @include flex(row, no-wrap, flex-start, center, flex-start);
+        
+        
+        h1{
+            font-size:2.4em;
+            font-family: $oswald;
+            padding:0 3%;
+        }
+        i.hidden{
+            display:none;
+        }
+        i:hover{
+            cursor: pointer;
+        }
+
+    }
+    div.right-side-header{
+        @include flex(row, no-wrap, center, center, flex-end);
+        h3.username{
+            width:60%;
+            text-align: right;
+            font-family: $open-sans-condensed;
+            font-size: 1.5em;
+            padding:0 4%;
+            letter-spacing: 0.5%;
+        }
+        input[type="submit"]{
+            background-color:$medium-green;
+            color:$white-pink;
+            padding:4% 10%;
+
+
+            
+            &:hover{
+                cursor: pointer;
+            }
+        }
+
+    }  
+}
+
+nav.main-side-nav{
+    position:fixed;
+    z-index:50;
+    top:0;left:0;
+    height:100%;
+    width:0;
+    background-color:$light-red;
+    padding-top:10vh;
+    overflow-x: hidden;
+    transition:width ease-in-out 0.5s;
+    
+    ul{
+        
+        a{
+            display:block;
+            width:100%;
+            padding:4% 0 4% 16%;
+            transition:0s;            
+
+            li{
+                transition:color ease-in-out 0.1s;
+                font-family: $open-sans-condensed;
+                font-weight: bold;
+                font-size: 1.5em;
+                &:hover{
+                    
+                    color:$white-pink;
+                }
+                
+            }
+        }
+    }
+}

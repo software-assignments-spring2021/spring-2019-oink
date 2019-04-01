@@ -116,7 +116,7 @@ router.get('/:username', (req, res) => {
 		const username = req.params.username;
 		//if it's the session user, there's no need to go to the database again
 		if(username === req.session.user.username){
-			res.render('user', {"user": username});
+			res.render('user', {"username": username});
 		}
 		else{
 			res.send("Error: User not found");
