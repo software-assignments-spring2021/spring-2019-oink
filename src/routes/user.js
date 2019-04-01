@@ -18,7 +18,14 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 router.get('/register', (req, res) => {
-	res.render('registration');
+	//if the user is already logged in, redirect to the home page
+
+	if(req.session.user){
+		res.redirect(`/user/${req.session.user.username}`)
+	}
+	else{
+		res.render('registration');
+	}
 });
 
 router.post('/register', (req, res) => {
@@ -45,10 +52,17 @@ router.post('/register', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-	res.render('Login');
+	//if the user is already logged in, redirect to the home page
+	if(req.session.user){
+		res.redirect(`/user/${req.session.user.username}`)
+	}
+	else{
+		res.render('Login');
+	}
 });
 
 router.post('/login', (req, res) => {
+
   	passport.authenticate('local', function(err, user){
 		if(!user){
 			res.send("no user found");
