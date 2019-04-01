@@ -30,6 +30,7 @@ app.use(session({
 app.use((req, res, next) => {
 	if(req.session.user){
 		app.set('view options', { layout: 'loggedInLayout' });
+		res.locals.user = req.session.user;
 		next();
 	}
 	else{

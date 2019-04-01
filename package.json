@@ -10,7 +10,8 @@
     "test": "mocha --exit",
     "test-with-coverage": "nyc --reporter=text mocha --exit",
     "start": "node src/app.js",
-    "persist": "nodemon src/app.js"
+    "persist": "nodemon src/app.js",
+    "sass": "sass --watch src/public/sass:src/public/css"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "nyc": "^13.3.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^5.0.1"
+    "passport-local-mongoose": "^5.0.1",
+    "sass": "^1.17.3"
   }
 }
