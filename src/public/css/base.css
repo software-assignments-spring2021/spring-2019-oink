@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+@import url("https://fonts.googleapis.com/css?family=Oswald");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300");
+* {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  box-sizing: border-box;
+  color: black;
+  list-style: none;
+  border: none;
+  text-decoration: none;
+  outline: none;
+  font-family: "Open Sans", sans-serif;
+}
+
+div.container {
+  transition: margin-left ease-in-out 0.5s;
+}
+
+header {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background-color: #cc8b86;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+header div.left-side-header, header div.right-side-header {
+  width: 50%;
+  padding: 0 2%;
+  margin: 0;
+}
+header div.left-side-header > *, header div.right-side-header > * {
+  font-size: 1.3em;
+}
+header div.left-side-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: flex-start;
+}
+header div.left-side-header h1 {
+  font-size: 2.4em;
+  font-family: "Oswald", sans-serif;
+  padding: 0 3%;
+}
+header div.left-side-header i.hidden {
+  display: none;
+}
+header div.left-side-header i:hover {
+  cursor: pointer;
+}
+header div.right-side-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-end;
+}
+header div.right-side-header h3.username {
+  width: 60%;
+  text-align: right;
+  font-family: "Open Sans Condensed", sans-serif;
+  font-size: 1.5em;
+  padding: 0 4%;
+  letter-spacing: 0.5%;
+}
+header div.right-side-header input[type=submit] {
+  background-color: #729956;
+  color: #fde8e9;
+  padding: 4% 10%;
+}
+header div.right-side-header input[type=submit]:hover {
+  cursor: pointer;
+}
+
+nav.main-side-nav {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background-color: #cc8b86;
+  padding-top: 10vh;
+  overflow-x: hidden;
+  transition: width ease-in-out 0.5s;
+}
+nav.main-side-nav ul a {
+  display: block;
+  width: 100%;
+  padding: 4% 0 4% 16%;
+  transition: 0s;
+}
+nav.main-side-nav ul a li {
+  transition: color ease-in-out 0.1s;
+  font-family: "Open Sans Condensed", sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+nav.main-side-nav ul a li:hover {
+  color: #fde8e9;
+}
+
+/*# sourceMappingURL=base.css.map */
