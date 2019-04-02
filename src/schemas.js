@@ -37,6 +37,11 @@ const GroupSchema = new Schema({
 
 });
 
+const FriendSchema = new Schema({
+	user: String,
+	balance: Number
+});
+
 const UserSchema = new Schema({
 	username:{type: String, unique:true, required:true, index:true},
 	email:{type:String, unique:true, index:true},
@@ -44,14 +49,11 @@ const UserSchema = new Schema({
 	groups:[GroupSchema],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
-	friends:[String]
+	friends:[FriendSchema]
 
 });
 
-const FriendSchema = new Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-	balance: Number
-});
+
 
 //Plug-Ins
 UserSchema.plugin(passportLocalMongoose);
@@ -60,8 +62,9 @@ UserSchema.plugin(passportLocalMongoose);
 mongoose.model('Bill', BillSchema);
 mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Group', GroupSchema);
-mongoose.model('User', UserSchema);
 mongoose.model('Friend', FriendSchema);
+mongoose.model('User', UserSchema);
+
 
 
 mongoose.connect('mongodb://localhost/oink_dev');

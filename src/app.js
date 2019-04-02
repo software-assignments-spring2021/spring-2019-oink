@@ -8,6 +8,8 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const billRouter = require('./routes/bill');
+const apiRouter = require('./routes/api');
+
 
 /*Any middleware added needs to go here*/
 
@@ -52,6 +54,7 @@ app.use(function(req, res, next){
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/bill', billRouter);
+app.use('/api', apiRouter);
 
 // 404 Page Handler
 app.use((req, res) => {
