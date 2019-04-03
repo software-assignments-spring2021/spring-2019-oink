@@ -1,0 +1,20 @@
+
+{{#unless bills}}
+<h2>You have not created any bills yet</h2>
+<a href="/bill/add"><h4>You can create one here</h4></a>
+
+{{else}}
+
+{{#each bills as |bill|}}
+
+<div class="bill">
+
+	<div class="amount">${{ bill.amount }}</div>
+	<div class="date">date added</div>
+	<div class="view"><a href="/bill/view/{{bill._id}}">View Bill</a></href>
+
+</div>
+
+{{/each}}
+
+{{/unless}}

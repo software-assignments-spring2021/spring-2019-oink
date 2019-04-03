@@ -173,4 +173,41 @@ router.post('/created', (req, res) => {
 	}
 });
 
+router.get('/view/:id', (req, res)=>{
+
+	if(req.session.user){
+
+		Bill.findOne({"_id" :req.params.id}, (err, bill)=>{
+			if (err || !bill){
+				res.render("viewBill",{err:"bill not found"});
+			}
+			else{
+				console.log(bill);
+				//res.render('viewBill', {bill:bill});
+
+				//find all transactions that go along with the bill
+				Transaction.find({'bill':bill._id}, (err, transactions)=>{
+
+					if(err){
+						bill['transactions'] = []
+					}
+					else{
+						bill['transactions'] = transactions
+					}
+
+					res.render('viewBill', {'bill':bill})
+
+				});
+
+			}
+
+
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+
+});
+
 module.exports = router;
