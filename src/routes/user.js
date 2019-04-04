@@ -127,6 +127,8 @@ router.get('/transactions', (req, res) => {
 });
 
 router.get("/my-bills", (req, res)=>{
+	//view all bills added by the user
+	
 
 	if(req.session.user){
 

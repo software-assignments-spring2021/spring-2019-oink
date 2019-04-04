@@ -174,6 +174,7 @@ router.post('/created', (req, res) => {
 });
 
 router.get('/view/:id', (req, res)=>{
+	//view one bill
 
 	if(req.session.user){
 
@@ -183,7 +184,6 @@ router.get('/view/:id', (req, res)=>{
 			}
 			else{
 				console.log(bill);
-				//res.render('viewBill', {bill:bill});
 
 				//find all transactions that go along with the bill
 				Transaction.find({'bill':bill._id}, (err, transactions)=>{
