@@ -54,8 +54,8 @@ router.post('/add', (req, res)=>{
 
 		const bill = new Bill({
 			amount:req.body.amount,
-			splitWith:friendsToSplit},
-			comment:req.body.comment);
+			splitWith:friendsToSplit,
+			comment:req.body.comment});
 
 		if (valHelper.validateBill(bill)){
 			
