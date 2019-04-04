@@ -28,7 +28,7 @@ const BillSchema = new Schema({
 	notSplit:{type:Boolean, required:false},
 
 	//only matters if not split is true
-	paidBy:{type:String, required: false} 
+	paidBy:{type:String, required: false}
 
 });
 
