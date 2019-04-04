@@ -19,6 +19,8 @@ const BillSchema = new Schema({
 	//if the two involved will be working on a payback, this will be only two users
 	splitWith:[{type:String, required:true}],
 
+	comment:{type:String, required:false},
+
 	//if the bill is not being split and is added to two users running totals
 	
 	//if the owner or the person in "splitWith" is paying the full bill on a payback system, this will be true

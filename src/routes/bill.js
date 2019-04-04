@@ -7,6 +7,7 @@ const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 
 const dbHelp = require('../helpers/db_helpers.js');
+const valHelpers = require('../helpers/validation_helpers.js');
 
 const async = require('async');
 
@@ -50,24 +51,35 @@ router.post('/add', (req, res)=>{
 	let user = req.session.user;
 	if(user){
 		const friendsToSplit = req.body.splitWith.split(','); friendsToSplit.push(req.session.user.username);
+
 		const bill = new Bill({
 			amount:req.body.amount,
-			splitWith:friendsToSplit});
+			splitWith:friendsToSplit},
+			comment:req.body.comment);
 
-		bill.save((err, addedBill)=>{
-			if (err){
-				res.send("Error adding bill");
-				console.log(err);
-			}
-			else{
-				console.log("need to split bill into transactions");
+		if (valHelper.validateBill(bill)){
+			
+			bill.save((err, addedBill)=>{
+				if (err){
+					res.render('addbill', {'friends': users, error:"Error adding Bill"})
+					//res.send("Error adding bill");
+					console.log(err);
+				}
+				else{
+					console.log("need to split bill into transactions");
 
-				User.findOne({username: user.username}, (err, doc)=>{
-					doc.bills.push(addedBill._id);
-					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/bill/created`));
-				});
-			}
-		})
+					User.findOne({username: user.username}, (err, doc)=>{
+						doc.bills.push(addedBill._id);
+						doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/bill/created`));
+					});
+				}
+			});
+
+		}else{
+			res.render('addbill', {'friends': users, error:"Error adding Bill"})
+		}
+
+		
 
 
 	}
