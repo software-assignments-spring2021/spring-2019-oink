@@ -118,9 +118,16 @@ router.get('/my-transactions', (req, res) => {
 router.post('/pay-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	Transaction.findById(id, (err, transaction) => {
-		if(transaction !== null){
-			transaction.isPaid = true;
-			transaction.save();
+		if(transaction){
+			if(transaction !== null){
+				transaction.isPaid = true;
+				transaction.save();
+				console.log("Transaction paid");
+			}
+		}
+		else{
+			console.log(err);
+			res.send(err);
 		}
 	});
 });
@@ -136,8 +143,7 @@ router.get('/index', (req, res) => {
 	}
 });
 
-/*
-=======
+
 router.get("/my-bills", (req, res)=>{
 	//view all bills added by the user
 	
@@ -160,8 +166,8 @@ router.get("/my-bills", (req, res)=>{
 
 
 //view a user
->>>>>>> dae95cce48392f79601195946ab7835fdbf3c0fe
 router.get('/:username', (req, res) => {
+	/*
 	if(req.session.user){
 		const username = req.params.username;
 		//if it's the session user, there's no need to go to the database again
@@ -174,8 +180,8 @@ router.get('/:username', (req, res) => {
 	}
 	else{
 		res.redirect('login');
-	}
+	}*/
 
-});*/
+});
 
 module.exports = router;
