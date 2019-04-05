@@ -103,8 +103,9 @@ router.post('/add', (req, res)=>{
 
 							transaction.save((err, addedTransaction)=>{
 								if (err){
-									res.send("Error adding Transaction");
 									console.log(err);
+									res.send("Error adding Transaction");
+									
 								}
 								else{
 									User.findOne({username: friendsToSplit[i].user}, (err, doc)=>{
@@ -115,7 +116,7 @@ router.post('/add', (req, res)=>{
 							});
 						}
 
-						res.redirect(id);
+						res.redirect(`/bill/${id}`);
 					});
 				});
 			}
