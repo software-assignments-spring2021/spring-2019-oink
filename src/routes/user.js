@@ -151,6 +151,9 @@ router.get("/my-bills", (req, res)=>{
 	if(req.session.user){
 
 		const bills = req.session.user.bills;
+		console.log(req.session);
+		console.log(req.session.user.bills);
+		console.log(bills);
 
 		//in this format so that we can also sort by date
 		Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
