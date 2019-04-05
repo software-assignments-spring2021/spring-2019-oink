@@ -7,6 +7,7 @@ const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 
 const dbHelp = require('../helpers/db_helpers.js');
+const valHelpers = require('../helpers/validation_helpers.js');
 
 /*
 router.get('/add', (req, res) => {
@@ -51,7 +52,7 @@ router.post('/add', (req, res)=>{
 		const bill = new Bill({
 			amount:req.body.amount,
 			splitWith:friendsToSplit,
-			about:req.body.about
+			comment:req.body.comment
 		});
 		let id;
 		bill.save((err, addedBill)=>{
@@ -124,6 +125,36 @@ router.post('/add', (req, res)=>{
 			}
 		});
 
+		const friendsToSplit = req.body.splitWith.split(','); friendsToSplit.push(req.session.user.username);
+
+		const bill = new Bill({
+			amount:req.body.amount,
+			splitWith:friendsToSplit,
+			comment:req.body.comment});
+
+		if (valHelper.validateBill(bill)){
+			
+			bill.save((err, addedBill)=>{
+				if (err){
+					res.render('addbill', {'friends': users, error:"Error adding Bill"})
+					//res.send("Error adding bill");
+					console.log(err);
+				}
+				else{
+					console.log("need to split bill into transactions");
+
+					User.findOne({username: user.username}, (err, doc)=>{
+						doc.bills.push(addedBill._id);
+						doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, 'view/'+addedBill._id));
+					});
+				}
+			});
+
+		}else{
+			res.render('addbill', {'friends': users, error:"Error adding Bill"})
+		}
+
+		
 	}
 
 	else{
@@ -139,7 +170,7 @@ router.get('/:id', (req, res) => {
 			if(!err){
 				Transaction.find({"bill": id}, (err, transactions) => {
 					res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-					"date": bill._id.getTimestamp(), "text": bill.about, "transactions": transactions});
+					"date": bill._id.getTimestamp(), "text": bill.comment, "transactions": transactions});
 				});
 			}
 			else{
@@ -151,6 +182,43 @@ router.get('/:id', (req, res) => {
 	else{
 		res.redirect('/user/login');
 	}
+});
+
+router.get('/view/:id', (req, res)=>{
+	//view one bill
+
+	if(req.session.user){
+
+		Bill.findOne({"_id" :req.params.id}, (err, bill)=>{
+			if (err || !bill){
+				res.render("viewBill",{err:"bill not found"});
+			}
+			else{
+				console.log(bill);
+
+				//find all transactions that go along with the bill
+				Transaction.find({'bill':bill._id}, (err, transactions)=>{
+
+					if(err){
+						bill['transactions'] = []
+					}
+					else{
+						bill['transactions'] = transactions
+					}
+
+					res.render('viewBill', {'bill':bill})
+
+				});
+
+			}
+
+
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+
 });
 
 module.exports = router;

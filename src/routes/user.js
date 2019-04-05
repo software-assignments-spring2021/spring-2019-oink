@@ -4,6 +4,7 @@ const router = express.Router();
 require('../schemas'); 
 
 const User = mongoose.model("User");
+const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 
 
@@ -135,7 +136,32 @@ router.get('/index', (req, res) => {
 	}
 });
 
+<<<<<<< HEAD
 /*
+=======
+router.get("/my-bills", (req, res)=>{
+	//view all bills added by the user
+	
+
+	if(req.session.user){
+
+		const bills = req.session.user.bills;
+
+		//in this format so that we can also sort by date
+		Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
+			console.log(docs);
+			res.render("allUserBills", {"bills":docs});
+
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+});
+
+
+//view a user
+>>>>>>> dae95cce48392f79601195946ab7835fdbf3c0fe
 router.get('/:username', (req, res) => {
 	if(req.session.user){
 		const username = req.params.username;
