@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
 					if(!err){
 						req.session.user = user;
 						//res.redirect(`/user/${user.username}`);
-						res.redirect('/user/'+req.session.user.username); // Until User web pages created
+						res.redirect('/user/index'); // Until User web pages created
 					}
 				});
 			});
@@ -74,7 +74,7 @@ router.post('/login', (req, res) => {
 				if(!err){
 					req.session.user = user;
 					//res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
-					res.redirect('/user/'+req.session.user.username); // Until User web pages created
+					res.redirect('/user/index'); // Until User web pages created
 				}
 			});
 		}
@@ -92,39 +92,50 @@ router.get('/logout', (req, res) => {
 			res.redirect('/');
 		}
 	});
-
 });
 
-router.get('/transactions', (req, res) => {
-	if(req.session.user){
-		const transactionIDs = req.session.user.transactions;
-		const transactions = [];
-
-		let searchUser = "";
-		if(req.query.searchUser !== undefined)
-			searchUser = req.query.searchUser;
-		
-		for(let i = 0 ; i < transactionIDs.length; i++){
-			const id = transactionIDs[i];
-			Transaction.findById(id, (err, transaction)=>{
-				if(!err){
-					if(transaction.paidTo == searchUser || searchUser == ""){
-						if(transaction.isPaid == false) // only display current, non-paid transactions
-							transactions.push(transaction);
-					}
-				}
-				else{
-					res.send('error');
-				}
-			});
-		}
-		res.render("transactions", {"user": req.session.user.username, "transactions": transactions});
+router.get('/my-transactions', (req, res) => {
+	const user = req.session.user;
+	if(user){
+		Transaction.find({"paidBy": user.username}, (err, transactions) => {
+			const unpaid = [];
+			const paid = [];
+			for (let i = 0 ; i < transactions.length; i++){
+				if(transactions[i].isPaid === true)
+					paid.push(transactions[i]);
+				else
+					unpaid.unshift(transactions[i]);
+			}
+			res.render('my-transactions', {"paid": paid, "unpaid": unpaid});
+		});
 	}
 	else{
 		res.redirect('login');
 	}
 });
 
+router.post('/pay-transaction/:id', (req, res) => {
+	const id = req.params.id;
+	Transaction.findById(id, (err, transaction) => {
+		if(transaction !== null){
+			transaction.isPaid = true;
+			transaction.save();
+		}
+	});
+});
+
+router.get('/index', (req, res) => {
+	if(req.session.user){
+		User.find({}, function(err, users, count){
+			res.render('user', {"user": req.session.user.username,"friends": users});
+		});
+	}
+	else{
+		res.redirect('login');
+	}
+});
+
+/*
 router.get('/:username', (req, res) => {
 	if(req.session.user){
 		const username = req.params.username;
@@ -140,6 +151,6 @@ router.get('/:username', (req, res) => {
 		res.redirect('login');
 	}
 
-});
+});*/
 
 module.exports = router;

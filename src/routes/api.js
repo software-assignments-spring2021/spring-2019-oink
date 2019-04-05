@@ -29,8 +29,6 @@ router.post('/add-friend',(req,res)=>{
 				res.send({result: "added"});
 			}
 		});
-
-
 	});
 
 

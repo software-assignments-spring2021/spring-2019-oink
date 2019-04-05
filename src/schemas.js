@@ -26,7 +26,8 @@ const BillSchema = new Schema({
 	notSplit:{type:Boolean, required:false},
 
 	//only matters if not split is true
-	paidBy:{type:String, required: false} 
+	paidBy:{type:String, required: false},
+	about:String
 
 });
 
@@ -49,7 +50,7 @@ const UserSchema = new Schema({
 	groups:[GroupSchema],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
-	friends:[FriendSchema]
+	friends:[String]
 
 });
 
