@@ -114,47 +114,12 @@ router.post('/add', (req, res)=>{
 								}
 							});
 						}
-						/*
-						User.findOne({"username": user.username}, (err, doc) => {
-							const billId = doc.bills[doc.bills.length-1].toString();
-							res.redirect(billId); // redirect to bill page
-						});	*/
+
 						res.redirect(id);
 					});
 				});
 			}
-		});
-
-		const friendsToSplit = req.body.splitWith.split(','); friendsToSplit.push(req.session.user.username);
-
-		const bill = new Bill({
-			amount:req.body.amount,
-			splitWith:friendsToSplit,
-			comment:req.body.comment});
-
-		if (valHelper.validateBill(bill)){
-			
-			bill.save((err, addedBill)=>{
-				if (err){
-					res.render('addbill', {'friends': users, error:"Error adding Bill"})
-					//res.send("Error adding bill");
-					console.log(err);
-				}
-				else{
-					console.log("need to split bill into transactions");
-
-					User.findOne({username: user.username}, (err, doc)=>{
-						doc.bills.push(addedBill._id);
-						doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, 'view/'+addedBill._id));
-					});
-				}
-			});
-
-		}else{
-			res.render('addbill', {'friends': users, error:"Error adding Bill"})
-		}
-
-		
+		});		
 	}
 
 	else{

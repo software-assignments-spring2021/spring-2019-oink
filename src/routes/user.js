@@ -136,7 +136,6 @@ router.get('/index', (req, res) => {
 	}
 });
 
-<<<<<<< HEAD
 /*
 =======
 router.get("/my-bills", (req, res)=>{
