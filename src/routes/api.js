@@ -11,11 +11,13 @@ router.post('/add-friend',(req,res)=>{
 		user: username,
 		balance: 0.00
 	});
+	const secondFriend = new Friend({
+		user: req.session.user.username,
+		balance: 0.00
+	});
 
-
-
-	User.findOne({username: req.session.user.username},(err, doc)=>{
-		doc.friends.push(newFriend);
+	User.findOne({"username": username},(err, doc)=>{
+		doc.friends.push(secondFriend);
 		doc.save((err,saved)=>{
 			if(err){
 				console.log(err);
