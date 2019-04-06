@@ -1,14 +1,14 @@
 </h2>Unpaid Transactions</h2>
 {{#each unpaid as |u|}}
 	<div>
-		${{ u.amount }} - <button onclick='payTransaction("{{ u._id }}")'>Pay</button> - Added by: {{ u.paidTo }} - <a href="/bill/{{ u.bill }}">View</a>
+		${{ u.amount }} - <button onclick='payTransaction("{{ u._id }}")'>Pay</button> - Added by: {{ u.paidTo }} - <a href="/bill/view/{{ u.bill }}">View</a>
 	</div>
 {{/each}}
 
 <h2>Paid Transactions</h2>
 {{#each paid as |p|}}
 	<div>
-		${{ p.amount }} - Added by: {{ p.paidTo }} - <a href="/bill/{{ p.bill }}">View</a>
+		${{ p.amount }} - Added by: {{ p.paidTo }} - <a href="/bill/view/{{ p.bill }}">View</a>
 	</div>
 {{/each}}
 
