@@ -33,4 +33,18 @@ function onClickAddUserToBill(){
   const splitWith = document.getElementById("splitWith");
   splitWith.value += txt;
 
+  
 } 
+
+function calculateTip(){
+  const pretip = document.getElementById("pretip");
+  const tip = document.getElementById("tip");
+  const total = document.getElementById("amount");
+
+  total.value = pretip.value * ((tip.value * .01) + 1);
+}
+
+function noTip() {
+  const tip = document.getElementById("tip");
+  tip.value = 0;
+}

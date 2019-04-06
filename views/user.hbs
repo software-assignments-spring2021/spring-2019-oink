@@ -2,7 +2,11 @@
 
 <form action="/bill/add" method="post">
   
-  $ <input type="text" name="amount" placeholder="0.00"><br><br>
+  $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
+  Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
+	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
+	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
+	Total: <input type="text" name="amount" id="amount" readonly><br><br>
 
 	<div id="friendsDropdown">
 		Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
