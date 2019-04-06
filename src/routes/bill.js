@@ -133,19 +133,21 @@ router.get('/view/:id', (req, res)=>{
 				res.render("viewBill",{err:"bill not found"});
 			}
 			else{
-				console.log(bill);
 
 				//find all transactions that go along with the bill
+				const showBill = {};
+				showBill.comment = bill.comment;
+				showBill.amount = bill.amount;
 				Transaction.find({'bill':bill._id}, (err, transactions)=>{
 
 					if(err){
-						bill['transactions'] = []
+						showBill['transactions'] = []
 					}
 					else{
-						bill['transactions'] = transactions
+						showBill['transactions'] = transactions;
 					}
-
-					res.render('viewBill', {'bill':bill})
+					console.log(showBill);
+					res.render('viewBill', {'bill':showBill});
 
 				});
 
