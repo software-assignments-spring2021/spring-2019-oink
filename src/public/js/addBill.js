@@ -38,6 +38,7 @@ function onClickAddUserToBill(){
   const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
   addFriend2.addEventListener("click", function(){
     handleAddFriend(friend);
+    addFriend2.style.visibility = "hidden";
   });
 } 
 
@@ -57,5 +58,6 @@ function noTip() {
 function handleAddFriend(friend){
   const req = new XMLHttpRequest();
   req.open('post', '/api/add-friend/', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.send("username="+friend);
 }
