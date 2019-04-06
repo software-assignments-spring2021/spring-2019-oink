@@ -9,7 +9,9 @@ const Transaction = mongoose.model("Transaction");
 const dbHelp = require('../helpers/db_helpers.js');
 const valHelpers = require('../helpers/validation_helpers.js');
 
+
 router.post('/add', (req, res)=>{
+	console.log(req.body);
 	//the bill gets amount and all the people it is being split with are passed to the server
 	//the session user should get added to that list
 	//the bill is added to the database and then gets split into transactions based on amount/weights
@@ -89,7 +91,7 @@ router.post('/add', (req, res)=>{
 							});
 						}
 
-						res.redirect(`/bill/${id}`);
+						res.redirect(`/bill/view/${id}`);
 					});
 				});
 			}
@@ -102,7 +104,7 @@ router.post('/add', (req, res)=>{
 
 });
 
-router.get('/:id', (req, res) => {
+router.get('/view/:id', (req, res) => {
 	if(req.session.user){
 		const id = req.params.id;
 		Bill.findById(id, (err, bill)=>{
@@ -121,45 +123,6 @@ router.get('/:id', (req, res) => {
 	else{
 		res.redirect('/user/login');
 	}
-});
-
-router.get('/view/:id', (req, res)=>{
-	//view one bill
-
-	if(req.session.user){
-
-		Bill.findOne({"_id" :req.params.id}, (err, bill)=>{
-			if (err || !bill){
-				res.render("viewBill",{err:"bill not found"});
-			}
-			else{
-
-				//find all transactions that go along with the bill
-				const showBill = {};
-				showBill.comment = bill.comment;
-				showBill.amount = bill.amount;
-				Transaction.find({'bill':bill._id}, (err, transactions)=>{
-
-					if(err){
-						showBill['transactions'] = []
-					}
-					else{
-						showBill['transactions'] = transactions;
-					}
-					console.log(showBill);
-					res.render('viewBill', {'bill':showBill});
-
-				});
-
-			}
-
-
-		});
-	}
-	else{
-		res.redirect('/user/login');
-	}
-
 });
 
 module.exports = router;

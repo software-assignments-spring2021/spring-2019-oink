@@ -22,7 +22,7 @@ router.get('/register', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 
 	if(req.session.user){
-		res.redirect(`/user/${req.session.user.username}`)
+		res.redirect('/user/index');
 	}
 	else{
 		res.render('registration');
@@ -43,7 +43,6 @@ router.post('/register', (req, res) => {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						//res.redirect(`/user/${user.username}`);
 						res.redirect('/user/index'); // Until User web pages created
 					}
 				});
@@ -55,7 +54,7 @@ router.post('/register', (req, res) => {
 router.get('/login', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 	if(req.session.user){
-		res.redirect(`/user/${req.session.user.username}`)
+		res.redirect('/user/index');
 	}
 	else{
 		res.render('Login');
@@ -74,7 +73,6 @@ router.post('/login', (req, res) => {
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					//res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
 					res.redirect('/user/index'); // Until User web pages created
 				}
 			});
@@ -111,7 +109,7 @@ router.get('/my-transactions', (req, res) => {
 		});
 	}
 	else{
-		res.redirect('login');
+		res.redirect('/user/login');
 	}
 });
 
@@ -123,11 +121,12 @@ router.post('/pay-transaction/:id', (req, res) => {
 				transaction.isPaid = true;
 				transaction.save();
 				console.log("Transaction paid");
+				res.send("ok");
 			}
 		}
 		else{
 			console.log(err);
-			res.send(err);
+			res.send("error");
 		}
 	});
 });
@@ -135,11 +134,11 @@ router.post('/pay-transaction/:id', (req, res) => {
 router.get('/index', (req, res) => {
 	if(req.session.user){
 		User.find({}, function(err, users, count){
-			res.render('user', {"user": req.session.user.username,"friends": users});
+			res.render('user', {"friends": users});
 		});
 	}
 	else{
-		res.redirect('login');
+		res.redirect('/user/login');
 	}
 });
 
@@ -154,7 +153,7 @@ router.get("/my-bills", (req, res)=>{
 
 		//in this format so that we can also sort by date
 		Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
-			console.log(docs);
+			//console.log(docs);
 			res.render("allUserBills", {"bills":docs});
 
 		});
