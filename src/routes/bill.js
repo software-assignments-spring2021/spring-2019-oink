@@ -44,7 +44,7 @@ router.post('/add', (req, res)=>{
 						friendsToSplit = [];
 						for(let key in req.body){
 							if(req.body.hasOwnProperty(key)){
-								if(key !== "splitWith" && key !== "amount" && key !== "about"){
+								if(key !== "splitWith" && key !== "amount" && key !== "about" && key !== 'pretip' && key !== 'tip'){
 									const a = {}
 									a.user = key;
 									a.amount = req.body[key];
