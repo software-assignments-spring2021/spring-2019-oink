@@ -6,7 +6,7 @@ require('../schemas');
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
-
+const Group = mongoose.model("Group");
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -134,7 +134,13 @@ router.post('/pay-transaction/:id', (req, res) => {
 router.get('/index', (req, res) => {
 	if(req.session.user){
 		User.find({}, function(err, users, count){
-			res.render('user', {"friends": users});
+			const groups = [];
+			for(let i = 0; i < req.session.user.groups.length; i++){
+				Group.findById(req.session.user.groups[i], (err, group) => {
+					groups.push(group);
+				});
+			}
+			res.render('user', {"friends": users, "groups": groups});
 		});
 	}
 	else{
@@ -166,20 +172,23 @@ router.get("/my-bills", (req, res)=>{
 
 //view a user
 router.get('/:username', (req, res) => {
-	/*
-	if(req.session.user){
-		const username = req.params.username;
-		//if it's the session user, there's no need to go to the database again
-		if(username === req.session.user.username){
-			res.render('user', {"username": username});
+
+	const user = req.params.username;
+	User.findOne({"username": user}, (err, foundUser) => {
+		if(!foundUser){
+			res.redirect('/user/index');
 		}
+
 		else{
-			res.send("Error: User not found");
+			const groups = [];
+			for(let i = 0; i < foundUser.groups.length; i++){
+				Group.findById(foundUser.groups[i], (err, group) => {
+					groups.push(group);
+				});
+			}
+			res.render('user-profile', {"user": user, "groups": groups});
 		}
-	}
-	else{
-		res.redirect('login');
-	}*/
+	});
 
 });
 
