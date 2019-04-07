@@ -21,6 +21,7 @@ function onClickAddUserToBill(){
 
   const addFriend = document.createElement("button");
   addFriend.innerHTML = "Add Friend";
+  addFriend.setAttribute("id", "addFriend");
   addFriend.type = "button";
   div.appendChild(addFriend);
 
@@ -33,7 +34,12 @@ function onClickAddUserToBill(){
   const splitWith = document.getElementById("splitWith");
   splitWith.value += txt;
 
-  
+  const addFriend2 = document.getElementById("addFriend");
+  const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
+  addFriend2.addEventListener("click", function(){
+    handleAddFriend(friend);
+    addFriend2.style.visibility = "hidden";
+  });
 } 
 
 function calculateTip(){
@@ -47,4 +53,11 @@ function calculateTip(){
 function noTip() {
   const tip = document.getElementById("tip");
   tip.value = 0;
+}
+
+function handleAddFriend(friend){
+  const req = new XMLHttpRequest();
+  req.open('post', '/api/add-friend/', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.send("username="+friend);
 }
