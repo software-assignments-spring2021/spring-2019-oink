@@ -29,6 +29,18 @@
   About: <input type="text" name="about" id="about">
 
   <br><br>
+
+  <div id="groups">
+    <h3>Pay by Group:</h3>
+    {{#each groups as |g|}}
+      <div>
+        {{ g.name }} - {{ g.inGroup.length }} Members <h2 hidden>{{ g._id }}</h2>
+        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+      </div>
+    {{/each}}<br>
+  </div><br>
+
+
   <input type="submit" value="Add bill">
 </form>
 
