@@ -1,3 +1,9 @@
+{{#if notification}}
+  <div id="notification">
+    <h3>You owe {{notification.paidTo}}: ${{notification.amount}}
+  </div><br>
+{{/if}}
+
 <h3>Add a bill:</h3>
 
 <form action="/bill/add" method="post">

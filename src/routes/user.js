@@ -1,11 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const async = require('async');
 const router = express.Router(); 
 require('../schemas'); 
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
+
 const Group = mongoose.model("Group");
 
 const passport = require('passport');
@@ -134,13 +136,42 @@ router.post('/pay-transaction/:id', (req, res) => {
 router.get('/index', (req, res) => {
 	if(req.session.user){
 		User.find({}, function(err, users, count){
-			const groups = [];
-			for(let i = 0; i < req.session.user.groups.length; i++){
-				Group.findById(req.session.user.groups[i], (err, group) => {
-					groups.push(group);
-				});
-			}
-			res.render('user', {"friends": users, "groups": groups});
+			User.findOne({"username": req.session.user.username}, function(err, user){
+				
+				const transactionIDs = user.transactions;
+				let found = false;
+				let notification;
+				
+				/*
+				for(let i = transactionIDs.length-1; i >= 0; i--){
+					Transaction.findById(transactionIDs[i], (err, transaction) => {
+						if(!transaction.isPaid && !found){
+							notification = transaction;
+							found = true;
+						}
+					});
+				}*/
+				async.forEach(transactionIDs, function(item, callback){
+					Transaction.findById(item, (err, transaction) => {
+						if(!transaction.isPaid && !found){
+							notification = transaction;
+							found = true;
+						}
+						callback();
+					});
+				}, function(err){
+					const groups = [];
+					for(let i = 0; i < req.session.user.groups.length; i++){
+						Group.findById(req.session.user.groups[i], (err, group) => {
+							groups.push(group);
+						});
+					}
+					if(notification !== undefined)
+						res.render('user', {"friends": users, "groups": groups, "notification": notification});
+					else
+						res.render('user', {"friends": users, "groups": groups});
+					});		
+			});
 		});
 	}
 	else{
