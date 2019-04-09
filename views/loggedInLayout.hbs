@@ -20,6 +20,7 @@
             <a href="/user/my-bills"><li>View My Bills</li></a>
             <a href="/user/my-transactions"><li>View My Transactions</li></a>
             <a href="/user/my-balances"><li>View My Balances</li></a>
+            <a href="/group/add"><li>Create A Group</li></a>
             <a href="/api/add-friend"><li>Find A Friend</li></a>
 
         </ul>
@@ -33,7 +34,7 @@
                 <a href="/user/index"><h1>Oink</h1></a>
             </div>
             <div class="right-side-header">
-                <h3 class="username">{{ user.username }}</h3>
+                <a href="/user/{{ user.username }}"<h3 class="username">{{ user.username }}</h3></a>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
                 </form>

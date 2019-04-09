@@ -40,11 +40,24 @@ router.post('/add', (req, res) => {
 				}
 			}
 		});
-		res.redirect('/user/index');
+		res.redirect('/user/' + user.username);
 	}
 	else{
 		res.redirect('/user/login');
 	}
+});
+
+router.get('/:id', (req, res) => {
+	const id = req.params.id;
+	Group.findById(id, (err, group) => {
+		if(group){
+			res.json(group);
+		}
+		else{
+			res.send(err);
+			console.log(err);
+		}
+	});
 });
 
 module.exports = router;
