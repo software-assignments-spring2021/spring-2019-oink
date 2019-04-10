@@ -216,6 +216,10 @@ router.get('/search', (req, res) => {
 });
 
 
+router.get('/my-balances', (req, res) => {
+	res.send("user balances");
+});
+
 //view a user
 router.get('/:username', (req, res) => {
 

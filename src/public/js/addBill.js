@@ -7,8 +7,24 @@ function onClickAddUserToBill(){
   addUserToBill(username);
 } 
 
+function removeUser(username){
+  
+  const div = document.getElementById(username + "Block");
+
+  div.parentNode.removeChild(div);
+  const splitWith = document.getElementById('splitWith');
+  const users = splitWith.split(',');
+  let newString = "";
+  for(let i = 0; i < user.length; i++){
+    if(user[i] != username)
+      newString += user[i] + ',';
+  }
+  splitWith.value = newString;
+}
+
 function addUserToBill(username){
     const div = document.createElement("div");
+    div.setAttribute("id", username + "Block");
     div.className = "userBlock";
     const parentDiv = document.getElementById("userAmounts");
 
@@ -44,6 +60,15 @@ function addUserToBill(username){
     });
     req.send("username="+username);
 
+    // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
+
+    const delButton = document.createElement("button");
+    delButton.innerHTML = "Remove";
+    delButton.setAttribute("id", "deleteUser");
+    delButton.type = "button";
+
+    div.appendChild(delButton);
+
     const br = document.createElement("br");
     div.appendChild(br);
 
@@ -62,6 +87,18 @@ function addUserToBill(username){
           addFriend2.disabled = true;
         });
     }
+
+    delButton.onclick = function() {
+      const users = splitWith.value.split(',');
+      let newString = "";
+      for(let i = 0; i < users.length; i++){
+        if(users[i] != username && users[i] != '')
+          newString += users[i] + ',';
+      }
+      splitWith.value = newString;
+      div.parentNode.removeChild(div);
+    }
+
 }
 
 function calculateTip(){
