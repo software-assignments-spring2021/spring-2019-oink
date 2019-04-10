@@ -1,0 +1,54 @@
+{{#if notification}}
+  <div id="notification">
+    <h3>You owe {{notification.paidTo}}: ${{notification.amount}}
+  </div><br>
+{{/if}}
+
+<h3>Add a bill:</h3>
+
+<form action="/bill/add" method="post">
+  
+  $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
+  Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
+	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
+	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
+	Total: <input type="text" name="amount" id="amount" readonly><br><br>
+
+	<div id="friendsDropdown">
+		Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
+		{{#each friends as |f|}}
+			<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
+		{{/each}}
+	</div>
+	<button type="button" onclick="onClickAddUserToBill()">Add User</button><br>
+
+	<br>
+
+  <div id="userAmounts">
+  	<div class="userBlock">
+  		{{ user.username }}
+  		<input type="text" name='{{ user.username }}' placeholder="0.00">
+  	</div>
+  </div>
+
+  <input hidden type="text" name="splitWith" id="splitWith">
+  About: <input type="text" name="about" id="about">
+
+  <br><br>
+
+  <div id="groups">
+    <h3>Pay by Group:</h3>
+    {{#each groups as |g|}}
+      <div>
+        {{ g.name }} - {{ g.inGroup.length }} Members <h2 hidden>{{ g._id }}</h2>
+        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+      </div>
+    {{/each}}<br>
+  </div><br>
+
+
+  <input type="submit" value="Add bill">
+</form>
+
+<script src="/js/search.js"></script>
+<script src="/js/addBill.js"></script>

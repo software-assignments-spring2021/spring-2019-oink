@@ -4,37 +4,14 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
+const Transaction = mongoose.model("Transaction");
 
 const dbHelp = require('../helpers/db_helpers.js');
+const valHelpers = require('../helpers/validation_helpers.js');
 
-router.get('/add', (req, res) => {
-
-	// Search bar will display the names of every friend on session user's friend-list
-	// Filtering will be implemented using client-side JS
-
-	// SPRINT 1 VERSION
-		// DISPLAY ALL USERS IN OINK DATABASE
-
-		// WILL EVENTUALLY ONLY SHOW FRIENDS OF USER
-	
-	if(req.session.user){
-		//const users = req.session.user.friends;
-		User.find({}, function(err, users, count){
-			if(users != null){
-				res.render('addbill', {'friends': users});
-			}
-			else{
-				res.send('No Users Yet');
-			}
-		});
-	}
-	else{
-		res.redirect('/user/login');
-	}
-
-});
 
 router.post('/add', (req, res)=>{
+	console.log(req.body);
 	//the bill gets amount and all the people it is being split with are passed to the server
 	//the session user should get added to that list
 	//the bill is added to the database and then gets split into transactions based on amount/weights
@@ -46,27 +23,79 @@ router.post('/add', (req, res)=>{
 
 	let user = req.session.user;
 	if(user){
-		const friendsToSplit = req.body.splitWith.split(','); friendsToSplit.push(req.session.user.username);
+		let friendsToSplit = req.body.splitWith.split(','); friendsToSplit[friendsToSplit.length-1] = req.session.user.username;
 		const bill = new Bill({
 			amount:req.body.amount,
-			splitWith:friendsToSplit});
-
+			splitWith:friendsToSplit,
+			comment:req.body.comment
+		});
+		let id;
 		bill.save((err, addedBill)=>{
 			if (err){
 				res.send("Error adding bill");
 				console.log(err);
 			}
 			else{
-				console.log("need to split bill into transactions");
-
 				User.findOne({username: user.username}, (err, doc)=>{
-					doc.bills.push(addedBill._id);
-					doc.save((err, saved)=> dbHelp.saveDocAndRedirect(err, saved, res, `/created`));
+					doc.bills.push(mongoose.Types.ObjectId(addedBill._id));
+					id = addedBill._id;
+					doc.save(function(){
+						req.body = JSON.parse(JSON.stringify(req.body));
+						friendsToSplit = [];
+						for(let key in req.body){
+							if(req.body.hasOwnProperty(key)){
+								if(key !== "splitWith" && key !== "amount" && key !== "about" && key !== 'pretip' && key !== 'tip'){
+									const a = {}
+									a.user = key;
+									a.amount = req.body[key];
+									friendsToSplit.unshift(a);
+								}
+							}
+						}
+						for(let i = 0; i < friendsToSplit.length; i ++){
+							let transaction;
+							if(i !== friendsToSplit.length-1){
+								
+								transaction = new Transaction({
+									amount:friendsToSplit[i].amount,
+									paidBy:friendsToSplit[i].user,
+									paidTo:friendsToSplit[friendsToSplit.length-1].user,
+									isPaid: false,
+									//bill: mongoose.Types.ObjectId(id)
+									bill: id
+								});
+							}
+							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
+								transaction = new Transaction({
+									amount:friendsToSplit[i].amount,
+									paidBy:friendsToSplit[i].user,
+									paidTo:friendsToSplit[friendsToSplit.length-1].user,
+									isPaid: true,
+									//bill: mongoose.Types.ObjectId(id)
+									bill: id
+								});
+							}
+
+							transaction.save((err, addedTransaction)=>{
+								if (err){
+									console.log(err);
+									res.send("Error adding Transaction");
+									
+								}
+								else{
+									User.findOne({username: friendsToSplit[i].user}, (err, doc)=>{
+										doc.transactions.push(mongoose.Types.ObjectId(addedTransaction._id));
+										doc.save();
+									});
+								}
+							});
+						}
+
+						res.redirect(`/bill/view/${id}`);
+					});
 				});
 			}
-		})
-
-
+		});		
 	}
 
 	else{
@@ -75,35 +104,18 @@ router.post('/add', (req, res)=>{
 
 });
 
-router.get('/created', (req, res) => {
+router.get('/view/:id', (req, res) => {
 	if(req.session.user){
-		const username = req.session.user.username;
-		User.findOne({"username": username}, (err, user) => {
-			if(user){
-				if(user.bills.length == 0){
-					res.send("No Bills Created Yet :(");
-				}
-				else{
-					const id = user.bills[user.bills.length-1];
-					Bill.findById(id, (err, bill)=>{
-						if(!err){
-							const value = bill.amount;
-							const sharees = [];
-							for(let i = 0; i < bill.splitWith.length; i++){
-								const usr = {};
-								usr.name = bill.splitWith[i];
-								usr.split = value / bill.splitWith.length;
-								sharees.push(usr);
-							}
-							res.render('billCreated', {"value": value, "splitWith": sharees});
-						}
-						else{
-							res.send('error');
-						}
-					});
-				}
+		const id = req.params.id;
+		Bill.findById(id, (err, bill)=>{
+			if(!err){
+				Transaction.find({"bill": id}, (err, transactions) => {
+					res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
+					"date": bill._id.getTimestamp(), "text": bill.comment, "transactions": transactions});
+				});
 			}
 			else{
+				console.log(err);
 				res.send('error');
 			}
 		});

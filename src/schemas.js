@@ -6,6 +6,7 @@ const TransactionSchema = new Schema({
 	//will be referenced by the bill
 	amount:{type: Number, required:true},
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
+	paidTo:{type:String, required:true},
 	isPaid:{type:Boolean},
 	bill:{type: Schema.Types.ObjectId, ref:"Bill"}
 });
@@ -18,6 +19,8 @@ const BillSchema = new Schema({
 	//if the two involved will be working on a payback, this will be only two users
 	splitWith:[{type:String, required:true}],
 
+	comment:{type:String, required:false},
+
 	//if the bill is not being split and is added to two users running totals
 	
 	//if the owner or the person in "splitWith" is paying the full bill on a payback system, this will be true
@@ -25,8 +28,7 @@ const BillSchema = new Schema({
 	notSplit:{type:Boolean, required:false},
 
 	//only matters if not split is true
-	paidBy:{type:String, required: false} 
-
+	paidBy:{type:String, required: false},
 });
 
 const GroupSchema = new Schema({
@@ -36,21 +38,23 @@ const GroupSchema = new Schema({
 
 });
 
+const FriendSchema = new Schema({
+	user: String,
+	balance: Number
+});
+
 const UserSchema = new Schema({
 	username:{type: String, unique:true, required:true, index:true},
 	email:{type:String, unique:true, index:true},
 	password:{type:String},
-	groups:[GroupSchema],
+	groups:[{type: Schema.Types.ObjectId, ref:"Group"}],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
-	friends:[String]
+	friends:[FriendSchema]
 
 });
 
-const FriendSchema = new Schema({
-	user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-	balance: Number
-});
+
 
 //Plug-Ins
 UserSchema.plugin(passportLocalMongoose);
@@ -59,8 +63,9 @@ UserSchema.plugin(passportLocalMongoose);
 mongoose.model('Bill', BillSchema);
 mongoose.model('Transaction', TransactionSchema);
 mongoose.model('Group', GroupSchema);
-mongoose.model('User', UserSchema);
 mongoose.model('Friend', FriendSchema);
+mongoose.model('User', UserSchema);
+
 
 
 mongoose.connect('mongodb://localhost/oink_dev');

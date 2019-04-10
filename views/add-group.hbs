@@ -1,0 +1,29 @@
+<h3>Add a Group</h3>
+
+<form action="" method="post">
+  
+  Group Name:<br>
+  <input type="text" name="name" >
+  <br><br>
+
+  	<div id="friendsDropdown">
+		Add users: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
+		{{#each friends as |f|}}
+			<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
+		{{/each}}
+	</div>
+	<button type="button" onclick="onClickAddUserToGroup()">Add User</button><br><br><br>
+
+	<div id="members"><h3>Members:</h3>
+		<ul>
+			<li>{{ user }}</li>
+		</ul>
+	</div><br><br><br>
+
+	<input hidden type="text" name="splitWith" id="splitWith">
+	<input type="submit" value="Add Group">
+</form> 
+
+<script src="/js/search.js"></script>
+<script src="/js/addGroup.js"></script>
+

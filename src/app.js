@@ -8,6 +8,9 @@ const session = require('express-session');
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const billRouter = require('./routes/bill');
+const apiRouter = require('./routes/api');
+const groupRouter = require('./routes/group');
+
 
 /*Any middleware added needs to go here*/
 
@@ -27,10 +30,17 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-//set local variables for hbs files
-app.use(function(req, res, next){
-	res.locals.user = req.session.user || '';
-	next();
+
+app.use((req, res, next) => {
+	if(req.session.user){
+		res.locals.user = req.session.user;
+		app.set('view options', { layout: 'loggedInLayout' });
+		next();
+	}
+	else{
+		app.set('view options', { layout: 'layout' });
+		next();
+	}
 });
 
 
@@ -46,6 +56,8 @@ app.use(function(req, res, next){
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/bill', billRouter);
+app.use('/api', apiRouter);
+app.use('/group', groupRouter);
 
 // 404 Page Handler
 app.use((req, res) => {

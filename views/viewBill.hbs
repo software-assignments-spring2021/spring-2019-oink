@@ -1,0 +1,34 @@
+
+{{#if err}}
+	<h2>{{ err }}</h2>
+
+{{else}}
+	<div class="amount">
+		<h2>${{ bill.amount }}</h2>
+	</div>
+
+	{{#with bill.comment}}
+	<div class="comment">
+		{{ bill.comment }}
+	</div>
+	{{/with}}
+
+	<section class="transactions">
+	<h3>Users paying this bill</h3>
+	{{#each bill.transactions}}
+		{{#if this.isPaid}}
+		<div class="paid">
+			<div class="amount">${{ amount }}</div>
+			<div class="user"><a href="/user/{{paidBy}}">{{paidBy}}</a>
+		</div>
+		{{else}}
+		<div class="unpaid">
+			<div class="amount">${{ amount }}</div>
+			<div class="user"><a href="/user/{{paidBy}}">{{paidBy}}</a>
+		</div>
+		{{/if}}
+	{{/each}}
+	</section>
+
+
+{{/if}}

@@ -1,0 +1,80 @@
+<!doctype html> <!--everything in the layout.hbs goes onto to every handlebrs webpage: this the the template -->
+<html>
+<head>
+	<title>Oink</title>
+    <!--  base css  -->
+	<link rel="stylesheet" href ="/css/base.css" type="text/css"/>
+    <!-- font awesome icons   -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+	<meta charset="utf-8">
+
+</head>
+<body>
+
+	<nav class="main-side-nav">
+
+        <ul>
+            <a href="/user/index"><li>Add a bill</li></a>
+            <a href="/user/my-bills"><li>View My Bills</li></a>
+            <a href="/user/my-transactions"><li>View My Transactions</li></a>
+            <a href="/user/my-balances"><li>View My Balances</li></a>
+            <a href="/group/add"><li>Create A Group</li></a>
+            <a href="/api/add-friend"><li>Find A Friend</li></a>
+
+        </ul>
+	</nav>
+    <div class="container">
+
+        <header>
+            <div class="left-side-header">
+                <i class="fas fa-bars" onclick="openSideNav()"></i>
+                <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
+                <a href="/user/index"><h1>Oink</h1></a>
+            </div>
+            <div class="right-side-header">
+                <a href="/user/{{ user.username }}"<h3 class="username">{{ user.username }}</h3></a>
+                <form action="/user/logout" method="get">
+                    <input type="submit" name="Logout" value="Logout" />
+                </form>
+            </div>
+        </header>
+
+        <div class="content">
+
+            {{{body}}} <!-- think of body as a variable as the other hbs files--> 
+
+        </div>
+
+        <footer>
+            <div class="footer-1">
+
+            </div>
+
+            <div class="footer-2">
+
+            </div>
+        </footer>
+    </div>
+    
+    
+    <!--  script for moving the sidebar  -->
+    <script>
+        //for the sidebar
+        function openSideNav(){
+            document.querySelector("nav.main-side-nav").style.width = "16%";
+            document.querySelector("div.container").style.marginLeft = "16%";
+            document.querySelector("i.fa-bars").classList.add("hidden");
+            document.querySelector("i.fa-times").classList.remove("hidden")
+        }
+        
+        function closeSideNav(){
+            document.querySelector("nav.main-side-nav").style.width = "0";
+            document.querySelector("div.container").style.marginLeft = "0";
+            document.querySelector("i.fa-bars").classList.remove("hidden");
+            document.querySelector("i.fa-times").classList.add("hidden");
+        }
+    </script>
+</body>
+</html>
