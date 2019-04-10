@@ -88,7 +88,7 @@ router.post('/add', (req, res)=>{
 										doc.transactions.push(mongoose.Types.ObjectId(addedTransaction._id));
 										doc.save();
 									});
-							}
+								}
 							});
 						}
 
@@ -98,15 +98,18 @@ router.post('/add', (req, res)=>{
 						for(let i = 0; i < friendsToSplit.length-1; i++){
 							const friendName = friendsToSplit[i].user;
 							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
-							
 							Friend.find({"user": friendName}, (err, friends) => {
 								for(let j = 0; j < friends.length; j++){
 									const id = friends[j]._id;
-									if(user.friends.includes(id.toString())){
-										friends[j].balance -= updateBalance;
-										friends[j].save();
-										break;
-									}
+									User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
+										for(let k = 0; k < sessionUser.friends.length; k++){
+											if(sessionUser.friends[k] == id.toString()){
+												friends[j].balance -= updateBalance;
+												friends[j].save();
+											}
+										}
+
+									});
 								}
 							});
 						}

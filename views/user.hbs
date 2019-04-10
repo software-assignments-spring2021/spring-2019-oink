@@ -12,7 +12,7 @@
   Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
 	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
 	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
-	Total: <input type="text" name="amount" id="amount" readonly><br><br>
+	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
 
 	<div id="friendsDropdown">
 		Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
@@ -26,8 +26,8 @@
 
   <div id="userAmounts">
   	<div class="userBlock">
-  		{{ user.username }}
-  		<input type="text" name='{{ user.username }}' placeholder="0.00">
+  		{{ user.username }} ($) : 
+  		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
   	</div>
   </div>
 
@@ -47,7 +47,7 @@
   </div><br>
 
 
-  <input type="submit" value="Add bill">
+  <input type="submit" value="Add bill" id="addBillButton">
 </form>
 
 <script src="/js/search.js"></script>

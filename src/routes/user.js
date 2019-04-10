@@ -147,7 +147,7 @@ router.post('/pay-transaction/:id', (req, res) => {
 
 router.get('/index', (req, res) => {
 	if(req.session.user){
-		User.find({}, function(err, users, count){
+		User.find({"username": { $ne: req.session.user.username}}, function(err, users, count){
 			User.findOne({"username": req.session.user.username}, function(err, user){
 				
 				const transactionIDs = user.transactions;

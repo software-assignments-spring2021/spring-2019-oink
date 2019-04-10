@@ -12,13 +12,15 @@ function addUserToBill(username){
     div.className = "userBlock";
     const parentDiv = document.getElementById("userAmounts");
 
-    const usernameField = document.createTextNode(username); // CREATE / APPEND USERNAME
+    const usernameField = document.createTextNode(username + " ($) : "); // CREATE / APPEND USERNAME
     div.appendChild(usernameField);
 
     const valueText = document.createElement("input"); // CREATE / APPEND TEXT FIELD
     valueText.type = "text";
+    valueText.value = 0;
     valueText.name = username;
     valueText.placeholder = "$0.00";
+    valueText.setAttribute("class", "transactionValue");
     div.appendChild(valueText);
 
     const addFriend = document.createElement("button");
@@ -81,3 +83,25 @@ function onClickAddGroup(id, user){
   req.addEventListener('load', () => {handleAddGroup(req, user);});
   req.send();
 }
+
+function checkValuesWithSum(){
+  
+  const vals = document.getElementsByClassName("transactionValue");
+  const sum = parseInt(document.getElementById("amount").value);
+  let inc = 0;
+  for(let i = 0; i < vals.length; i++){
+    inc += parseInt(vals[i].value);
+  }
+  const addBill = document.getElementById("addBillButton");
+  if(inc !== sum || sum === 0){
+    console.log(sum);
+    console.log(inc);
+    addBill.disabled = true;
+  }
+  if(inc === sum && sum !== 0){
+    addBill.disabled = false;
+  }
+
+}
+
+setInterval(checkValuesWithSum, 30);
