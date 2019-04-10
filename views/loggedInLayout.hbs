@@ -31,10 +31,10 @@
             <div class="left-side-header">
                 <i class="fas fa-bars" onclick="openSideNav()"></i>
                 <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
-                <a href="/user/index"><h1>Oink</h1></a>
+                <h1><a href="/user/index">Oink</a></h1>
             </div>
             <div class="right-side-header">
-                <a href="/user/{{ user.username }}"<h3 class="username">{{ user.username }}</h3></a>
+                <h3 class="username"><a href="/user/{{ user.username }}">{{ user.username }}</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
                 </form>

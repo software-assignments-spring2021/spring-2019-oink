@@ -1,15 +1,25 @@
-</h2>Unpaid Transactions</h2>
+<h2>Unpaid Transactions</h2>
+<section>
 {{#each unpaid as |u|}}
-	<div>
-		${{ u.amount }} - <button onclick='payTransaction("{{ u._id }}")'>Pay</button> - Added by: {{ u.paidTo }} - <a href="/bill/view/{{ u.bill }}">View</a>
-	</div>
+	<article class="unpaid">
+		<span class="amount">${{ u.amount }}</span>
+		<button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+		<span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
+		<span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+	</article>
 {{/each}}
+</section>
+
 
 <h2>Paid Transactions</h2>
+<section>
 {{#each paid as |p|}}
-	<div>
-		${{ p.amount }} - Added by: {{ p.paidTo }} - <a href="/bill/view/{{ p.bill }}">View</a>
-	</div>
+	<article class="paid">
+		<span class="amount">${{ p.amount }}</span>
+		<span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
+		<span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+	</article>
 {{/each}}
+</section>
 
 <script src="/js/my-transactions.js"></script>
