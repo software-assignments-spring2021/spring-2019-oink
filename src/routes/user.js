@@ -6,6 +6,7 @@ require('../schemas');
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
+const Friend = mongoose.model("Friend");
 const Transaction = mongoose.model("Transaction");
 
 const Group = mongoose.model("Group");
@@ -119,12 +120,23 @@ router.post('/pay-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	Transaction.findById(id, (err, transaction) => {
 		if(transaction){
-			if(transaction !== null){
-				transaction.isPaid = true;
-				transaction.save();
-				console.log("Transaction paid");
-				res.send("ok");
-			}
+			transaction.isPaid = true;
+			transaction.save();
+			console.log("Transaction paid");
+
+			// UPDATE BALANCES
+			User.findOne({"username": transaction.paidBy}, (error, user) => {
+				for(let i = 0; i < user.friends.length; i++){
+					Friend.findById(user.friends[i], (err, friend) => {
+						if(friend.user === transaction.paidTo){
+							friend.balance += transaction.amount;
+							friend.save();
+						}
+					});
+				}
+			});
+			res.send("ok");
+			
 		}
 		else{
 			console.log(err);
@@ -142,15 +154,6 @@ router.get('/index', (req, res) => {
 				let found = false;
 				let notification;
 				
-				/*
-				for(let i = transactionIDs.length-1; i >= 0; i--){
-					Transaction.findById(transactionIDs[i], (err, transaction) => {
-						if(!transaction.isPaid && !found){
-							notification = transaction;
-							found = true;
-						}
-					});
-				}*/
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
 						if(!transaction.isPaid && !found){

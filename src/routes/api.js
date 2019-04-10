@@ -19,7 +19,7 @@ router.post('/add-friend',(req,res)=>{
 
 	
 	User.findOne({"username": username},(err, doc)=>{
-		doc.friends.push(secondFriend);
+		doc.friends.push(secondFriend._id);
 		doc.save((err,saved)=>{
 			if(err){
 				console.log(err);
@@ -30,9 +30,11 @@ router.post('/add-friend',(req,res)=>{
 				console.log(doc)
 				//req.session.user.friends.push(newFriend);
 				User.findOne({"username": req.session.user.username},(err, user)=>{
-					user.friends.push(newFriend);
+					user.friends.push(newFriend._id);
 					user.save();
 					console.log(req.session.user);
+					newFriend.save();
+					secondFriend.save();
 					res.send({result: "added"});
 				});
 			}

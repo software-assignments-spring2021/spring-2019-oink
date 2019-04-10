@@ -50,7 +50,7 @@ const UserSchema = new Schema({
 	groups:[{type: Schema.Types.ObjectId, ref:"Group"}],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
-	friends:[FriendSchema]
+	friends:[{type: Schema.Types.ObjectId, ref:"Friend"}]
 
 });
 
