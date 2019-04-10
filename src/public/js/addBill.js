@@ -157,4 +157,14 @@ function checkValuesWithSum(){
 
 }
 
-setInterval(checkValuesWithSum, 30);
+function onClickSplitType(icon) {
+
+const symbol = document.getElementById("typeOfPayment");
+symbol.value = icon;
+
+}
+
+
+
+
+//setInterval(checkValuesWithSum, 30);
