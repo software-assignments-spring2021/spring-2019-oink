@@ -12,7 +12,7 @@ function addUserToBill(username){
     div.className = "userBlock";
     const parentDiv = document.getElementById("userAmounts");
 
-    const usernameField = document.createTextNode(username + " ($) : "); // CREATE / APPEND USERNAME
+    const usernameField = document.createTextNode(username); // CREATE / APPEND USERNAME
     div.appendChild(usernameField);
 
     const valueText = document.createElement("input"); // CREATE / APPEND TEXT FIELD
@@ -23,11 +23,26 @@ function addUserToBill(username){
     valueText.setAttribute("class", "transactionValue");
     div.appendChild(valueText);
 
-    const addFriend = document.createElement("button");
-    addFriend.innerHTML = "Add Friend";
-    addFriend.setAttribute("id", "addFriend");
-    addFriend.type = "button";
-    div.appendChild(addFriend);
+    // DETERMINE WHETHER USER IS A FRIEND
+
+    let friends = false;
+    const req = new XMLHttpRequest();
+    req.open('post', '/api/is-friend', true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.addEventListener('load', () => {
+      if(req.responseText === 'friends')
+        friends = true;
+
+      //IF NOT FRIENDS, INCLUDE "ADD FRIEND" BUTTON
+      if(!friends){
+        const addFriend = document.createElement("button");
+        addFriend.innerHTML = "Add Friend";
+        addFriend.setAttribute("id", "addFriend");
+        addFriend.type = "button";
+        div.appendChild(addFriend);
+      }
+    });
+    req.send("username="+username);
 
     const br = document.createElement("br");
     div.appendChild(br);
@@ -39,11 +54,14 @@ function addUserToBill(username){
     splitWith.value += txt;
 
     const addFriend2 = document.getElementById("addFriend");
-    const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
-    addFriend2.addEventListener("click", function(){
-      handleAddFriend(friend);
-      addFriend2.style.visibility = "hidden";
-    });
+    if(addFriend2){
+        const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
+        addFriend2.addEventListener("click", function(){
+          handleAddFriend(friend);
+          addFriend2.style.visibility = "hidden";
+          addFriend2.disabled = true;
+        });
+    }
 }
 
 function calculateTip(){
