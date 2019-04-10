@@ -1,0 +1,17 @@
+<h2>{{ user }}'s Profile!</h2>
+
+<h3>Friends:</h3>
+
+{{#each friends}}
+	{{username}}
+{{/each}}
+
+<h3>Groups:</h3>
+{{#each groups}}
+	{{name}}
+	<ul>
+		{{#each inGroup}}
+			<li>{{this}}</li>
+		{{/each}}<br><br>
+	</ul>
+{{/each}}
