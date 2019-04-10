@@ -87,13 +87,19 @@ function onClickAddGroup(id, user){
 function checkValuesWithSum(){
   
   const vals = document.getElementsByClassName("transactionValue");
-  const sum = parseInt(document.getElementById("amount").value);
+  let sum = parseInt(document.getElementById("amount").value);
+  let legalValue = true;
+  if(isNaN(sum))
+    legalValue = false;
   let inc = 0;
   for(let i = 0; i < vals.length; i++){
-    inc += parseInt(vals[i].value);
+    let tempVal = parseInt(vals[i].value);
+    if(isNaN(tempVal))
+      legalValue = false;
+    inc += tempVal;
   }
   const addBill = document.getElementById("addBillButton");
-  if(inc !== sum || sum === 0){
+  if(inc !== sum || sum === 0 || !legalValue){
     console.log(sum);
     console.log(inc);
     addBill.disabled = true;
