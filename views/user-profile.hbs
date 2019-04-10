@@ -1,5 +1,9 @@
 <h2>{{ user }}'s Profile!</h2>
 
+{{#if addFriend}}
+	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button>
+{{/if}}
+
 <h3>Friends:</h3>
 
 <h3>Groups:</h3>
@@ -11,3 +15,5 @@
 		{{/each}}<br><br>
 	</ul>
 {{/each}}
+
+<script src="/js/add_friend.js"></script>
