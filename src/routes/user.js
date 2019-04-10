@@ -6,6 +6,7 @@ require('../schemas');
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
+const Friend = mongoose.model("Friend");
 const Transaction = mongoose.model("Transaction");
 
 const Group = mongoose.model("Group");
@@ -119,12 +120,23 @@ router.post('/pay-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	Transaction.findById(id, (err, transaction) => {
 		if(transaction){
-			if(transaction !== null){
-				transaction.isPaid = true;
-				transaction.save();
-				console.log("Transaction paid");
-				res.send("ok");
-			}
+			transaction.isPaid = true;
+			transaction.save();
+			console.log("Transaction paid");
+
+			// UPDATE BALANCES
+			User.findOne({"username": transaction.paidBy}, (error, user) => {
+				for(let i = 0; i < user.friends.length; i++){
+					Friend.findById(user.friends[i], (err, friend) => {
+						if(friend.user === transaction.paidTo){
+							friend.balance += transaction.amount;
+							friend.save();
+						}
+					});
+				}
+			});
+			res.send("ok");
+			
 		}
 		else{
 			console.log(err);
@@ -135,22 +147,13 @@ router.post('/pay-transaction/:id', (req, res) => {
 
 router.get('/index', (req, res) => {
 	if(req.session.user){
-		User.find({}, function(err, users, count){
+		User.find({"username": { $ne: req.session.user.username}}, function(err, users, count){
 			User.findOne({"username": req.session.user.username}, function(err, user){
 				
 				const transactionIDs = user.transactions;
 				let found = false;
 				let notification;
 				
-				/*
-				for(let i = transactionIDs.length-1; i >= 0; i--){
-					Transaction.findById(transactionIDs[i], (err, transaction) => {
-						if(!transaction.isPaid && !found){
-							notification = transaction;
-							found = true;
-						}
-					});
-				}*/
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
 						if(!transaction.isPaid && !found){
@@ -200,11 +203,28 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
+router.get('/search', (req, res) => {
+	const user = req.session.user;
+	if(user){
+		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
+			res.render('add-friend', {"friends": users});
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+});
+
+
+router.get('/my-balances', (req, res) => {
+	res.send("user balances");
+});
 
 //view a user
 router.get('/:username', (req, res) => {
 
 	const user = req.params.username;
+	const sessionUser = req.session.user;
 	User.findOne({"username": user}, (err, foundUser) => {
 		if(!foundUser){
 			res.redirect('/user/index');
@@ -217,7 +237,21 @@ router.get('/:username', (req, res) => {
 					groups.push(group);
 				});
 			}
-			res.render('user-profile', {"user": user, "groups": groups});
+			if(user === sessionUser.username)
+				res.render('user-profile', {"user": user, "groups": groups});
+			else{
+				let friend = false;
+				User.findOne({"username": sessionUser.username}, (err, tempUser) => {
+					for(let i = 0; i < tempUser.friends.length; i++){
+						if(tempUser.friends[i].user == user)
+							friend = true;
+					}
+					if(friend)
+						res.render('user-profile', {"user": user, "groups": groups});
+					else
+						res.render('user-profile', {"user": user, "groups": groups, "addFriend": "Add Friend"});
+					});
+			}
 		}
 	});
 

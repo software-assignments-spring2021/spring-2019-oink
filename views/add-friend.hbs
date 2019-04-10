@@ -1,14 +1,10 @@
-<h3>Add a Friend</h3>
+<h3>Search for a User!</h3>
 
-<form action="" method="post">
 <div id="friendsDropdown">
 	Add a user: <input type="text" placeholder="Search.." id="searchUser" name="username" onkeyup="searchUserFilter()"><br>
 	{{#each friends as |f|}}
-		<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
+		<a href="/user/{{ f.username }}">{{ f.username }}</a><br>
 	{{/each}}
 </div>
-
-	<input type="submit" value="Add Friend">
-</form>
 
 <script src="/js/search.js"></script>

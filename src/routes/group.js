@@ -6,7 +6,7 @@ const Group = mongoose.model("Group");
 
 
 router.get('/add',(req,res)=>{
-	User.find({}, (err, users) => {
+	User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
 		const user = req.session.user;
 		if(user){
 			res.render('add-group', {'friends': users, 'user': user.username});

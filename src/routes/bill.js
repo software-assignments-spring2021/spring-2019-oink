@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
+const Friend = mongoose.model("Friend");
 
 const dbHelp = require('../helpers/db_helpers.js');
 const valHelpers = require('../helpers/validation_helpers.js');
@@ -87,6 +88,25 @@ router.post('/add', (req, res)=>{
 										doc.transactions.push(mongoose.Types.ObjectId(addedTransaction._id));
 										doc.save();
 									});
+								}
+							});
+						}
+
+						// SEE IF ANY USERS ARE FRIENDS OF BILL CREATOR
+							// IF YES, UPDATE BALANCES
+
+						for(let i = 0; i < friendsToSplit.length-1; i++){
+							const friendName = friendsToSplit[i].user;
+							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
+
+							User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
+								for(let j = 0; j < sessionUser.friends.length; j++){
+									const friend = sessionUser.friends[j];
+									if(friend.user == friendName){
+										friend.balance -= updateBalance;
+										sessionUser.markModified('friends');
+										sessionUser.save();
+									}
 								}
 							});
 						}

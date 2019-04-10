@@ -19,3 +19,7 @@ function onClickUsername(username){
   const input = document.getElementById("searchUser");
   input.value = username;
 }
+
+function searchUser(username){
+  
+}
