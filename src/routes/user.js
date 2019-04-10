@@ -203,11 +203,24 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
+router.get('/search', (req, res) => {
+	const user = req.session.user;
+	if(user){
+		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
+			res.render('add-friend', {"friends": users});
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
+});
+
 
 //view a user
 router.get('/:username', (req, res) => {
 
 	const user = req.params.username;
+	const sessionUser = req.session.user;
 	User.findOne({"username": user}, (err, foundUser) => {
 		if(!foundUser){
 			res.redirect('/user/index');
@@ -220,7 +233,21 @@ router.get('/:username', (req, res) => {
 					groups.push(group);
 				});
 			}
-			res.render('user-profile', {"user": user, "groups": groups});
+			if(user === sessionUser.username)
+				res.render('user-profile', {"user": user, "groups": groups});
+			else{
+				let friend = false;
+				User.findOne({"username": sessionUser.username}, (err, tempUser) => {
+					for(let i = 0; i < tempUser.friends.length; i++){
+						if(tempUser.friends[i].user == user)
+							friend = true;
+					}
+					if(friend)
+						res.render('user-profile', {"user": user, "groups": groups});
+					else
+						res.render('user-profile', {"user": user, "groups": groups, "addFriend": "Add Friend"});
+					});
+			}
 		}
 	});
 

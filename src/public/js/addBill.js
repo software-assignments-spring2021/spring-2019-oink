@@ -94,8 +94,6 @@ function checkValuesWithSum(){
   }
   const addBill = document.getElementById("addBillButton");
   if(inc !== sum || sum === 0){
-    console.log(sum);
-    console.log(inc);
     addBill.disabled = true;
   }
   if(inc === sum && sum !== 0){

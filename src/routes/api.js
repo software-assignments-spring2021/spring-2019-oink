@@ -19,7 +19,7 @@ router.post('/add-friend',(req,res)=>{
 
 	
 	User.findOne({"username": req.session.user.username},(err, doc)=>{
-		doc.friends.push(newFriend._id);
+		doc.friends.push(newFriend);
 		doc.save((err,saved)=>{
 			if(err){
 				console.log(err);
@@ -30,33 +30,25 @@ router.post('/add-friend',(req,res)=>{
 				console.log(doc)
 				//req.session.user.friends.push(newFriend);
 				User.findOne({"username": username},(err, user)=>{
-					user.friends.push(secondFriend._id);
+					user.friends.push(secondFriend);
+					/*
 					user.save((err, savedUser) => {
 						console.log(req.session.user);
 						newFriend.save((err, savedFriend) => {
 							secondFriend.save((err, savedSecondFriend) => {
-								res.redirect('/user/' + req.session.user.username);
+								res.send({result: "added"});
 							});
 						});
-					});
+					});*/
+					user.save();
+					console.log(req.session.user);
+					res.send({result: "added"});
 					
 					
 				});
 			}
 		});
 	});
-});
-
-router.get('/add-friend', (req, res) => {
-	const user = req.session.user;
-	if(user){
-		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-			res.render('add-friend', {"friends": users});
-		});
-	}
-	else{
-		res.redirect('/user/login');
-	}
 });
 
 module.exports = router;

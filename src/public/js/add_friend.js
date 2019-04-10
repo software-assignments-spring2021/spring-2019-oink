@@ -16,7 +16,7 @@ function addFriend(username){
 			console.log("friend not added");
 		}
 	});
-
+	location.reload();
 	req.send(`username=${username}`);
 
 

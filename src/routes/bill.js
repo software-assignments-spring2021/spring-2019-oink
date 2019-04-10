@@ -98,18 +98,15 @@ router.post('/add', (req, res)=>{
 						for(let i = 0; i < friendsToSplit.length-1; i++){
 							const friendName = friendsToSplit[i].user;
 							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
-							Friend.find({"user": friendName}, (err, friends) => {
-								for(let j = 0; j < friends.length; j++){
-									const id = friends[j]._id;
-									User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
-										for(let k = 0; k < sessionUser.friends.length; k++){
-											if(sessionUser.friends[k] == id.toString()){
-												friends[j].balance -= updateBalance;
-												friends[j].save();
-											}
-										}
 
-									});
+							User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
+								for(let j = 0; j < sessionUser.friends.length; j++){
+									const friend = sessionUser.friends[j];
+									if(friend.user == friendName){
+										friend.balance -= updateBalance;
+										sessionUser.markModified('friends');
+										sessionUser.save();
+									}
 								}
 							});
 						}
