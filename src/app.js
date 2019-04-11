@@ -14,6 +14,13 @@ const groupRouter = require('./routes/group');
 
 /*Any middleware added needs to go here*/
 
+//for debugging
+app.use(function(req, res, next){
+
+	console.log(`request made to ${req.path}`)
+	next();
+});
+
 //serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -30,6 +37,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+
 app.use((req, res, next) => {
 	if(req.session.user){
 		res.locals.user = req.session.user;
@@ -43,12 +51,7 @@ app.use((req, res, next) => {
 });
 
 
-//for debugging
-app.use(function(req, res, next){
 
-	console.log(`request made to ${req.path}`)
-	next();
-});
 /*********************************/
 
 /*Set routes*/

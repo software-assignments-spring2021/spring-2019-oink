@@ -30,10 +30,10 @@
             <div class="left-side-header">
                 <i class="fas fa-bars" onclick="openSideNav()"></i>
                 <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
-                <h1>Oink</h1>
+                <h1><a href="#">Oink</a></h1>
             </div>
             <div class="right-side-header">
-                <h3 class="username">Jessica Ingraham</h3>
+                <h3 class="username"><a href="#">Jessica Ingraham</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
                 </form>
@@ -42,8 +42,54 @@
 
         <div class="content">
 
-            {{{body}}} <!-- think of body as a variable as the other hbs files--> 
-
+            <!-- think of body as a variable as the other hbs files--> 
+            
+            <h2>Unpaid Transactions</h2>
+            <section>
+                <article class="unpaid">
+                    <span class="amount">$10</span>
+                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+                <article class="unpaid">
+                    <span class="amount">$10</span>
+                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+                <article class="unpaid">
+                    <span class="amount">$10</span>
+                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+            </section>
+            
+            <h2>Paid Transactions</h2>
+            <section>
+                <article class="paid">
+                    <span class="amount">$30</span>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+                <article class="paid">
+                    <span class="amount">$30</span>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+                <article class="paid">
+                    <span class="amount">$30</span>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+                <article class="paid">
+                    <span class="amount">$30</span>
+                    <span class="added-by">Added by JessTest</span>
+                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+            </section>
+            
         </div>
 
         <footer>

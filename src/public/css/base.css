@@ -111,4 +111,70 @@ nav.main-side-nav ul a li:hover {
   color: #fde8e9;
 }
 
+div.content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+h2 {
+  font-size: 2em;
+  font-family: "Open Sans Condensed", sans-serif;
+  padding: 1% 0;
+}
+
+section {
+  width: 100%;
+}
+section article {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3em;
+  padding: 1.2% 0;
+  margin: 1% 10%;
+  width: auto;
+  border-style: solid;
+  border-width: medium;
+}
+section article.paid {
+  background-color: #b5d99c;
+  border-color: #729956;
+}
+section article.unpaid {
+  background-color: #daa89b;
+  border-color: #cc8b86;
+}
+section article span {
+  padding: 0 1%;
+  margin: 0 3%;
+}
+section article span.amount {
+  font-weight: bold;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button {
+  padding: 0 3%;
+}
+button.pay {
+  background-color: #b5d99c;
+  border: solid thin #729956;
+}
+
+a {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 /*# sourceMappingURL=base.css.map */
