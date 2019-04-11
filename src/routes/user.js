@@ -169,18 +169,17 @@ router.get('/index', (req, res) => {
 					});
 				}, function(err){
 					const groups = [];
-					for(let i = 0; i < req.session.user.groups.length; i++){
-						Group.findById(req.session.user.groups[i], (err, group) => {
+					for(let i = 0; i < user.groups.length; i++){
+						Group.findById(user.groups[i], (err, group) => {
 							groups.push(group);
 						});
 					}
-					User.findOne({'username': req.session.user.username}, (err, sessionUser) => {
-						if(notification !== undefined)
-							res.render('user', {"user": sessionUser, "friends": users, "groups": groups, "notification": notification});
-						else
-							res.render('user', {"user": sessionUser, "friends": users, "groups": groups});
-						});	
+					if(notification !== undefined)
+						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+					else
+						res.render('user', {"user": user, "friends": users, "groups": groups});
 					});	
+					
 			});
 		});
 	}
