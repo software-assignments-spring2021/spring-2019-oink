@@ -100,4 +100,14 @@ router.post('/upload/image', (req, res) => {
 	});
 });
 
+router.post('/image', (req, res) => {
+	const username = req.body.username;
+	User.findOne({"username": username}, (err, user) => {
+		if(user)
+			res.send(user.img.src);
+		else
+			res.send("error");
+	});
+});
+
 module.exports = router;

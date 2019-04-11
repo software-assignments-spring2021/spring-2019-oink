@@ -28,6 +28,18 @@ function addUserToBill(username){
     div.className = "userBlock";
     const parentDiv = document.getElementById("userAmounts");
 
+    const profilePic = document.createElement('img');
+    profilePic.height = "15";
+    profilePic.width = "15";
+    const xml = new XMLHttpRequest();
+    xml.open('post', '/api/image', true);
+    xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xml.addEventListener('load', () => {
+      profilePic.src = xml.responseText;
+    });
+    xml.send("username="+username); 
+
+    div.appendChild(profilePic);
     const usernameField = document.createTextNode(username); // CREATE / APPEND USERNAME
     div.appendChild(usernameField);
 

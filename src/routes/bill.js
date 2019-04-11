@@ -136,8 +136,27 @@ router.get('/view/:id', (req, res) => {
 		Bill.findById(id, (err, bill)=>{
 			if(!err){
 				Transaction.find({"bill": id}, (err, transactions) => {
-					res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-					"date": bill._id.getTimestamp(), "text": bill.comment, "transactions": transactions});
+					User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
+						const friends = [];
+						const nonfriends = [];
+						for(let i = 0; i < transactions.length; i++){
+							const user = transactions[i].paidBy;
+							let isFriend = false;
+							for(let j = 0; j < sessionUser.friends.length; j++){
+								if(sessionUser.friends[j].user == user){
+									isFriend = true;
+									friends.push(transactions[i]);
+								}
+							}
+							if(i == transactions.length-1)
+								friends.push(transactions[i]);
+							if(!isFriend && i != transactions.length-1)
+								nonfriends.push(transactions[i]);
+						}
+						res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
+						"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
+						nonfriends});
+					});
 				});
 			}
 			else{

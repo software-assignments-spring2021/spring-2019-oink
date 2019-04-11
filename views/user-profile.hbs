@@ -1,6 +1,6 @@
 <h2>{{ user }}'s Profile!</h2>
 
-<img src="{{ image.src }}" alt="Anon">
+<img src="{{ image.src }}" alt="Anon" width="225" height="225">
 
 <form action='/api/upload/image' enctype="multipart/form-data" method="post">
 	<input type="file" name="upload" accept="image/png, image/jpeg">
