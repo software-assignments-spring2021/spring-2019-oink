@@ -45,7 +45,8 @@ router.post('/add', (req, res)=>{
 						friendsToSplit = [];
 						for(let key in req.body){
 							if(req.body.hasOwnProperty(key)){
-								if(key !== "splitWith" && key !== "amount" && key !== "about" && key !== 'pretip' && key !== 'tip'){
+								if(key !== "splitWith" && key !== "amount" && key !== "about" && key !== 'pretip' && key !== 'tip' &&
+										key !== "typeOfPayment"){
 									const a = {}
 									a.user = key;
 									a.amount = req.body[key];
@@ -55,10 +56,15 @@ router.post('/add', (req, res)=>{
 						}
 						for(let i = 0; i < friendsToSplit.length; i ++){
 							let transaction;
-							if(i !== friendsToSplit.length-1){
+							let amount = friendsToSplit[i].amount;
+							console.log(req.body.typeOfPayment);
+							if (req.body.typeOfPayment=="%"){
+								amount = amount * .01 * req.body.amount;
+							}
+							if(i !== friendsToSplit.length-1){								
 								
 								transaction = new Transaction({
-									amount:friendsToSplit[i].amount,
+									amount:amount,
 									paidBy:friendsToSplit[i].user,
 									paidTo:friendsToSplit[friendsToSplit.length-1].user,
 									isPaid: false,
@@ -68,7 +74,7 @@ router.post('/add', (req, res)=>{
 							}
 							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
 								transaction = new Transaction({
-									amount:friendsToSplit[i].amount,
+									amount:amount,
 									paidBy:friendsToSplit[i].user,
 									paidTo:friendsToSplit[friendsToSplit.length-1].user,
 									isPaid: true,
