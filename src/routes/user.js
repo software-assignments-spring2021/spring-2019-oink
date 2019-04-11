@@ -237,8 +237,11 @@ router.get('/:username', (req, res) => {
 					groups.push(group);
 				});
 			}
+			const friendsList = foundUser.friends;
+			
 			if(user === sessionUser.username)
-				res.render('user-profile', {"user": user, "groups": groups});
+				res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList});
+
 			else{
 				let friend = false;
 				User.findOne({"username": sessionUser.username}, (err, tempUser) => {
@@ -247,9 +250,9 @@ router.get('/:username', (req, res) => {
 							friend = true;
 					}
 					if(friend)
-						res.render('user-profile', {"user": user, "groups": groups});
+						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList});
 					else
-						res.render('user-profile', {"user": user, "groups": groups, "addFriend": "Add Friend"});
+						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "addFriend": "Add Friend"});
 					});
 			}
 		}
