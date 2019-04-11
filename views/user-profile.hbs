@@ -1,18 +1,17 @@
 <h2>{{ user }}'s Profile!</h2>
 
+<img src="{{ image.src }}" alt="Anon">
+
+<form action='/api/upload/image' enctype="multipart/form-data" method="post">
+	<input type="file" name="upload" accept="image/png, image/jpeg">
+	<input type="submit" value="Upload">
+</form>
+
 {{#if addFriend}}
-	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button>
+	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button><br>
 {{/if}}
 
 <h3>Friends:</h3>
-
-<ul>
-{{#each friends}}
-
-	<li>{{user}}</li>
-
-{{/each}}
-</ul>
 
 <h3>Groups:</h3>
 {{#each groups}}

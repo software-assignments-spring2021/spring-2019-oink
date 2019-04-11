@@ -3,7 +3,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Friend = mongoose.model("Friend");
-
+const fs = require('fs');
+const formidable = require('formidable');
 
 router.post('/add-friend',(req,res)=>{
 	const username = req.body.username; //username of the friend being added
@@ -71,6 +72,31 @@ router.post('/is-friend', (req, res) => {
 		else{
 			res.send("not_friends");
 		}
+	});
+});
+
+router.post('/upload/image', (req, res) => {
+	User.findOne({"username": req.session.user.username}, (err,sessionUser) => {
+		console.log(sessionUser);
+		//fs.unlinkSync(sessionUser.img.rawSRC);
+		
+		const form = new formidable.IncomingForm();
+
+	    form.parse(req);
+
+	    form.on('fileBegin', function (name, file){
+	        file.path = __dirname + '/../public/images/' + file.name;
+	    });
+
+	    form.on('file', function (name, file){
+	        console.log('Uploaded ' + file.name);
+	        sessionUser.img.rawSRC = __dirname + '/../public/images/' + file.name;
+			sessionUser.img.src = '/images/' + file.name;
+			sessionUser.save(() => {
+				res.redirect('/user/'+req.session.user.username);
+			});
+	    });		
+
 	});
 });
 

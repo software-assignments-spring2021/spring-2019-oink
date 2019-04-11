@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const async = require('async');
 const router = express.Router(); 
+const fs = require('fs');
 require('../schemas'); 
 
 const User = mongoose.model("User");
@@ -33,7 +34,11 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-	user = {username: req.body.username, email: req.body.email};
+	const img = {};
+	img.src = '/images/no_profile_picture.png';
+	img.contentType = '/image/png';
+	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
+	user = {username: req.body.username, email: req.body.email, 'img': img};
 
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
@@ -239,8 +244,11 @@ router.get('/:username', (req, res) => {
 			}
 			const friendsList = foundUser.friends;
 			
-			if(user === sessionUser.username)
-				res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList});
+			if(user === sessionUser.username){
+				User.findOne({"username": sessionUser.username}, (err, foundUser) => {
+					res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img});
+				});
+			}
 
 			else{
 				let friend = false;

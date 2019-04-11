@@ -3,7 +3,6 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 
-
 //find all the routes
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
@@ -20,6 +19,12 @@ app.use(function(req, res, next){
 	console.log(`request made to ${req.path}`)
 	next();
 });
+/*
+app.use(multer({ dest: './public/img/',
+	rename: function (fieldname, filename) {
+	return filename;
+	},
+}));*/
 
 //serve static files
 app.use(express.static(path.join(__dirname, 'public')));
