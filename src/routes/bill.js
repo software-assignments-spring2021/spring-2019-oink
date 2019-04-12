@@ -111,15 +111,38 @@ router.post('/add', (req, res)=>{
 
 						for(let i = 0; i < friendsToSplit.length-1; i++){
 							const friendName = friendsToSplit[i].user;
+							console.log(friendName);
 							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
 
 							User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
 								for(let j = 0; j < sessionUser.friends.length; j++){
 									const friend = sessionUser.friends[j];
 									if(friend.user == friendName){
-										friend.balance -= updateBalance;
-										sessionUser.markModified('friends');
-										sessionUser.save();
+										User.findOne({'username': friend.user}, (err, friendUser) => {
+
+											for(let k = 0; k < friendUser.friends.length; k++){
+												if(friendUser.friends[k].user == sessionUser.username){
+													//	console.log('test');
+													const newBalance = friendUser.friends[k].balance - updateBalance;
+													console.log('test: ' + friendUser.friends[k]);
+													/*
+													friendUser.markModified('friends');
+													friendUser.save(function(){
+														console.log("save complete");
+														console.log(friendUser);
+													});*/
+													User.updateOne({'friends._id': friendUser.friends[k]._id}, {'$set': {
+														'friends.$.balance': newBalance
+													}}, function(){
+														User.findOne({'username': friendUser.username}, (err, tmp) => {
+															console.log('test');
+															console.log(tmp);
+														})
+													});
+													
+												}
+											}
+										});
 									}
 								}
 							});

@@ -1,6 +1,10 @@
 function showBalances(username){
 	
-	const header = document.getElementById('header');
+	const header = document.getElementById('header'); // CLEAR THE CURRENT CONTENTS OF THE SCREEN
+	while(header.firstChild){
+		header.removeChild(header.firstChild);
+	}
+
 	const title = document.getElementsByTagName('h3')[3];
 	title.textContent = "Your Transactions With " + username;
 
@@ -28,7 +32,17 @@ function showBalances(username){
       	
       	ul.appendChild(li);
       }
+
+        const totalBalance = document.createElement("h3");
+        if(res.balance == 0)
+	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
+	 	if(res.balance > 0)
+	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
+	 	if(res.balance < 0)
+	 		totalBalance.textContent = "In Total: " + "You owe $" + res.balance + " to " + username; 	
+
       header.append(ul);
+      header.append(totalBalance);
     });
     req.send("username="+username);
 }
