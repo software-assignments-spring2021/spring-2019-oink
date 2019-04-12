@@ -132,12 +132,11 @@ router.post('/pay-transaction/:id', (req, res) => {
 			// UPDATE BALANCES
 			User.findOne({"username": transaction.paidBy}, (error, user) => {
 				for(let i = 0; i < user.friends.length; i++){
-					Friend.findById(user.friends[i], (err, friend) => {
-						if(friend.user === transaction.paidTo){
-							friend.balance += transaction.amount;
-							friend.save();
-						}
-					});
+					if(user.friends[i].user === transaction.paidTo){
+						user.friends[i].balance += transaction.amount;
+						user.markModified('friends');
+						user.save();
+					}
 				}
 			});
 			res.send("ok");
@@ -225,7 +224,15 @@ router.get('/search', (req, res) => {
 
 
 router.get('/my-balances', (req, res) => {
-	res.send("user balances");
+	const user = req.session.user;
+	if(user){
+		User.findOne({"username": user.username}, (err, sessionUser) => {
+			res.render('my-balances', {friends: sessionUser.friends});
+		});
+	}
+	else{
+		res.redirect('login');
+	}
 });
 
 //view a user

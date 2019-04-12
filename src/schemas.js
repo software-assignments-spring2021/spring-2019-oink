@@ -29,6 +29,8 @@ const BillSchema = new Schema({
 
 	//only matters if not split is true
 	paidBy:{type:String, required: false},
+
+	dateCreated:{type:String, required: true}
 });
 
 const GroupSchema = new Schema({

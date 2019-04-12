@@ -7,6 +7,8 @@ const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 const Friend = mongoose.model("Friend");
 
+const dateTime = require('node-datetime');
+
 const dbHelp = require('../helpers/db_helpers.js');
 const valHelpers = require('../helpers/validation_helpers.js');
 
@@ -24,11 +26,16 @@ router.post('/add', (req, res)=>{
 
 	let user = req.session.user;
 	if(user){
+		// FIGURE OUT THE DATE
+		const dt = dateTime.create();
+		const formatted = dt.format('m/d/Y');
+
 		let friendsToSplit = req.body.splitWith.split(','); friendsToSplit[friendsToSplit.length-1] = req.session.user.username;
 		const bill = new Bill({
 			amount:req.body.amount,
 			splitWith:friendsToSplit,
-			comment:req.body.comment
+			comment:req.body.comment,
+			dateCreated: formatted
 		});
 		let id;
 		bill.save((err, addedBill)=>{
@@ -45,8 +52,8 @@ router.post('/add', (req, res)=>{
 						friendsToSplit = [];
 						for(let key in req.body){
 							if(req.body.hasOwnProperty(key)){
-								if(key !== "splitWith" && key !== "amount" && key !== "about" && key !== 'pretip' && key !== 'tip' &&
-										key !== "typeOfPayment"){
+								if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
+										key !== "typeOfPayment" && key !== "amount"){
 									const a = {}
 									a.user = key;
 									a.amount = req.body[key];
@@ -54,6 +61,7 @@ router.post('/add', (req, res)=>{
 								}
 							}
 						}
+						console.log(friendsToSplit);
 						for(let i = 0; i < friendsToSplit.length; i ++){
 							let transaction;
 							let amount = friendsToSplit[i].amount;
@@ -148,11 +156,15 @@ router.get('/view/:id', (req, res) => {
 									friends.push(transactions[i]);
 								}
 							}
-							if(i == transactions.length-1)
+
+							if(user == sessionUser.username)
 								friends.push(transactions[i]);
-							if(!isFriend && i != transactions.length-1)
+
+							else if(!isFriend)
 								nonfriends.push(transactions[i]);
 						}
+						console.log(friends);
+						console.log(nonfriends);
 						res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
 						"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
 						nonfriends});
