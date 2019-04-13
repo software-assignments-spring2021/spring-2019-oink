@@ -20,6 +20,7 @@ function showBalances(username){
       	const a = document.createElement("a");
         let forgive;
       	a.textContent = "View Bill";
+        a.href = "/fake/link";
       	if(t.paidBy != username && t.isPaid == true){
       		li.textContent = "You paid " + t.amount + " to " + t.paidTo + ' on ' + res.dates[i];
       	}
@@ -38,7 +39,8 @@ function showBalances(username){
       	}
       	
       	ul.appendChild(li);
-      	if(a.href !== undefined){
+      	if(a.href != "http://localhost:3000/fake/link"){
+          console.log(a.href);
       		ul.appendChild(a);
       	}
         if(forgive !== undefined){
