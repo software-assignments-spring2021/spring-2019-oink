@@ -18,6 +18,7 @@ function showBalances(username){
       	const t = res.transactions[i]
       	const li = document.createElement("li");
       	const a = document.createElement("a");
+        let forgive;
       	a.textContent = "View Bill";
       	if(t.paidBy != username && t.isPaid == true){
       		li.textContent = "You paid " + t.amount + " to " + t.paidTo + ' on ' + res.dates[i];
@@ -32,21 +33,26 @@ function showBalances(username){
       	else if(t.paidBy == username && t.isPaid == false){
       		li.textContent = t.paidBy + ' owes you ' + t.amount + " because of: ";
       		a.href = "/bill/view/" + t.bill;
+          forgive = document.createElement("button");
+          forgive.value = "Forgive";
       	}
       	
       	ul.appendChild(li);
       	if(a.href !== undefined){
       		ul.appendChild(a);
       	}
+        if(forgive !== undefined){
+          ul.appendChild(forgive);
+        }
       }
 
-        const totalBalance = document.createElement("h3");
-        if(res.balance == 0)
-	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
-	 	if(res.balance > 0)
-	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
-	 	if(res.balance < 0)
-	 		totalBalance.textContent = "In Total: " + "You owe $" + res.balance + " to " + username; 	
+      const totalBalance = document.createElement("h3");
+      if(res.balance == 0)
+  	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
+  	 	if(res.balance > 0)
+  	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
+  	 	if(res.balance < 0)
+  	 		totalBalance.textContent = "In Total: " + "You owe $" + res.balance + " to " + username; 	
 
       header.append(ul);
       header.append(totalBalance);
