@@ -40,7 +40,6 @@ function showBalances(username){
       	
       	ul.appendChild(li);
       	if(a.href != "http://localhost:3000/fake/link"){
-          console.log(a.href);
       		ul.appendChild(a);
       	}
         if(forgive !== undefined){
