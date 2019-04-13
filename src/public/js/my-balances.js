@@ -17,20 +17,27 @@ function showBalances(username){
       for(let i = 0; i < res.transactions.length; i++){
       	const t = res.transactions[i]
       	const li = document.createElement("li");
+      	const a = document.createElement("a");
+      	a.textContent = "View Bill";
       	if(t.paidBy != username && t.isPaid == true){
       		li.textContent = "You paid " + t.amount + " to " + t.paidTo + ' on ' + res.dates[i];
       	}
       	else if(t.paidBy != username && t.isPaid == false){
-      		li.textContent = "You owe $" + t.amount + " to " + t.paidTo;
+      		li.textContent = "You owe $" + t.amount + " to " + t.paidTo + " because of: ";
+      		a.href = "/bill/view/" + t.bill;
       	}
       	else if(t.paidBy == username && t.isPaid == true){
       		li.textContent = t.paidBy + " paid you " + t.amount + " on " + res.dates[i];
       	}
       	else if(t.paidBy == username && t.isPaid == false){
-      		li.textContent = t.paidBy + ' owes you ' + t.amount;
+      		li.textContent = t.paidBy + ' owes you ' + t.amount + " because of: ";
+      		a.href = "/bill/view/" + t.bill;
       	}
       	
       	ul.appendChild(li);
+      	if(a.href !== undefined){
+      		ul.appendChild(a);
+      	}
       }
 
         const totalBalance = document.createElement("h3");

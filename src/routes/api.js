@@ -116,7 +116,8 @@ router.post('/history', (req, res) => {
 			if(transactions[i].paidBy == sessionUser.username && transactions[i].paidTo == username ||
 				transactions[i].paidBy == username && transactions[i].paidTo == sessionUser.username){
 
-				relTransactions.push(transactions[i]);
+				if(transactions[i].isFriends == true)
+					relTransactions.push(transactions[i]);
 			}	
 		}
 		async.forEach(relTransactions, function(item, cb){
@@ -128,22 +129,14 @@ router.post('/history', (req, res) => {
 			User.findOne({"username": sessionUser.username}, (err, user) => {
 				for(let i = 0; i < user.friends.length; i++){
 					if(user.friends[i].user == username){
-						console.log(user.friends[i].user);
-						console.log('balance= ' + user.friends[i].balance);
 						response.balance = user.friends[i].balance;
 					}
 				}
-				console.log("1 "+ response.balance);
 				User.findOne({"username": username}, (err, otherUser) => {
 					for(let i = 0; i < otherUser.friends.length; i++){
 						if(otherUser.friends[i].user == sessionUser.username){
-								//response.balance -= otherUser.friends[i].balance;
-							console.log("2 " + response.balance);
 							response.balance -= otherUser.friends[i].balance;
-							//console.log(otherUser.friends[i].balance);
-							console.log('3 ' + response.balance);
 						}
-						//console.log(response.balance);
 					}
 					response.transactions = relTransactions;
 					response.dates = dates;

@@ -69,7 +69,12 @@ router.post('/add', (req, res)=>{
 							if (req.body.typeOfPayment=="%"){
 								amount = amount * .01 * req.body.amount;
 							}
-							if(i !== friendsToSplit.length-1){								
+							if(i !== friendsToSplit.length-1){
+								let isFriends = false;
+								for(let j = 0; j < doc.friends.length; j++){
+									if(doc.friends[j].user == friendsToSplit[i].user)
+										isFriends = true;
+								}								
 								
 								transaction = new Transaction({
 									amount:amount,
@@ -77,7 +82,8 @@ router.post('/add', (req, res)=>{
 									paidTo:friendsToSplit[friendsToSplit.length-1].user,
 									isPaid: false,
 									//bill: mongoose.Types.ObjectId(id)
-									bill: id
+									bill: id,
+									isFriends: isFriends
 								});
 							}
 							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
@@ -87,7 +93,8 @@ router.post('/add', (req, res)=>{
 									paidTo:friendsToSplit[friendsToSplit.length-1].user,
 									isPaid: true,
 									//bill: mongoose.Types.ObjectId(id)
-									bill: id
+									bill: id,
+									isFriends: false
 								});
 							}
 

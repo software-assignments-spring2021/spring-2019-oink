@@ -8,7 +8,8 @@ const TransactionSchema = new Schema({
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
 	paidTo:{type:String, required:true},
 	isPaid:{type:Boolean},
-	bill:{type: Schema.Types.ObjectId, ref:"Bill"}
+	bill:{type: Schema.Types.ObjectId, ref:"Bill"},
+	isFriends:{type:Boolean}
 });
 
 const BillSchema = new Schema({
