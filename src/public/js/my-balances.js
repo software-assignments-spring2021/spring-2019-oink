@@ -48,7 +48,7 @@ function showBalances(username){
 	 	if(res.balance > 0)
 	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
 	 	if(res.balance < 0)
-	 		totalBalance.textContent = "In Total: " + "You owe $" + res.balance + " to " + username; 	
+	 		totalBalance.textContent = "In Total: " + "You owe $" + (-1*res.balance) + " to " + username; 	
 
       header.append(ul);
       header.append(totalBalance);
