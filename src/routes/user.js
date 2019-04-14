@@ -160,9 +160,11 @@ router.get('/index', (req, res) => {
 				
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
-						if(!transaction.isPaid && !found){
-							notification = transaction;
-							found = true;
+						if(transaction){
+							if(!transaction.isPaid && !found){
+								notification = transaction;
+								found = true;
+							}
 						}
 						callback();
 					});
