@@ -28,8 +28,13 @@
 	</ul>
 {{/each}}
 
-{{#if defaultTip}}
-	<h3>Your Default Tip is: {{defaultTip}}%</h3>
+{{#if tip}}
+	<form action="/api/change-tip" method="post">
+		<h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
+		<input type="submit" value="Change Default">
+	</form>
 {{/if}}
 
+
 <script src="/js/add_friend.js"></script>
+<script src="/js/change_tip.js"></script>

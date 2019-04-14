@@ -9,7 +9,7 @@
 <form action="/bill/add" method="post">
   
   $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
-  Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
+  Tip (%): <input type="text" name="tip" id ="tip" value="{{ user.defaultTip }}"><br><br>
 	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
 	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
 	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>

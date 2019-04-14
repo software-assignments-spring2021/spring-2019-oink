@@ -37,7 +37,8 @@ const BillSchema = new Schema({
 const GroupSchema = new Schema({
 
 	name:{type:String, required:true},
-	inGroup:[String] //will be usernames
+	inGroup:[String], //will be usernames
+	defaultPercentages:[Number] // will be same length as inGroup
 
 });
 

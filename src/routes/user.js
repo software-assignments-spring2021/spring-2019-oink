@@ -259,9 +259,7 @@ router.get('/:username', (req, res) => {
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						console.log("test");
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img,
-									"defaultTip": foundUser.defaultTip});
+						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
 					});
 				}
 

@@ -173,4 +173,14 @@ router.post('/remove-transaction/:id', (req, res) => {
 	});
 });
 
+router.post('/change-tip', (req, res) => {
+	const newTip = req.body.tip;
+	const user = req.session.user.username;
+	User.findOne({"username": user}, (err, foundUser) => {
+		foundUser.defaultTip = parseInt(newTip);
+		foundUser.save();
+		res.redirect('/user/index');
+	});
+});
+
 module.exports = router;
