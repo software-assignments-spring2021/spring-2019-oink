@@ -54,8 +54,8 @@ const UserSchema = new Schema({
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
 	friends:[FriendSchema],
-	img: { src: String, contentType: String, rawSRC: String }
-
+	img: { src: String, contentType: String, rawSRC: String },
+	defaultTip: Number
 });
 
 
