@@ -106,12 +106,14 @@ function calculateTip(){
   const tip = document.getElementById("tip");
   const total = document.getElementById("amount");
 
-  total.value = pretip.value * ((tip.value * .01) + 1);
+  total.value = (pretip.value * ((tip.value * .01) + 1)).toFixed(2);
 }
 
 function noTip() {
   const tip = document.getElementById("tip");
   tip.value = 0;
+
+  calculateTip();
 }
 
 function handleAddFriend(friend){

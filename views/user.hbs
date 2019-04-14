@@ -1,17 +1,17 @@
 {{#if notification}}
   <div class="notification">
     <h3>You owe {{notification.paidTo}}: ${{notification.amount}}
-  </div><br>
+  </div>
 {{/if}}
 
 <h2>Add a New Bill</h2>
 
 <form action="/bill/add" method="post">
   
-  $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
-  Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
+  $ <input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"><br><br>
+  Tip (%): <input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" value="20"><br><br>
 	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
-	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
+	<!-- <button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br> -->
 	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
 
 	<div id="friendsDropdown">
