@@ -23,6 +23,16 @@ function removeUser(username){
 }
 
 function addUserToBill(username){
+
+    /*
+
+    <div class="userBlock">
+      {{ user.username }} 
+      <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
+    </div>
+
+    */
+
     const div = document.createElement("div");
     div.setAttribute("id", username + "Block");
     div.className = "userBlock";

@@ -25,9 +25,11 @@
 	<br>
 
   <div id="userAmounts">
-    <h3>How much does everyone owe? <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
+    <h3>How much does everyone owe? <!-- <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
     <button type="button" onclick="onClickSplitType('%')">Split by percentage</button>
-  	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button>
+  	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button> -->
+    <input type="radio" name="typeOfPayment" value="%"/>Percentage
+    <input type="radio" name="typeOfPayment" value="$"/>Fixed Amount
     <div class="userBlock">
   		{{ user.username }} 
   		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">

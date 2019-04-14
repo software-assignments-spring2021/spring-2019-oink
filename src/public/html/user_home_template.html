@@ -44,51 +44,69 @@
 
             <!-- think of body as a variable as the other hbs files--> 
             
-            <h2>Unpaid Transactions</h2>
-            <section>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-            </section>
-            
-            <h2>Paid Transactions</h2>
-            <section>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-            </section>
+            <div class="notification">
+                <h3>You owe Jess $30</h3>
+            </div>
+
+            <h2>Add a New Bill</h2>
+
+            <form action="/bill/add" method="post">
+
+                $<input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00">
+                Tip (%): <input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" value="20">
+                <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
+                Total: <input type="text" name="amount" id="amount" value=0 readonly>
+
+                <div class="add-friends" id="friendsDropdown">
+                    Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()">
+                    <a onclick="onClickUsername('Jess1')">Jess1</a>
+                    <a onclick="onClickUsername('Jess1')">Jess1</a>
+                    <a onclick="onClickUsername('Jess1')">Jess1</a>  
+                </div>
+                
+                <button type="button" onclick="onClickAddUserToBill()">Add User</button><br>
+
+                <div class="userAmounts" id="userAmounts">
+                    <h3>How much does everyone owe?</h3>
+                    <input type="radio" name="typeOfPayment" value="%"/>Percentage
+                    <input type="radio" name="typeOfPayment" value="$"/>Fixed Amount
+                  
+                    <div class="userBlock">
+                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
+                    </div>
+                    <div class="userBlock">
+                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
+                    </div>
+                    <div class="userBlock">
+                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
+                    </div>
+                  
+                </div>
+
+                <input hidden type="text" name="splitWith" id="splitWith">
+
+              <div id="groups">
+                  <h3>Pay by Group</h3>
+                  <div class="group">
+                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+                  </div>
+                  <div class="group">
+                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+                  </div>
+                  <div class="group">
+                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+                  </div>
+                </div>
+                
+                About <input type="text" name="about" id="about">
+
+
+
+              <input type="submit" value="Add bill" id="addBillButton">
+            </form>
             
         </div>
 
