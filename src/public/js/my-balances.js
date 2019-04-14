@@ -35,7 +35,13 @@ function showBalances(username){
       		li.textContent = t.paidBy + ' owes you ' + t.amount + " because of: ";
       		a.href = "/bill/view/" + t.bill;
           forgive = document.createElement("button");
-          forgive.value = "Forgive";
+          forgive.textContent = "Forgive";
+          forgive.onclick = function(){
+              const xml = new XMLHttpRequest();
+              xml.open('post', '/api/remove-transaction/'+t._id, true);
+              xml.send();
+              location.reload();
+          };
       	}
       	
       	ul.appendChild(li);
@@ -43,6 +49,9 @@ function showBalances(username){
       		ul.appendChild(a);
       	}
         if(forgive !== undefined){
+          const br = document.createElement("br");
+          ul.appendChild(br);
+          console.log('test');
           ul.appendChild(forgive);
         }
       }
