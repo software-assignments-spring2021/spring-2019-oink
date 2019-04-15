@@ -7,6 +7,7 @@
     padding:0;
     margin:0;
     font-size:100%;
+    width:100%;
     box-sizing: border-box;
     color:black;
     list-style: none;
@@ -14,6 +15,17 @@
     text-decoration: none;
     outline:none;
     font-family: $default;
+}
+
+input[type="submit"]{
+    
+    &:active{
+        transition: translate 2s ease-in-out;
+
+        transform:translate(3px, 5px);
+        box-shadow: 2px 2px $dark-green;
+        
+    }
 }
 
 
@@ -28,7 +40,7 @@ header{
     border-bottom:3px solid $purple-pink;
     box-shadow: 4px 4px 4 grey;
     
-    background-color:$light-red;
+    background-color:$hot-pink;
     
     @include flex(row, no-wrap, center, center, center);
     
@@ -48,6 +60,11 @@ header{
             font-size:2.4em;
             font-family: $oswald;
             padding:0 3%;
+            text-align: left;
+        }
+        i{
+            width:auto;
+            padding:1% 3%;
         }
         i.hidden{
             display:none;
@@ -58,19 +75,27 @@ header{
 
     }
     div.right-side-header{
-        @include flex(row, no-wrap, center, center, flex-end);
+        @include flex(row, no-wrap, flex-end, center, flex-end);
+        text-align: right;
+        
         h3.username{
-            width:60%;
             text-align: right;
             font-family: $open-sans-condensed;
             font-size: 1.5em;
             padding:0 4%;
             letter-spacing: 0.5%;
+            
         }
+        
+        form{
+            width:auto;
+        }
+        
         input[type="submit"]{
             background-color:$medium-green;
             color:$white-pink;
-            padding:4% 10%;
+            padding:1% 10%;
+            width:auto;
 
 
             
@@ -88,7 +113,7 @@ nav.main-side-nav{
     top:0;left:0;
     height:100%;
     width:0;
-    background-color:$light-red;
+    background-color:$hot-pink;
     padding-top:10vh;
     overflow-x: hidden;
     transition:width ease-in-out 0.5s;
@@ -168,13 +193,17 @@ section{
     }
 }
 
-input[type="text"]{
+div.content{
     
-    &#tip{
-        text-align: right;
-        border-bottom: 2px solid black;
-        margin-bottom:4%;
+    button{
+        width:auto;
     }
+    
+    h2, h3, h4, h5, h6{
+        text-align: center;
+    }
+    
+    
 }
 
 div.notification{
@@ -189,14 +218,13 @@ div.notification{
 form.addbill{
     
     div.comment{
-        width:100%;
         text-align: center;
-        background-color:blue;
         
         font-size:1em;
+        width:44%;
+        
         textarea{
-            border: 3px solid black;
-            padding:0.5% 1%;
+            border-bottom: 3px solid black;
             resize:none;
         }
     }
@@ -206,44 +234,44 @@ form.addbill{
         margin:1% 0;
     }
     
-    .label{
+    label{
         font-size:1.2em;
     }
     
     .total{
-        background-color:blue;
         width:100%;
         
     }
     
     input[type="text"]{
         font-size: 1.2em;
+        
     }
     
     div.pretipAndTip{
-        @include flex(row, no-wrap, center, center, center);
+        @include flex(row, no-wrap, center, center, space-evenly);
         
         
         >*{
-            margin:0 2%;
             
+            font-size:1.4em;
+            width:auto;
         }
         
-        div.pretip{
-            font-size:1.5em;
-        }
         
-        div.tip{
-            text-align: center;
-            font-size:1.3em;
+        .tip{
+            @include flex(row, no-wrap, center, center,center);
             
-            input{
-                display: inline-block;
+            #tip{
+                text-align: right;
             }
+            
             button{
-                display: inline-block;
+                
+                width:100%;
             }
-        }
+        }    
+            
     }
 }
 
@@ -261,9 +289,23 @@ button:hover{
 button{
     padding:0 3%;
     
+    background-color:$bright-green;
+//    border: solid medium $medium-green;
+    box-shadow: 3px 3px 2px $dark-green;
+    
+    transition: translate 2s ease-in-out;
+    
+    &:active{
+        transition: translate 2s ease-in-out;
+
+        transform:translate(3px, 5px);
+        box-shadow: 2px 2px $dark-green;
+        
+    }
+    
+    
     &.pay{
         background-color:$light-green;
-        border: solid thin $medium-green;
     }
 }
 
