@@ -72,17 +72,17 @@
                 
                 <div class="userAmounts" id="userAmounts">
                     <h3>How much does everyone owe?</h3>
-                    <input type="radio" name="typeOfPayment" value="%"/>Percentage
-                    <input type="radio" name="typeOfPayment" value="$"/>Fixed Amount
+                    <input type="radio" name="typeOfPayment" id="per" onclick="switchSymbol('percent')" value="%"/><label for="per">By Percentage</label>
+                    <input type="radio" name="typeOfPayment" id="mon" onclick="switchSymbol('dollar')" checked="checked" value="$"/><label for="mon">By Amount</label>
                   
                     <div class="userBlock">
-                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
                     </div>
                     <div class="userBlock">
-                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
                     </div>
                     <div class="userBlock">
-                      Jess <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
                     </div>
                   
                 </div>

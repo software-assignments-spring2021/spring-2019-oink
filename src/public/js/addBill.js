@@ -176,6 +176,23 @@ symbol.value = icon;
 
 }
 
+function switchSymbol(sym){
+  //unhide the equivalent symbol
+
+  const opposite = sym == "dollar" ? "percent" : "dollar"
+
+  document.querySelectorAll(`div.userBlock span.${sym}`).forEach((span)=>{
+    console.log(span);
+    span.classList.remove("hidden");
+  });
+
+  document.querySelectorAll(`div.userBlock span.${opposite}`).forEach((span)=>{
+    span.classList.add("hidden");
+  });
+
+
+}
+
 
 
 

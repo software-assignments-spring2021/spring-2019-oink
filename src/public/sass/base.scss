@@ -148,9 +148,7 @@ div.content, form{
 }
 
 h2{
-    font-size:2em;
-    font-family: $open-sans-condensed;
-    padding:1% 0;
+
 }
 
 section{
@@ -203,6 +201,15 @@ div.content{
         text-align: center;
     }
     
+    h2{
+        font-size:2em;
+        font-family: $open-sans-condensed;
+        padding:1% 0;
+    }
+    
+    h3{
+        padding:0.5% 0;
+    }
     
 }
 
@@ -272,6 +279,47 @@ form.addbill{
             }
         }    
             
+    }
+    
+    .userAmounts{
+        text-align:center;
+        
+        div.userBlock{
+            font-size:1.3em;
+            
+            .hidden{
+                display: none;
+            }
+            
+            span{
+                font-size: inherit;
+            }
+            >*{
+                display: inline-block;
+                width:auto;
+                
+            }
+            h4{
+                padding:0 2%;
+                
+                font-family:$open-sans-condensed;
+            }
+            
+            padding:0.5% 0;
+        }
+
+        
+        input[type="radio"]{
+            display:none;
+        }
+        
+        input[type="radio"]+label{
+            
+        }
+        
+        input[type="radio"]:checked+label{
+            font-weight: bold;
+        }
     }
 }
 

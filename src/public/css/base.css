@@ -139,12 +139,6 @@ div.content, form {
   width: 100%;
 }
 
-h2 {
-  font-size: 2em;
-  font-family: "Open Sans Condensed", sans-serif;
-  padding: 1% 0;
-}
-
 section {
   width: 100%;
 }
@@ -183,6 +177,14 @@ div.content button {
 }
 div.content h2, div.content h3, div.content h4, div.content h5, div.content h6 {
   text-align: center;
+}
+div.content h2 {
+  font-size: 2em;
+  font-family: "Open Sans Condensed", sans-serif;
+  padding: 1% 0;
+}
+div.content h3 {
+  padding: 0.5% 0;
 }
 
 div.notification {
@@ -240,6 +242,33 @@ form.addbill div.pretipAndTip .tip #tip {
 }
 form.addbill div.pretipAndTip .tip button {
   width: 100%;
+}
+form.addbill .userAmounts {
+  text-align: center;
+}
+form.addbill .userAmounts div.userBlock {
+  font-size: 1.3em;
+  padding: 0.5% 0;
+}
+form.addbill .userAmounts div.userBlock .hidden {
+  display: none;
+}
+form.addbill .userAmounts div.userBlock span {
+  font-size: inherit;
+}
+form.addbill .userAmounts div.userBlock > * {
+  display: inline-block;
+  width: auto;
+}
+form.addbill .userAmounts div.userBlock h4 {
+  padding: 0 2%;
+  font-family: "Open Sans Condensed", sans-serif;
+}
+form.addbill .userAmounts input[type=radio] {
+  display: none;
+}
+form.addbill .userAmounts input[type=radio]:checked + label {
+  font-weight: bold;
 }
 
 div.total {
