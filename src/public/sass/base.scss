@@ -25,6 +25,8 @@ header{
     width:100%;
     position: sticky;
     top:0; left:0;
+    border-bottom:3px solid $purple-pink;
+    box-shadow: 4px 4px 4 grey;
     
     background-color:$light-red;
     
@@ -115,7 +117,7 @@ nav.main-side-nav{
 }
 
 
-div.content{
+div.content, form{
     @include flex(column, no-wrap, center, center, center);
     width:100%;    
 }
@@ -166,9 +168,95 @@ section{
     }
 }
 
+input[type="text"]{
+    
+    &#tip{
+        text-align: right;
+        border-bottom: 2px solid black;
+        margin-bottom:4%;
+    }
+}
+
+div.notification{
+    width:100%;
+    text-align: center;
+    background-color:$medium-green;
+    color:$white-pink;
+    font-size: 1.2em;
+    padding:0.2%;
+}
+
+form.addbill{
+    
+    div.comment{
+        width:100%;
+        text-align: center;
+        background-color:blue;
+        
+        font-size:1em;
+        textarea{
+            border: 3px solid black;
+            padding:0.5% 1%;
+            resize:none;
+        }
+    }
+    
+    
+    >*{
+        margin:1% 0;
+    }
+    
+    .label{
+        font-size:1.2em;
+    }
+    
+    .total{
+        background-color:blue;
+        width:100%;
+        
+    }
+    
+    input[type="text"]{
+        font-size: 1.2em;
+    }
+    
+    div.pretipAndTip{
+        @include flex(row, no-wrap, center, center, center);
+        
+        
+        >*{
+            margin:0 2%;
+            
+        }
+        
+        div.pretip{
+            font-size:1.5em;
+        }
+        
+        div.tip{
+            text-align: center;
+            font-size:1.3em;
+            
+            input{
+                display: inline-block;
+            }
+            button{
+                display: inline-block;
+            }
+        }
+    }
+}
+
+div.total{
+    font-size:1.4em;
+    text-align: center;
+}
+
 button:hover{
     cursor:pointer;
 }
+
+
 
 button{
     padding:0 3%;

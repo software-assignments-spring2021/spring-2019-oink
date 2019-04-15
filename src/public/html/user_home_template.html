@@ -50,12 +50,22 @@
 
             <h2>Add a New Bill</h2>
 
-            <form action="/bill/add" method="post">
-
-                $<input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00">
-                Tip (%): <input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" value="20">
-                <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
-                Total: <input type="text" name="amount" id="amount" value=0 readonly>
+            <form class="addbill" action="/bill/add" method="post">
+                
+                <div class="pretipAndTip">
+                    <div class="pretip">
+                        <span class="label">$</span><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
+                    </div>
+                        
+                    <div class="tip">
+                        <span class="label">Tip</span><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" value="20"><span class="label">(%)</span>
+                        <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
+                    </div>
+                </div>
+                
+                <div class="total">
+                    <span class="label">Total $</span><input type="text" name="amount" id="amount" value="0.00 " readonly/>
+                </div>
 
                 <div class="add-friends" id="friendsDropdown">
                     Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()">
@@ -84,25 +94,27 @@
                 </div>
 
                 <input hidden type="text" name="splitWith" id="splitWith">
-
-              <div id="groups">
+                
+                <div id="groups">
                   <h3>Pay by Group</h3>
                   <div class="group">
-                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <h3>Study Group - 4 Members</h3> <span hidden>{{ g._id }}</span>
                     <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
                   </div>
                   <div class="group">
-                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <h3>Roommates - 3 Members</h3> <span hidden>{{ g._id }}</span>
                     <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
                   </div>
                   <div class="group">
-                    <h3>{{ g.name }} - {{ g.inGroup.length }} Members</h3> <p hidden>{{ g._id }}</p>
+                    <h3>Brunch Crew - 5 Members</h3> <span hidden>{{ g._id }}</span>
                     <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
                   </div>
                 </div>
                 
-                About <input type="text" name="about" id="about">
-
+                
+                <div class="comment">
+                    <textarea name="about" rows="6" cols="55" id="about" placeholder="Add a Comment" maxlength="150" wrap="soft"></textarea>
+                </div>
 
 
               <input type="submit" value="Add bill" id="addBillButton">
@@ -139,5 +151,7 @@
             document.querySelector("i.fa-times").classList.add("hidden");
         }
     </script>
+    <script src="../js/addBill.js"></script>
+    <script src="../js/stretchy.js"></script>
 </body>
 </html>
