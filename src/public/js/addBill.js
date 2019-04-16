@@ -137,12 +137,18 @@ function handleAddFriend(friend){
 }
 
 function handleAddGroup(req, user){
+  // clear current users
+  const users = document.getElementById('users');
+  while(users.firstChild){
+    users.removeChild(users.firstChild);
+  }
+  const typeOfPayment = document.getElementById("typeOfPayment");
+  typeOfPayment.value = "%";
+  // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
     const username = group.inGroup[i];
-    if(username !== user){
-      addUserToBill(username, group.defaultPercentages[i]);
-    }
+    addUserToBill(username, group.defaultPercentages[i]);
   }
 }
 

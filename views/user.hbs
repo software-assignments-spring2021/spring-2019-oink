@@ -28,7 +28,7 @@
     <h3>How much does everyone owe? <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
     <button type="button" onclick="onClickSplitType('%')">Split by percentage</button>
   	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button>
-    <div class="userBlock">
+    <div class="userBlock" id="users">
   		<img src='{{ user.img.src }}' width="15" height="15">  {{ user.username }} 
   		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
   	</div>
