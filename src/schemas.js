@@ -38,7 +38,8 @@ const GroupSchema = new Schema({
 
 	name:{type:String, required:true},
 	inGroup:[String], //will be usernames
-	defaultPercentages:[Number] // will be same length as inGroup
+	defaultPercentages:[Number], // will be same length as inGroup
+	administrator: String //username of person who created the group / has administrative access
 
 });
 

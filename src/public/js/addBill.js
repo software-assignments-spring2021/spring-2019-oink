@@ -2,27 +2,25 @@ function onClickAddUserToBill(){
   // clear user search bar
   const input = document.getElementById("searchUser");
   const username = input.value;
-  input.textContent = "";
+  input.value = "";
+
+  // remove user from dropdown
+  const a = document.getElementById("user_"+username);
+  a.parentNode.removeChild(a); 
+
+  const br = a.firstChild;
+  a.removeChild(br);
+
   // add username to list of Friends to add to a bill
+  
+  const friendsList = document.getElementsByClassName("friends");
+  for(let i = 0; i < friendsList.length; i++)
+    friendsList[i].setAttribute("hidden", true);
   addUserToBill(username);
 } 
 
-function removeUser(username){
-  
-  const div = document.getElementById(username + "Block");
-
-  div.parentNode.removeChild(div);
-  const splitWith = document.getElementById('splitWith');
-  const users = splitWith.split(',');
-  let newString = "";
-  for(let i = 0; i < user.length; i++){
-    if(user[i] != username)
-      newString += user[i] + ',';
-  }
-  splitWith.value = newString;
-}
-
 function addUserToBill(username, defaultPercentage){
+
     const div = document.createElement("div");
     div.setAttribute("id", username + "Block");
     div.className = "userBlock";
@@ -112,6 +110,19 @@ function addUserToBill(username, defaultPercentage){
       }
       splitWith.value = newString;
       div.parentNode.removeChild(div);
+
+      const friendsDropdown = document.getElementById("friendsDropdown");
+      const a = document.createElement("a");
+      a.className = "friends";
+      a.setAttribute("id", "user_"+username);
+      a.onclick = function(){
+        onClickUsername(username);
+      }
+      a.setAttribute("hidden", true);
+      a.textContent = username;
+      const br = document.createElement("br");
+      a.appendChild(br);
+      friendsDropdown.appendChild(a);
     }
 
 }
@@ -184,8 +195,5 @@ const symbol = document.getElementById("typeOfPayment");
 symbol.value = icon;
 
 }
-
-
-
 
 //setInterval(checkValuesWithSum, 30);

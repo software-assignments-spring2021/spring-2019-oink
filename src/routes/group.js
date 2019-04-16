@@ -36,7 +36,8 @@ router.post('/add', (req, res) => {
 		const group = new Group({
 			name: req.body.name,
 			inGroup: groupMembers,
-			defaultPercentages: defaultPercentages
+			defaultPercentages: defaultPercentages,
+			administrator: req.session.user.username
 		});
 		group.save((err, addedGroup) => {
 			if (err){

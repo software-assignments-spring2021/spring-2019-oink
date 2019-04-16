@@ -15,9 +15,9 @@
 	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
 
 	<div id="friendsDropdown">
-		Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
+		Add a user: <input type="text" onclick="showDropDown()" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
 		{{#each friends as |f|}}
-			<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
+			<a class="friends" id="user_{{ f.username }}" onclick="onClickUsername('{{ f.username }}')" hidden>{{ f.username }}<br></a>
 		{{/each}}
 	</div>
 	<button type="button" onclick="onClickAddUserToBill()">Add User</button><br>

@@ -250,16 +250,22 @@ router.get('/:username', (req, res) => {
 
 			else{
 				const groups = [];
+				const adminGroups = [];
+				const allGroups = [];
 				for(let i = 0; i < foundUser.groups.length; i++){
 					Group.findById(foundUser.groups[i], (err, group) => {
-						groups.push(group);
+						if(group.administrator == sessionUser.username)
+							adminGroups.push(group);
+						else
+							groups.push(group);
+						allGroups.push(group);
 					});
 				}
 				const friendsList = foundUser.friends;
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+						res.render('user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
 					});
 				}
 
@@ -271,9 +277,9 @@ router.get('/:username', (req, res) => {
 								friend = true;
 						}
 						if(friend)
-							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": tempUser.img});
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "image": tempUser.img});
 						else
-							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "addFriend": "Add Friend"
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": "Add Friend"
 								, "image": tempUser.img});
 						});
 				}

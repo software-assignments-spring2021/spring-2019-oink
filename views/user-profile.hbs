@@ -19,14 +19,36 @@
 </ul>
 
 <h3>Groups:</h3>
-{{#each groups}}
-	{{name}}
-	<ul>
-		{{#each inGroup}}
-			<li>{{this}}</li>
-		{{/each}}<br><br>
-	</ul>
-{{/each}}
+{{#if admin}}
+	{{#each adminGroups}}
+		<h3>{{name}}</h3>
+		<ul>
+			{{#each inGroup}}
+				<li>{{this}}</li>
+			{{/each}}<br>
+		</ul>
+		<button>Edit</button>
+		<button>Delete</button>
+	{{/each}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+		<ul>
+			{{#each inGroup}}
+				<li>{{this}}</li>
+			{{/each}}<br>
+		</ul>
+	{{/each}}
+{{else}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+		<ul>
+			{{#each inGroup}}
+				<li>{{this}}</li>
+			{{/each}}<br>
+		</ul>
+	{{/each}}
+{{/if}}
+
 
 {{#if tip}}
 	<form action="/api/change-tip" method="post">
