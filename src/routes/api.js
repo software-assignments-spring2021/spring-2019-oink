@@ -148,4 +148,39 @@ router.post('/history', (req, res) => {
 	});
 });
 
+router.post('/remove-transaction/:id', (req, res) => {
+	const id = req.params.id;
+	Transaction.findById(id, (err, transaction) => {
+		const user = transaction.paidBy;
+		User.findOne({"username": user}, (err, foundUser) => {
+			for(let i = 0;i < foundUser.friends.length; i++){
+				if(foundUser.friends[i].user == transaction.paidTo){
+					const newBalance = foundUser.friends[i].balance += transaction.amount;
+					User.updateOne({'friends._id': foundUser.friends[i]._id}, {'$set': {
+							'friends.$.balance': newBalance
+						}}, function(){
+							Transaction.deleteOne({_id: id}, (err) => {
+								if(err){
+									res.json(err);
+								}
+								else
+									res.send("document removed");
+							});
+					});
+				}
+			}
+		});
+	});
+});
+
+router.post('/change-tip', (req, res) => {
+	const newTip = req.body.tip;
+	const user = req.session.user.username;
+	User.findOne({"username": user}, (err, foundUser) => {
+		foundUser.defaultTip = parseInt(newTip);
+		foundUser.save();
+		res.redirect('/user/index');
+	});
+});
+
 module.exports = router;

@@ -37,7 +37,8 @@ const BillSchema = new Schema({
 const GroupSchema = new Schema({
 
 	name:{type:String, required:true},
-	inGroup:[String] //will be usernames
+	inGroup:[String], //will be usernames
+	defaultPercentages:[Number] // will be same length as inGroup
 
 });
 
@@ -54,8 +55,8 @@ const UserSchema = new Schema({
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
 	friends:[FriendSchema],
-	img: { src: String, contentType: String, rawSRC: String }
-
+	img: { src: String, contentType: String, rawSRC: String },
+	defaultTip: Number
 });
 
 

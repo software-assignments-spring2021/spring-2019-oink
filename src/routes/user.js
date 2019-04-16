@@ -38,7 +38,7 @@ router.post('/register', (req, res) => {
 	img.src = '/images/no_profile_picture.png';
 	img.contentType = '/image/png';
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
-	user = {username: req.body.username, email: req.body.email, 'img': img};
+	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
 
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
@@ -160,9 +160,11 @@ router.get('/index', (req, res) => {
 				
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
-						if(!transaction.isPaid && !found){
-							notification = transaction;
-							found = true;
+						if(transaction){
+							if(!transaction.isPaid && !found){
+								notification = transaction;
+								found = true;
+							}
 						}
 						callback();
 					});
@@ -257,7 +259,7 @@ router.get('/:username', (req, res) => {
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img});
+						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
 					});
 				}
 

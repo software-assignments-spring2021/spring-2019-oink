@@ -18,6 +18,7 @@ function showBalances(username){
       	const t = res.transactions[i]
       	const li = document.createElement("li");
       	const a = document.createElement("a");
+        let forgive;
       	a.textContent = "View Bill";
         a.href = "/fake/link";
       	if(t.paidBy != username && t.isPaid == true){
@@ -33,17 +34,30 @@ function showBalances(username){
       	else if(t.paidBy == username && t.isPaid == false){
       		li.textContent = "You loaned " + t.amount + " to " + t.paidBy + ' on ' + res.dates[i];
       		a.href = "/bill/view/" + t.bill;
+          forgive = document.createElement("button");
+          forgive.textContent = "Forgive";
+          forgive.onclick = function(){
+              const xml = new XMLHttpRequest();
+              xml.open('post', '/api/remove-transaction/'+t._id, true);
+              xml.send();
+              location.reload();
+          };
       	}
       	
       	ul.appendChild(li);
       	if(a.href != "http://localhost:3000/fake/link"){
-          console.log(a.href);
       		ul.appendChild(a);
       	}
+        if(forgive !== undefined){
+          const br = document.createElement("br");
+          ul.appendChild(br);
+          console.log('test');
+          ul.appendChild(forgive);
+        }
       }
 
-        const totalBalance = document.createElement("h3");
-        if(res.balance == 0)
+    const totalBalance = document.createElement("h3");
+    if(res.balance == 0)
 	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
 	 	if(res.balance > 0)
 	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;

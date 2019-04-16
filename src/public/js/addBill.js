@@ -22,7 +22,7 @@ function removeUser(username){
   splitWith.value = newString;
 }
 
-function addUserToBill(username){
+function addUserToBill(username, defaultPercentage){
     const div = document.createElement("div");
     div.setAttribute("id", username + "Block");
     div.className = "userBlock";
@@ -45,7 +45,10 @@ function addUserToBill(username){
 
     const valueText = document.createElement("input"); // CREATE / APPEND TEXT FIELD
     valueText.type = "text";
-    valueText.value = 0;
+    if(!defaultPercentage)
+      valueText.value = 0;
+    else
+      valueText.value = defaultPercentage;
     valueText.name = username;
     valueText.placeholder = "$0.00";
     valueText.setAttribute("class", "transactionValue");
@@ -118,7 +121,7 @@ function calculateTip(){
   const tip = document.getElementById("tip");
   const total = document.getElementById("amount");
 
-  total.value = pretip.value * ((tip.value * .01) + 1);
+  total.value = Math.round(pretip.value * ((tip.value * .01) + 1) * 100) / 100 ;
 }
 
 function noTip() {
@@ -134,12 +137,18 @@ function handleAddFriend(friend){
 }
 
 function handleAddGroup(req, user){
+  // clear current users
+  const users = document.getElementById('users');
+  while(users.firstChild){
+    users.removeChild(users.firstChild);
+  }
+  const typeOfPayment = document.getElementById("typeOfPayment");
+  typeOfPayment.value = "%";
+  // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
     const username = group.inGroup[i];
-    if(username !== user){
-      addUserToBill(username);
-    }
+    addUserToBill(username, group.defaultPercentages[i]);
   }
 }
 

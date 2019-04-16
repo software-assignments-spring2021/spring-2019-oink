@@ -9,7 +9,7 @@
 <form action="/bill/add" method="post">
   
   $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
-  Tip (%): <input type="text" name="tip" id ="tip" value="20"><br><br>
+  Tip (%): <input type="text" name="tip" id ="tip" value="{{ user.defaultTip }}"><br><br>
 	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
 	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
 	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
@@ -28,7 +28,7 @@
     <h3>How much does everyone owe? <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
     <button type="button" onclick="onClickSplitType('%')">Split by percentage</button>
   	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button>
-    <div class="userBlock">
+    <div class="userBlock" id="users">
   		<img src='{{ user.img.src }}' width="15" height="15">  {{ user.username }} 
   		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
   	</div>
