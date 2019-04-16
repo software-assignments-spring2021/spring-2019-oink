@@ -1,0 +1,15 @@
+<h3>My Balances</h3>
+
+<h3>Friends:</h3>
+<div id="friendList">
+	{{#each friends as |f|}}
+		<a href="#" onclick="showBalances('{{ f.user }}')">{{ f.user }}</a><br>
+	{{/each}}
+</div>
+<br><br>
+
+<h3>Click a Friend to view your balance</h3>
+<div id="header">
+</div>
+
+<script src="/js/my-balances.js"></script>

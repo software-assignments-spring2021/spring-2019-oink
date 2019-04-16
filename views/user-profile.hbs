@@ -1,16 +1,20 @@
 <h2>{{ user }}'s Profile!</h2>
 
+<img src="{{ image.src }}" alt="Anon" width="225" height="225">
+
+<form action='/api/upload/image' enctype="multipart/form-data" method="post">
+	<input type="file" name="upload" accept="image/png, image/jpeg">
+	<input type="submit" value="Upload">
+</form>
+
 {{#if addFriend}}
-	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button>
+	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button><br>
 {{/if}}
 
 <h3>Friends:</h3>
-
 <ul>
-{{#each friends}}
-
-	<li>{{user}}</li>
-
+{{#each friends as |f|}}
+	<a href="/user/{{ f.user }}"><li>{{ f.user }}</li></a>
 {{/each}}
 </ul>
 
@@ -24,4 +28,13 @@
 	</ul>
 {{/each}}
 
+{{#if tip}}
+	<form action="/api/change-tip" method="post">
+		<h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
+		<input type="submit" value="Change Default">
+	</form>
+{{/if}}
+
+
 <script src="/js/add_friend.js"></script>
+<script src="/js/change_tip.js"></script>

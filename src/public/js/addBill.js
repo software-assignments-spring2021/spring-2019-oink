@@ -54,7 +54,7 @@ function appendChildren(parent, ...children){
     return parent;
 }
 
-function addUserToBill(username){
+function addUserToBill(username, defaultPercentage){
 
    /*
 
@@ -71,10 +71,20 @@ function addUserToBill(username){
   const spanDollar = createElement("span", {"class":"dollar"}, "$");
   const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
   const userh4 = createElement("h4", {}, username);
-  const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":"0", "placeholder": "0"});
+  const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
+
+  const profilePic = createElement("img", {"width":"16px", "height":"16px"});
+  const xml = new XMLHttpRequest();
+  xml.open('post', '/api/image', true);
+  xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xml.addEventListener('load', () => {
+      profilePic.src = xml.responseText;
+  });
+  xml.send("username="+username); 
 
   const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
 
+  outerDiv.appendChild(profilePic);
   outerDiv.appendChild(userh4);
   outerDiv.appendChild(spanDollar);
   outerDiv.appendChild(input);
@@ -121,7 +131,7 @@ function addUserToBill(username){
 
   });
 
-  outerDiv.insertBefore(delButton, userh4);
+  outerDiv.insertBefore(delButton, profilePic);
 
   //add the username to the split with field
   document.querySelector("#splitWith").value += `${username},`
@@ -137,7 +147,9 @@ function calculateTip(){
   const tip = document.getElementById("tip");
   const total = document.getElementById("amount");
 
+
   total.value = (pretip.value * ((tip.value * .01) + 1)).toFixed(2);
+
 }
 
 function noTip() {
@@ -155,12 +167,18 @@ function handleAddFriend(friend){
 }
 
 function handleAddGroup(req, user){
+  // clear current users
+  const users = document.getElementById('users');
+  while(users.firstChild){
+    users.removeChild(users.firstChild);
+  }
+  const typeOfPayment = document.getElementById("typeOfPayment");
+  typeOfPayment.value = "%";
+  // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
     const username = group.inGroup[i];
-    if(username !== user){
-      addUserToBill(username);
-    }
+    addUserToBill(username, group.defaultPercentages[i]);
   }
 }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const async = require('async');
 const router = express.Router(); 
+const fs = require('fs');
 require('../schemas'); 
 
 const User = mongoose.model("User");
@@ -33,7 +34,11 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-	user = {username: req.body.username, email: req.body.email};
+	const img = {};
+	img.src = '/images/no_profile_picture.png';
+	img.contentType = '/image/png';
+	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
+	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
 
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
@@ -127,12 +132,11 @@ router.post('/pay-transaction/:id', (req, res) => {
 			// UPDATE BALANCES
 			User.findOne({"username": transaction.paidBy}, (error, user) => {
 				for(let i = 0; i < user.friends.length; i++){
-					Friend.findById(user.friends[i], (err, friend) => {
-						if(friend.user === transaction.paidTo){
-							friend.balance += transaction.amount;
-							friend.save();
-						}
-					});
+					if(user.friends[i].user === transaction.paidTo){
+						user.friends[i].balance += transaction.amount;
+						user.markModified('friends');
+						user.save();
+					}
 				}
 			});
 			res.send("ok");
@@ -156,24 +160,27 @@ router.get('/index', (req, res) => {
 				
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
-						if(!transaction.isPaid && !found){
-							notification = transaction;
-							found = true;
+						if(transaction){
+							if(!transaction.isPaid && !found){
+								notification = transaction;
+								found = true;
+							}
 						}
 						callback();
 					});
 				}, function(err){
 					const groups = [];
-					for(let i = 0; i < req.session.user.groups.length; i++){
-						Group.findById(req.session.user.groups[i], (err, group) => {
+					for(let i = 0; i < user.groups.length; i++){
+						Group.findById(user.groups[i], (err, group) => {
 							groups.push(group);
 						});
 					}
 					if(notification !== undefined)
-						res.render('user', {"friends": users, "groups": groups, "notification": notification});
+						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
 					else
-						res.render('user', {"friends": users, "groups": groups});
-					});		
+						res.render('user', {"user": user, "friends": users, "groups": groups});
+					});	
+					
 			});
 		});
 	}
@@ -188,15 +195,17 @@ router.get("/my-bills", (req, res)=>{
 	
 
 	if(req.session.user){
+		User.findOne({"username": req.session.user.username}, (err, user) => {
+			const bills = user.bills;
 
-		const bills = req.session.user.bills;
+			//in this format so that we can also sort by date
+			Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
+				//console.log(docs);
+				res.render("allUserBills", {"bills":docs});
 
-		//in this format so that we can also sort by date
-		Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
-			//console.log(docs);
-			res.render("allUserBills", {"bills":docs});
-
+			});
 		});
+		
 	}
 	else{
 		res.redirect('/user/login');
@@ -217,46 +226,63 @@ router.get('/search', (req, res) => {
 
 
 router.get('/my-balances', (req, res) => {
-	res.send("user balances");
+	const user = req.session.user;
+	if(user){
+		User.findOne({"username": user.username}, (err, sessionUser) => {
+			res.render('my-balances', {friends: sessionUser.friends});
+		});
+	}
+	else{
+		res.redirect('login');
+	}
 });
 
 //view a user
 router.get('/:username', (req, res) => {
 
-	const user = req.params.username;
-	const sessionUser = req.session.user;
-	User.findOne({"username": user}, (err, foundUser) => {
-		if(!foundUser){
-			res.redirect('/user/index');
-		}
-
-		else{
-			const groups = [];
-			for(let i = 0; i < foundUser.groups.length; i++){
-				Group.findById(foundUser.groups[i], (err, group) => {
-					groups.push(group);
-				});
+	if(req.session.user){
+		const user = req.params.username;
+		const sessionUser = req.session.user;
+		User.findOne({"username": user}, (err, foundUser) => {
+			if(!foundUser){
+				res.redirect('/user/index');
 			}
-			const friendsList = foundUser.friends;
-			
-			if(user === sessionUser.username)
-				res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList});
 
 			else{
-				let friend = false;
-				User.findOne({"username": sessionUser.username}, (err, tempUser) => {
-					for(let i = 0; i < tempUser.friends.length; i++){
-						if(tempUser.friends[i].user == user)
-							friend = true;
-					}
-					if(friend)
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList});
-					else
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "addFriend": "Add Friend"});
+				const groups = [];
+				for(let i = 0; i < foundUser.groups.length; i++){
+					Group.findById(foundUser.groups[i], (err, group) => {
+						groups.push(group);
 					});
+				}
+				const friendsList = foundUser.friends;
+				console.log(friendsList);
+				if(user === sessionUser.username){
+					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
+						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+					});
+				}
+
+				else{
+					let friend = false;
+					User.findOne({"username": sessionUser.username}, (err, tempUser) => {
+						for(let i = 0; i < tempUser.friends.length; i++){
+							if(tempUser.friends[i].user == user)
+								friend = true;
+						}
+						if(friend)
+							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": tempUser.img});
+						else
+							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "addFriend": "Add Friend"
+								, "image": tempUser.img});
+						});
+				}
 			}
-		}
-	});
+		});
+	}
+	else{
+		res.redirect('login');
+	}
 
 });
 

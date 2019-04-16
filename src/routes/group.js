@@ -22,9 +22,21 @@ router.post('/add', (req, res) => {
 	if(user){
 		let groupMembers = req.body.splitWith.split(','); 
 		groupMembers[groupMembers.length-1] = user.username;
+		const defaultPercentage = Math.floor(100 / groupMembers.length); //default even split
+		const defaultPercentages = new Array(groupMembers.length).fill(defaultPercentage);
+
+		// make sure percentages add up to 100
+		let sum = 0;
+		for(let i = 0;i < defaultPercentages.length; i++){
+			sum += defaultPercentages[i];
+		}
+
+		defaultPercentages[defaultPercentages.length-1] += (100 - sum);
+
 		const group = new Group({
 			name: req.body.name,
-			inGroup: groupMembers
+			inGroup: groupMembers,
+			defaultPercentages: defaultPercentages
 		});
 		group.save((err, addedGroup) => {
 			if (err){

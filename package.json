@@ -33,9 +33,11 @@
   "devDependencies": {
     "async": "^2.6.2",
     "chai": "^4.2.0",
+    "formidable": "^1.2.1",
     "handlebars": "^4.1.0",
     "hbs": "^4.0.3",
     "mocha": "^6.0.2",
+    "node-datetime": "^2.1.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",
     "passport": "^0.4.0",
