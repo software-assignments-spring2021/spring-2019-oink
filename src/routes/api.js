@@ -2,9 +2,12 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
+const Transaction = mongoose.model("Transaction");
+const Bill = mongoose.model("Bill");
 const Friend = mongoose.model("Friend");
 const fs = require('fs');
 const formidable = require('formidable');
+const async = require('async');
 
 router.post('/add-friend',(req,res)=>{
 	const username = req.body.username; //username of the friend being added
@@ -32,15 +35,7 @@ router.post('/add-friend',(req,res)=>{
 				//req.session.user.friends.push(newFriend);
 				User.findOne({"username": username},(err, user)=>{
 					user.friends.push(secondFriend);
-					/*
-					user.save((err, savedUser) => {
-						console.log(req.session.user);
-						newFriend.save((err, savedFriend) => {
-							secondFriend.save((err, savedSecondFriend) => {
-								res.send({result: "added"});
-							});
-						});
-					});*/
+					
 					user.save();
 					console.log(req.session.user);
 					res.send({result: "added"});
@@ -107,6 +102,49 @@ router.post('/image', (req, res) => {
 			res.send(user.img.src);
 		else
 			res.send("error");
+	});
+});
+
+router.post('/history', (req, res) => {
+	const username = req.body.username;
+	const sessionUser = req.session.user;
+	Transaction.find({}, (err, transactions) => {
+		const response = {};
+		const relTransactions = [];
+		const dates = [];
+		for(let i = 0; i < transactions.length; i++){
+			if(transactions[i].paidBy == sessionUser.username && transactions[i].paidTo == username ||
+				transactions[i].paidBy == username && transactions[i].paidTo == sessionUser.username){
+
+				if(transactions[i].isFriends == true)
+					relTransactions.push(transactions[i]);
+			}	
+		}
+		async.forEach(relTransactions, function(item, cb){
+			Bill.findById(item.bill, (err, bill) => {
+				dates.push(bill.dateCreated);
+				cb();
+			});
+		}, function(err){
+			User.findOne({"username": sessionUser.username}, (err, user) => {
+				for(let i = 0; i < user.friends.length; i++){
+					if(user.friends[i].user == username){
+						response.balance = user.friends[i].balance;
+					}
+				}
+				User.findOne({"username": username}, (err, otherUser) => {
+					for(let i = 0; i < otherUser.friends.length; i++){
+						if(otherUser.friends[i].user == sessionUser.username){
+							response.balance -= otherUser.friends[i].balance;
+						}
+					}
+					response.transactions = relTransactions;
+					response.dates = dates;
+					res.json(response);
+				});
+
+			});
+		});
 	});
 });
 
