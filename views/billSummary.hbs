@@ -4,11 +4,17 @@
 <h3>About: </h3>{{ text }}
 
 <h3>On this bill: </h3>
-{{#each transactions as |t|}}
+{{#each non-friend-transactions as |t|}}
 	<div>
 		{{ t.amount }} - {{ t.paidBy }} - 
 		<form action="/api/add-friend" method="post">
+			<input type="text" name="username" value="{{ t.paidBy }}" hidden>
 			<input type="submit" value="Add friend">
 		</form>
+	</div>
+{{/each}}
+{{#each friend-transactions as |t|}}
+	<div>
+		{{ t.amount }} - {{ t.paidBy }}
 	</div>
 {{/each}}
