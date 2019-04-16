@@ -24,14 +24,14 @@ function showBalances(username){
       		li.textContent = "You paid " + t.amount + " to " + t.paidTo + ' on ' + res.dates[i];
       	}
       	else if(t.paidBy != username && t.isPaid == false){
-      		li.textContent = "You owe $" + t.amount + " to " + t.paidTo + " because of: ";
+      		li.textContent = t.paidTo + " loaned you " + t.amount + " on " + res.dates[i];
       		a.href = "/bill/view/" + t.bill;
       	}
       	else if(t.paidBy == username && t.isPaid == true){
       		li.textContent = t.paidBy + " paid you " + t.amount + " on " + res.dates[i];
       	}
       	else if(t.paidBy == username && t.isPaid == false){
-      		li.textContent = t.paidBy + ' owes you ' + t.amount + " because of: ";
+      		li.textContent = "You loaned " + t.amount + " to " + t.paidBy + ' on ' + res.dates[i];
       		a.href = "/bill/view/" + t.bill;
       	}
       	
