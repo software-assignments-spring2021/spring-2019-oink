@@ -6,54 +6,69 @@
 
 <h2>Add a New Bill</h2>
 
-<form action="/bill/add" method="post">
-  
-  $ <input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"><br><br>
-  Tip (%): <input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" value="20"><br><br>
-	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
-	<!-- <button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br> -->
-	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
+<form class="addbill" action="/bill/add" method="post">
+    
+    <div class="pretipAndTip">
+        <div class="pretip">
+            <label for="pretip">$</label><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
+        </div>
+        <div class="tip">
+            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="20"><span class="label">(%)</span>
+            <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
+        </div>
+    </div>
+    
+    <div class="total">
+        <label for="amount">Total $</label><input type="text" name="amount" id="amount" value="0.00 " readonly/>
+    </div>
+    
+    <div class="comment">
+        <textarea name="about" id="about" placeholder="Add a Comment" maxlength="150" wrap="soft"></textarea>
+    </div>
 
-	<div id="friendsDropdown">
-		Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
-		{{#each friends as |f|}}
-			<a onclick="onClickUsername('{{ f.username }}')">{{ f.username }}</a><br>
-		{{/each}}
-	</div>
-	<button type="button" onclick="onClickAddUserToBill()">Add User</button><br>
-
-	<br>
-
-  <div id="userAmounts">
-    <h3>How much does everyone owe? <!-- <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
-    <button type="button" onclick="onClickSplitType('%')">Split by percentage</button>
-  	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button> -->
-    <input type="radio" name="typeOfPayment" value="%"/>Percentage
-    <input type="radio" name="typeOfPayment" value="$"/>Fixed Amount
-    <div class="userBlock">
-  		{{ user.username }} 
-  		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
-  	</div>
-  </div>
-
-  <input hidden type="text" name="splitWith" id="splitWith">
-  About: <input type="text" name="about" id="about">
-
-  <br><br>
-
-  <div id="groups">
-    <h3>Pay by Group:</h3>
-    {{#each groups as |g|}}
-      <div>
-        {{ g.name }} - {{ g.inGroup.length }} Members <h2 hidden>{{ g._id }}</h2>
-        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
+    <div class="userAmounts" id="userAmounts">
+      <h3>How much does everyone owe?</h3>
+      <input type="radio" name="typeOfPayment" id="per" onclick="switchSymbol('percent')" value="%"/><label for="per">By Percentage</label>
+      <input type="radio" name="typeOfPayment" id="mon" onclick="switchSymbol('dollar')" checked="checked" value="$"/><label for="mon">By Amount</label>
+    
+      <div class="userBlock">
+          <h4>{{ user.username }}</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
       </div>
-    {{/each}}<br>
-  </div><br>
+    </div>
 
-
-  <input type="submit" value="Add bill" id="addBillButton">
+    <input hidden type="text" name="splitWith" id="splitWith">
+                
+    <input type="submit" value="Add bill" id="addBillButton">
+              
 </form>
+
+<div class="choose-users">
+                
+    
+<div id="select-friends">
+        <h3>Add a Friend</h3>
+        
+        <div class="friends">
+            <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+            {{#each friends as |f|}}
+              <h4 onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
+            {{/each}}
+        </div>
+    </div>
+
+    <div id="select-groups">
+        <h3>Add a Group</h3>
+        <div class="groups">
+            <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+            {{#each groups as |g|}}
+              <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">{{ g.name }} - {{ g.inGroup.length }} Members </h4><span hidden>{{ g._id }}</span>
+            {{/each}}
+        </div>
+    </div>
+    
+</div>
+
 
 <script src="/js/search.js"></script>
 <script src="/js/addBill.js"></script>
+<script src="/js/stretchy.js"></script>

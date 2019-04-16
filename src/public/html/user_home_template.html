@@ -94,35 +94,51 @@
             </form>
             
             <div class="choose-users">
-            
-                <div class="add-friends" id="friendsDropdown">
-                    Add a user: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()">
-                    <a onclick="onClickUsername('Jess1')">Jess1</a>
-                    <a onclick="onClickUsername('Jess1')">Jess1</a>
-                    <a onclick="onClickUsername('Jess1')">Jess1</a>  
+                
+                
+                <div id="select-friends">
+                    <h3>Add a Friend</h3>
+                    
+                    <div class="friends">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4>
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+
+                    </div>
+                    
+
                 </div>
 
-                <button type="button" onclick="onClickAddUserToBill()">Add User</button><br>
 
 
+                <div id="select-groups">
+                    <h3>Add a Group</h3>
+                    <div class="groups">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Study Group - 4 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Roommates - 3 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
 
-                <div id="groups">
-                    <h3>Pay by Group</h3>
-                    <div class="group">
-                        <h3>Study Group - 4 Members</h3> <span hidden>{{ g._id }}</span>
-                        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
-                    </div>
-                    <div class="group">
-                        <h3>Roommates - 3 Members</h3> <span hidden>{{ g._id }}</span>
-                        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
-                    </div>
-                    <div class="group">
-                        <h3>Brunch Crew - 5 Members</h3> <span hidden>{{ g._id }}</span>
-                        <button type="button" onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Use Group</button>
                     </div>
                 </div>
                 
             </div>
+            
+            
+            
             
         </div>
 

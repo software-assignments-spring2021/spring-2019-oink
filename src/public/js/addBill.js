@@ -22,15 +22,41 @@ function removeUser(username){
   splitWith.value = newString;
 }
 
+function createElement(elementType, attributes, text){
+  const elem = document.createElement(elementType);
+
+  for (let key in attributes){
+    if (attributes.hasOwnProperty(key)) {
+      elem.setAttribute(key, attributes[key])
+    }
+  }
+
+
+  if (text){
+    elem.appendChild(document.createTextNode(text));
+  }
+
+  console.log(elem);
+
+  return elem;
+
+
+}
+
 function addUserToBill(username){
+
+  const spanDollar = createElement("span", {"class":"dollar"}, "$");
+  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  const username = createElement("h4", {}, username);
 
     /*
 
     <div class="userBlock">
-      {{ user.username }} 
-      <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
-    </div>
-
+          <h4>{{ user.username }}</h4>
+          <span class="dollar">$</span>
+          <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+          <span class="percent hidden">%</span>
+      </div>
     */
 
     const div = document.createElement("div");

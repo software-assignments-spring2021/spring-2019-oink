@@ -192,6 +192,7 @@ section{
 }
 
 div.content{
+    padding-bottom:5%;
     
     button{
         width:auto;
@@ -223,6 +224,16 @@ div.notification{
 }
 
 form.addbill{
+    
+    input[type="submit"]{
+        width:auto;
+        padding:1%;
+        font-size:1.3em;
+        
+        &:hover{
+            cursor:pointer;
+        }
+    }
     
     div.comment{
         text-align: center;
@@ -301,6 +312,7 @@ form.addbill{
             }
             h4{
                 padding:0 2%;
+                font-size:1.3em;
                 
                 font-family:$open-sans-condensed;
             }
@@ -311,16 +323,61 @@ form.addbill{
         
         input[type="radio"]{
             display:none;
+            
+            +label{
+                
+            }
+            
+            &:checked+label{
+                font-weight: bold;
+            }
+            
         }
+    }
+}
+
+div.choose-users{
+    @include flex(row, no-wrap, center, center, center);
+    margin-top:2%;
+    
+    h3{
+        font-size:1.3em;
+    }
+    
+    div.groups, div.friends{
         
-        input[type="radio"]+label{
+        input[type="text"]#search{
+            position:sticky;
+            top:0; left:0;
+            width:100%;
+            padding:1%;
+            border-bottom: 2px solid $dark-green;
+            
+            
+            
             
         }
         
-        input[type="radio"]:checked+label{
-            font-weight: bold;
+        width:70%;
+        margin:auto;
+        border:medium solid $dark-green;
+        height:30vh;
+        overflow-y:scroll;
+    }
+    
+    h4{
+        font-size: 1.4em;
+        
+        padding:1% 0;
+        
+        font-family: $open-sans-condensed;
+        
+        &:hover{
+            cursor:pointer;
+            background-color:$light-green;
         }
     }
+    
 }
 
 div.total{

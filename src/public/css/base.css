@@ -172,6 +172,9 @@ section article span.amount {
   font-weight: bold;
 }
 
+div.content {
+  padding-bottom: 5%;
+}
 div.content button {
   width: auto;
 }
@@ -196,6 +199,14 @@ div.notification {
   padding: 0.2%;
 }
 
+form.addbill input[type=submit] {
+  width: auto;
+  padding: 1%;
+  font-size: 1.3em;
+}
+form.addbill input[type=submit]:hover {
+  cursor: pointer;
+}
 form.addbill div.comment {
   text-align: center;
   font-size: 1em;
@@ -262,6 +273,7 @@ form.addbill .userAmounts div.userBlock > * {
 }
 form.addbill .userAmounts div.userBlock h4 {
   padding: 0 2%;
+  font-size: 1.3em;
   font-family: "Open Sans Condensed", sans-serif;
 }
 form.addbill .userAmounts input[type=radio] {
@@ -269,6 +281,43 @@ form.addbill .userAmounts input[type=radio] {
 }
 form.addbill .userAmounts input[type=radio]:checked + label {
   font-weight: bold;
+}
+
+div.choose-users {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2%;
+}
+div.choose-users h3 {
+  font-size: 1.3em;
+}
+div.choose-users div.groups, div.choose-users div.friends {
+  width: 70%;
+  margin: auto;
+  border: medium solid #729956;
+  height: 30vh;
+  overflow-y: scroll;
+}
+div.choose-users div.groups input[type=text]#search, div.choose-users div.friends input[type=text]#search {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1%;
+  border-bottom: 2px solid #729956;
+}
+div.choose-users h4 {
+  font-size: 1.4em;
+  padding: 1% 0;
+  font-family: "Open Sans Condensed", sans-serif;
+}
+div.choose-users h4:hover {
+  cursor: pointer;
+  background-color: #b5d99c;
 }
 
 div.total {
