@@ -36,20 +36,27 @@ function createElement(elementType, attributes, text){
     elem.appendChild(document.createTextNode(text));
   }
 
-  console.log(elem);
+  //console.log(elem);
 
   return elem;
 
 
 }
 
+function appendChildren(parent, ...children){
+  //NOT WORKING
+    for (let child in children){
+      parent.appendChild(child);
+    }
+
+    //console.log(parent);
+
+    return parent;
+}
+
 function addUserToBill(username){
 
-  const spanDollar = createElement("span", {"class":"dollar"}, "$");
-  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
-  const username = createElement("h4", {}, username);
-
-    /*
+   /*
 
     <div class="userBlock">
           <h4>{{ user.username }}</h4>
@@ -59,81 +66,69 @@ function addUserToBill(username){
       </div>
     */
 
-    const div = document.createElement("div");
-    div.setAttribute("id", username + "Block");
-    div.className = "userBlock";
-    const parentDiv = document.getElementById("userAmounts");
+  const parentDiv = document.querySelector("#userAmounts");
 
-    const usernameField = document.createTextNode(username); // CREATE / APPEND USERNAME
-    div.appendChild(usernameField);
+  const spanDollar = createElement("span", {"class":"dollar"}, "$");
+  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  const userh4 = createElement("h4", {}, username);
+  const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":"0", "placeholder": "0"});
 
-    const valueText = document.createElement("input"); // CREATE / APPEND TEXT FIELD
-    valueText.type = "text";
-    valueText.value = 0;
-    valueText.name = username;
-    valueText.placeholder = "$0.00";
-    valueText.setAttribute("class", "transactionValue");
-    div.appendChild(valueText);
+  const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
 
-    // DETERMINE WHETHER USER IS A FRIEND
+  outerDiv.appendChild(userh4);
+  outerDiv.appendChild(spanDollar);
+  outerDiv.appendChild(input);
+  outerDiv.appendChild(spanPercent);
+  //console.log(outerDiv);
 
-    let friends = false;
-    const req = new XMLHttpRequest();
-    req.open('post', '/api/is-friend', true);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.addEventListener('load', () => {
-      if(req.responseText === 'friends')
-        friends = true;
 
-      //IF NOT FRIENDS, INCLUDE "ADD FRIEND" BUTTON
-      if(!friends){
-        const addFriend = document.createElement("button");
-        addFriend.innerHTML = "Add Friend";
-        addFriend.setAttribute("id", "addFriend");
-        addFriend.type = "button";
-        div.appendChild(addFriend);
-      }
-    });
-    req.send("username="+username);
+  // DETERMINE WHETHER USER IS A FRIEND
 
-    // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
+  let friends = false;
+  const req = new XMLHttpRequest();
+  req.open('post', '/api/is-friend', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.addEventListener('load', () => {
+    if(req.responseText !== 'friends'){
 
-    const delButton = document.createElement("button");
-    delButton.innerHTML = "Remove";
-    delButton.setAttribute("id", "deleteUser");
-    delButton.type = "button";
 
-    div.appendChild(delButton);
+      const addFriendButton = createElement("button", {"id": "addFriend", "type":"button"}, "Add Friend");
+      addFriendButton.addEventListener("click", function(){
+        handleAddFriend(username);
+        addFriendButton.style.display = "none";
+        addFriendButton.disabled = true;
+      });
 
-    const br = document.createElement("br");
-    div.appendChild(br);
+      outerDiv.appendChild(addFriendButton);
 
-    parentDiv.appendChild(div);
-
-    const txt = username + ',';
-    const splitWith = document.getElementById("splitWith");
-    splitWith.value += txt;
-
-    const addFriend2 = document.getElementById("addFriend");
-    if(addFriend2){
-        const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
-        addFriend2.addEventListener("click", function(){
-          handleAddFriend(friend);
-          addFriend2.style.visibility = "hidden";
-          addFriend2.disabled = true;
-        });
     }
 
-    delButton.onclick = function() {
-      const users = splitWith.value.split(',');
+  });
+  req.send("username="+username);
+
+  // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
+  const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+
+  delButton.addEventListener("click", function(){
+    const users = splitWith.value.split(',');
       let newString = "";
       for(let i = 0; i < users.length; i++){
         if(users[i] != username && users[i] != '')
           newString += users[i] + ',';
       }
       splitWith.value = newString;
-      div.parentNode.removeChild(div);
-    }
+      parentDiv.removeChild(outerDiv);
+
+  });
+
+  outerDiv.insertBefore(delButton, userh4);
+
+  //add the username to the split with field
+  document.querySelector("#splitWith").value += `${username},`
+
+  parentDiv.appendChild(outerDiv);
+
+  //console.log(parentDiv);
 
 }
 
