@@ -212,19 +212,6 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
-router.get('/search', (req, res) => {
-	const user = req.session.user;
-	if(user){
-		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-			res.render('add-friend', {"friends": users});
-		});
-	}
-	else{
-		res.redirect('/user/login');
-	}
-});
-
-
 router.get('/my-balances', (req, res) => {
 	const user = req.session.user;
 	if(user){
