@@ -224,6 +224,13 @@ router.get('/my-balances', (req, res) => {
 	}
 });
 
+router.post('/members', (req, res) => {
+	const usernames = req.body.usernames.split(',');
+	User.find({username: {$nin: usernames}}, (err, users) => {
+		res.json(users);
+	});
+});
+
 //view a user
 router.get('/:username', (req, res) => {
 
@@ -241,11 +248,13 @@ router.get('/:username', (req, res) => {
 				const allGroups = [];
 				for(let i = 0; i < foundUser.groups.length; i++){
 					Group.findById(foundUser.groups[i], (err, group) => {
-						if(group.administrator == sessionUser.username)
-							adminGroups.push(group);
-						else
-							groups.push(group);
-						allGroups.push(group);
+						if(group){
+							if(group.administrator == sessionUser.username)
+								adminGroups.push(group);
+							else
+								groups.push(group);
+							allGroups.push(group);
+						}
 					});
 				}
 				const friendsList = foundUser.friends;

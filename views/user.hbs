@@ -6,35 +6,6 @@
 
 <h2>Add a New Bill</h2>
 
-<<<<<<< HEAD
-<form action="/bill/add" method="post">
-  
-  $ <input type="text" name="pretip" id="pretip" placeholder="0.00"><br><br>
-  Tip (%): <input type="text" name="tip" id ="tip" value="{{ user.defaultTip }}"><br><br>
-	<button type="button" id="notipbutton" onclick="noTip()">No tip!</button><br><br>
-	<button type="button" id="tipButton" onclick="calculateTip()">Calculate Total</button><br><br>
-	Total: <input type="text" name="amount" id="amount" value=0 readonly><br><br>
-
-	<div id="friendsDropdown">
-		Add a user: <input type="text" onclick="showDropDown()" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
-		{{#each friends as |f|}}
-			<a class="friends" id="user_{{ f.username }}" onclick="onClickUsername('{{ f.username }}')" hidden>{{ f.username }}<br></a>
-		{{/each}}
-	</div>
-	<button type="button" onclick="onClickAddUserToBill()">Add User</button><br>
-
-	<br>
-
-  <div id="userAmounts">
-    <h3>How much does everyone owe? <input type="text" name="typeOfPayment" id="typeOfPayment" value="$" readonly></h3>
-    <button type="button" onclick="onClickSplitType('%')">Split by percentage</button>
-  	<button type="button" onclick="onClickSplitType('$')">Split by exact amount</button>
-    <div class="userBlock" id="users">
-  		<img src='{{ user.img.src }}' width="15" height="15">  {{ user.username }} 
-  		<input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0.00">
-  	</div>
-  </div>
-=======
 <form class="addbill" action="/bill/add" method="post">
     
     <div class="pretipAndTip">
@@ -54,7 +25,6 @@
     <div class="comment">
         <textarea name="comment" id="about" placeholder="Add a Comment" maxlength="150" wrap="soft"></textarea>
     </div>
->>>>>>> 8c02c9bdeb9d5286fb3672c7464d0bfb85793940
 
     <div class="userAmounts" id="userAmounts">
       <h3>How much does everyone owe?</h3>
