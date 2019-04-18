@@ -2,37 +2,10 @@ function onClickAddUserToBill(){
   // clear user search bar
   const input = document.getElementById("searchUser");
   const username = input.value;
-  input.value = "";
-
-  // remove user from dropdown
-  const a = document.getElementById("user_"+username);
-  a.parentNode.removeChild(a); 
-
-  const br = a.firstChild;
-  a.removeChild(br);
-
+  input.textContent = "";
   // add username to list of Friends to add to a bill
-  
-  const friendsList = document.getElementsByClassName("friends");
-  for(let i = 0; i < friendsList.length; i++)
-    friendsList[i].setAttribute("hidden", true);
   addUserToBill(username);
 } 
-
-function addUserToBill(username, defaultPercentage){
-
-    const div = document.createElement("div");
-    div.setAttribute("id", username + "Block");
-    div.className = "userBlock";
-    const parentDiv = document.getElementById("userAmounts");
-
-    const profilePic = document.createElement('img');
-    profilePic.height = "15";
-    profilePic.width = "15";
-    const xml = new XMLHttpRequest();
-    xml.open('post', '/api/image', true);
-    xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xml.addEventListener('load', () => {
 
 function removeUser(username){
   
@@ -84,7 +57,6 @@ function appendChildren(parent, ...children){
 function addUserToBill(username, defaultPercentage){
 
    /*
-
     <div class="userBlock">
           <h4>{{ user.username }}</h4>
           <span class="dollar">$</span>
@@ -154,22 +126,6 @@ function addUserToBill(username, defaultPercentage){
           newString += users[i] + ',';
       }
       splitWith.value = newString;
-      div.parentNode.removeChild(div);
-
-      const friendsDropdown = document.getElementById("friendsDropdown");
-      const a = document.createElement("a");
-      a.className = "friends";
-      a.setAttribute("id", "user_"+username);
-      a.onclick = function(){
-        onClickUsername(username);
-      }
-      a.setAttribute("hidden", true);
-      a.textContent = username;
-      const br = document.createElement("br");
-      a.appendChild(br);
-      friendsDropdown.appendChild(a);
-    }
-
       parentDiv.removeChild(outerDiv);
 
   });
@@ -274,5 +230,8 @@ function switchSymbol(sym){
 
 
 }
+
+
+
 
 //setInterval(checkValuesWithSum, 30);

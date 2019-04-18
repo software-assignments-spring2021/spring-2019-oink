@@ -18,3 +18,37 @@ function onClickAddUserToGroup(){
   splitWith.value += txt;
 
 } 
+
+function addNewUserToGroup(username, id){
+  const div = document.createElement("div");
+  div.class = "changeable";
+  div.setAttribute("id", username);
+  const input = document.createElement("input");
+  input.type = "text";
+  input.class = "changeableUsers";
+  input.value = username;
+  input.readonly = true;
+
+  div.appendChild(input);
+
+  const req = new XMLHttpRequest();
+  req.open('post', '/group/add-member', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.addEventListener('load', () => {
+    const button = document.createElement("button");
+    button.textContent = "Remove";
+    button.onclick = function(){
+      const req = new XMLHttpRequest();
+      req.open('post', '/group/remove-member', true);
+      req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      req.send("member=" + username + "&group=" + id);
+      
+      div.parentNode.removeChild(div);
+    }
+    div.appendChild(button);
+
+    const groupMembers = document.getElementById("groupMembers");
+    groupMembers.appendChild(div);
+  });
+  req.send("member=" + username + "&group=" + id);
+}
