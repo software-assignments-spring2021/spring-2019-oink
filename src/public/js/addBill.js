@@ -22,97 +22,123 @@ function removeUser(username){
   splitWith.value = newString;
 }
 
-function addUserToBill(username, defaultPercentage){
-    const div = document.createElement("div");
-    div.setAttribute("id", username + "Block");
-    div.className = "userBlock";
-    const parentDiv = document.getElementById("userAmounts");
+function createElement(elementType, attributes, text){
+  const elem = document.createElement(elementType);
 
-    const profilePic = document.createElement('img');
-    profilePic.height = "15";
-    profilePic.width = "15";
-    const xml = new XMLHttpRequest();
-    xml.open('post', '/api/image', true);
-    xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xml.addEventListener('load', () => {
-      profilePic.src = xml.responseText;
-    });
-    xml.send("username="+username); 
+  for (let key in attributes){
+    if (attributes.hasOwnProperty(key)) {
+      elem.setAttribute(key, attributes[key])
+    }
+  }
 
-    div.appendChild(profilePic);
-    const usernameField = document.createTextNode(username); // CREATE / APPEND USERNAME
-    div.appendChild(usernameField);
 
-    const valueText = document.createElement("input"); // CREATE / APPEND TEXT FIELD
-    valueText.type = "text";
-    if(!defaultPercentage)
-      valueText.value = 0;
-    else
-      valueText.value = defaultPercentage;
-    valueText.name = username;
-    valueText.placeholder = "$0.00";
-    valueText.setAttribute("class", "transactionValue");
-    div.appendChild(valueText);
+  if (text){
+    elem.appendChild(document.createTextNode(text));
+  }
 
-    // DETERMINE WHETHER USER IS A FRIEND
+  //console.log(elem);
 
-    let friends = false;
-    const req = new XMLHttpRequest();
-    req.open('post', '/api/is-friend', true);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.addEventListener('load', () => {
-      if(req.responseText === 'friends')
-        friends = true;
+  return elem;
 
-      //IF NOT FRIENDS, INCLUDE "ADD FRIEND" BUTTON
-      if(!friends){
-        const addFriend = document.createElement("button");
-        addFriend.innerHTML = "Add Friend";
-        addFriend.setAttribute("id", "addFriend");
-        addFriend.type = "button";
-        div.appendChild(addFriend);
-      }
-    });
-    req.send("username="+username);
 
-    // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
+}
 
-    const delButton = document.createElement("button");
-    delButton.innerHTML = "Remove";
-    delButton.setAttribute("id", "deleteUser");
-    delButton.type = "button";
-
-    div.appendChild(delButton);
-
-    const br = document.createElement("br");
-    div.appendChild(br);
-
-    parentDiv.appendChild(div);
-
-    const txt = username + ',';
-    const splitWith = document.getElementById("splitWith");
-    splitWith.value += txt;
-
-    const addFriend2 = document.getElementById("addFriend");
-    if(addFriend2){
-        const friend = addFriend2.parentElement.textContent.split("Add Friend")[0];
-        addFriend2.addEventListener("click", function(){
-          handleAddFriend(friend);
-          addFriend2.style.visibility = "hidden";
-          addFriend2.disabled = true;
-        });
+function appendChildren(parent, ...children){
+  //NOT WORKING
+    for (let child in children){
+      parent.appendChild(child);
     }
 
-    delButton.onclick = function() {
-      const users = splitWith.value.split(',');
+    //console.log(parent);
+
+    return parent;
+}
+
+function addUserToBill(username, defaultPercentage){
+
+   /*
+
+    <div class="userBlock">
+          <h4>{{ user.username }}</h4>
+          <span class="dollar">$</span>
+          <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+          <span class="percent hidden">%</span>
+      </div>
+    */
+
+  const parentDiv = document.querySelector("#userAmounts");
+
+  const spanDollar = createElement("span", {"class":"dollar"}, "$");
+  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  const userh4 = createElement("h4", {}, username);
+  const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
+
+  const profilePic = createElement("img", {"width":"16px", "height":"16px"});
+  const xml = new XMLHttpRequest();
+  xml.open('post', '/api/image', true);
+  xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xml.addEventListener('load', () => {
+      profilePic.src = xml.responseText;
+  });
+  xml.send("username="+username); 
+
+  const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
+
+  outerDiv.appendChild(profilePic);
+  outerDiv.appendChild(userh4);
+  outerDiv.appendChild(spanDollar);
+  outerDiv.appendChild(input);
+  outerDiv.appendChild(spanPercent);
+  //console.log(outerDiv);
+
+
+  // DETERMINE WHETHER USER IS A FRIEND
+
+  let friends = false;
+  const req = new XMLHttpRequest();
+  req.open('post', '/api/is-friend', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.addEventListener('load', () => {
+    if(req.responseText !== 'friends'){
+
+
+      const addFriendButton = createElement("button", {"id": "addFriend", "type":"button"}, "Add Friend");
+      addFriendButton.addEventListener("click", function(){
+        handleAddFriend(username);
+        addFriendButton.style.display = "none";
+        addFriendButton.disabled = true;
+      });
+
+      outerDiv.appendChild(addFriendButton);
+
+    }
+
+  });
+  req.send("username="+username);
+
+  // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
+  const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+
+  delButton.addEventListener("click", function(){
+    const users = splitWith.value.split(',');
       let newString = "";
       for(let i = 0; i < users.length; i++){
         if(users[i] != username && users[i] != '')
           newString += users[i] + ',';
       }
       splitWith.value = newString;
-      div.parentNode.removeChild(div);
-    }
+      parentDiv.removeChild(outerDiv);
+
+  });
+
+  outerDiv.insertBefore(delButton, profilePic);
+
+  //add the username to the split with field
+  document.querySelector("#splitWith").value += `${username},`
+
+  parentDiv.appendChild(outerDiv);
+
+  //console.log(parentDiv);
 
 }
 
@@ -121,12 +147,16 @@ function calculateTip(){
   const tip = document.getElementById("tip");
   const total = document.getElementById("amount");
 
-  total.value = Math.round(pretip.value * ((tip.value * .01) + 1) * 100) / 100 ;
+
+  total.value = (pretip.value * ((tip.value * .01) + 1)).toFixed(2);
+
 }
 
 function noTip() {
   const tip = document.getElementById("tip");
   tip.value = 0;
+
+  calculateTip();
 }
 
 function handleAddFriend(friend){
@@ -182,6 +212,23 @@ function onClickSplitType(icon) {
 
 const symbol = document.getElementById("typeOfPayment");
 symbol.value = icon;
+
+}
+
+function switchSymbol(sym){
+  //unhide the equivalent symbol
+
+  const opposite = sym == "dollar" ? "percent" : "dollar"
+
+  document.querySelectorAll(`div.userBlock span.${sym}`).forEach((span)=>{
+    console.log(span);
+    span.classList.remove("hidden");
+  });
+
+  document.querySelectorAll(`div.userBlock span.${opposite}`).forEach((span)=>{
+    span.classList.add("hidden");
+  });
+
 
 }
 
