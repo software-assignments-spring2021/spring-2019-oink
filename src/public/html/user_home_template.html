@@ -44,51 +44,101 @@
 
             <!-- think of body as a variable as the other hbs files--> 
             
-            <h2>Unpaid Transactions</h2>
-            <section>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="unpaid">
-                    <span class="amount">$10</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-            </section>
+            <div class="notification">
+                <h3>You owe Jess $30</h3>
+            </div>
+
+            <h2>Add a New Bill</h2>
+
+            <form class="addbill" action="/bill/add" method="post">
+                
+                <div class="pretipAndTip">
+                    <div class="pretip">
+                        <label for="pretip">$</label><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
+                    </div>
+                    <div class="tip">
+                        <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="20"><span class="label">(%)</span>
+                        <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
+                    </div>
+                </div>
+                
+                <div class="total">
+                    <label for="amount">Total $</label><input type="text" name="amount" id="amount" value="0.00 " readonly/>
+                </div>
+                
+                <div class="comment">
+                    <textarea name="about" id="about" placeholder="Add a Comment" maxlength="150" wrap="soft"></textarea>
+                </div>
+                
+                <div class="userAmounts" id="userAmounts">
+                    <h3>How much does everyone owe?</h3>
+                    <input type="radio" name="typeOfPayment" id="per" onclick="switchSymbol('percent')" value="%"/><label for="per">By Percentage</label>
+                    <input type="radio" name="typeOfPayment" id="mon" onclick="switchSymbol('dollar')" checked="checked" value="$"/><label for="mon">By Amount</label>
+                  
+                    <div class="userBlock">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
+                    </div>
+                    <div class="userBlock">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
+                    </div>
+                    <div class="userBlock">
+                        <h4>Jess</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
+                    </div>
+                  
+                </div>
+
+                <input hidden type="text" name="splitWith" id="splitWith">
+                
+                <input type="submit" value="Add bill" id="addBillButton">
+              
+            </form>
             
-            <h2>Paid Transactions</h2>
-            <section>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-                <article class="paid">
-                    <span class="amount">$30</span>
-                    <span class="added-by">Added by JessTest</span>
-                    <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                </article>
-            </section>
+            <div class="choose-users">
+                
+                
+                <div id="select-friends">
+                    <h3>Add a Friend</h3>
+                    
+                    <div class="friends">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4>
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+                        <h4 onclick="onClickUsername('Jess1')">Jess1</h4> 
+
+                    </div>
+                    
+
+                </div>
+
+
+
+                <div id="select-groups">
+                    <h3>Add a Group</h3>
+                    <div class="groups">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Study Group - 4 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Roommates - 3 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+                        <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">Brunch Crew - 5 Members</h4> <span hidden>{{ g._id }}</span>
+
+                    </div>
+                </div>
+                
+            </div>
+            
+            
+            
             
         </div>
 
@@ -121,5 +171,7 @@
             document.querySelector("i.fa-times").classList.add("hidden");
         }
     </script>
+    <script src="../js/addBill.js"></script>
+    <script src="../js/stretchy.js"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@
 			{{/each}}<br>
 		</ul>
 		<button>Edit</button>
-		<button>Delete</button>
+		<button onclick="deleteGroup('{{name}}')">Delete</button>
 	{{/each}}
 	{{#each groups}}
 		<h3>{{name}}</h3>
@@ -60,3 +60,4 @@
 
 <script src="/js/add_friend.js"></script>
 <script src="/js/change_tip.js"></script>
+<script src="/js/adjust_group.js"></script>
