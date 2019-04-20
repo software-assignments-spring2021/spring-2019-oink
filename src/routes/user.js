@@ -239,7 +239,7 @@ router.get('/my-balances', (req, res) => {
 
 //view a user
 router.get('/:username', (req, res) => {
-	
+
 
 	if(req.session.user){
 		const user = req.params.username;
@@ -260,7 +260,7 @@ router.get('/:username', (req, res) => {
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+						res.render('session-user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
 					});
 				}
 
