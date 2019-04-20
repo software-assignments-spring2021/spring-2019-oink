@@ -239,6 +239,7 @@ router.get('/my-balances', (req, res) => {
 
 //view a user
 router.get('/:username', (req, res) => {
+	
 
 	if(req.session.user){
 		const user = req.params.username;

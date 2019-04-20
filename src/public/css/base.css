@@ -15,10 +15,81 @@
   font-family: "Open Sans", sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 input[type=submit]:active {
   transition: translate 2s ease-in-out;
   transform: translate(3px, 5px);
   box-shadow: 2px 2px #729956;
+}
+
+div.user-profile-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding: 2% 0;
+}
+div.user-profile-header > * {
+  margin: 0 1%;
+}
+div.user-profile-header h2 {
+  width: auto;
+}
+div.user-profile-header div.profile-pic {
+  width: 150px;
+}
+div.user-profile-header div.profile-pic img {
+  object-fit: cover;
+}
+
+div.user-profile-content {
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: flex-start;
+  justify-content: stretch;
+}
+div.user-profile-content h3 {
+  padding: 1%;
+  font-family: "Open Sans Condensed", sans-serif;
+  font-size: 1.5em;
+}
+div.user-profile-content > * {
+  margin: 0 0.5%;
+  width: 50%;
+  height: 60vh;
+}
+div.user-profile-content section#bills, div.user-profile-content section#transactions {
+  height: 100%;
+  overflow-y: scroll;
+}
+div.user-profile-content section#friends, div.user-profile-content section#groups {
+  height: 27vh;
+}
+div.user-profile-content section#friends ul, div.user-profile-content section#groups ul {
+  height: 100%;
+  overflow-y: scroll;
+}
+div.user-profile-content .outline {
+  border: 5px solid black;
+}
+div.user-profile-content .friends-and-groups {
+  width: 40%;
+  text-align: center;
+}
+div.user-profile-content .friends-and-groups a:hover li {
+  background-color: #7AC74F;
+}
+div.user-profile-content .friends-and-groups li {
+  padding: 3% 0;
+  font-size: 1.2em;
 }
 
 div.container {
@@ -149,12 +220,12 @@ section article {
   align-content: center;
   align-items: center;
   justify-content: center;
-  font-size: 1.3em;
-  padding: 1.2% 0;
-  margin: 1% 10%;
+  font-size: 1.2em;
+  padding: 0.5% 0;
+  margin: 1%;
   width: auto;
   border-style: solid;
-  border-width: medium;
+  border-width: thin;
 }
 section article.paid {
   background-color: #b5d99c;
@@ -166,7 +237,7 @@ section article.unpaid {
 }
 section article span {
   padding: 0 1%;
-  margin: 0 3%;
+  text-align: center;
 }
 section article span.amount {
   font-weight: bold;

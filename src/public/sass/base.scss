@@ -17,6 +17,10 @@
     font-family: $default;
 }
 
+.hidden{
+    display:none;
+}
+
 input[type="submit"]{
     
     &:active{
@@ -27,6 +31,94 @@ input[type="submit"]{
         
     }
 }
+
+
+div.user-profile-header{
+    
+    @include flex(row, no-wrap, center, center, center);
+    padding:2% 0;
+    
+    > *{
+        margin:0 1%;
+    }
+    
+    h2{
+        width:auto;
+    }
+    
+    div.profile-pic{
+        //background-color:red;
+        
+        width:150px;
+        //object-fit: cover;
+        
+        img{
+            
+            object-fit: cover;
+            
+        }
+    
+    }
+
+    
+}
+
+div.user-profile-content{
+    height:70vh;
+    @include flex(row, no-wrap, center, flex-start, stretch);
+    
+    h3{
+        padding:1%;
+        font-family: $open-sans-condensed;
+        font-size: 1.5em;
+        
+    }
+    
+    > *{
+        margin:0 0.5%;
+        width:50%;
+        height:60vh;     
+        
+    }
+    
+    section#bills, section#transactions{
+        height: 100%;
+        overflow-y: scroll;
+    }
+    
+    section#friends, section#groups{
+        height: 27vh;
+        
+        ul{
+            height:100%;
+            overflow-y: scroll;
+        }
+    }
+    
+    .outline{
+        border: 5px solid black;
+    }
+    
+
+    
+    .friends-and-groups{
+        width:40%;
+        
+        text-align: center;
+        
+        a:hover li{
+            background-color:$bright-green;
+        }
+            
+        li{
+            padding:3% 0;
+            font-size:1.2em;
+
+        }
+    }
+}
+
+
 
 
 div.container{
@@ -158,13 +250,13 @@ section{
     article{
         @include flex(row, no-wrap, center, center, center);
         
-        font-size:1.3em;
-        padding:1.2% 0;
-        margin:1% 10%;
+        font-size:1.2em;
+        padding:0.5% 0;
+        margin:1%;
         width:auto;
         
         border-style:solid;
-        border-width: medium;
+        border-width: thin;
         
         
         &.paid{
@@ -181,7 +273,7 @@ section{
         
         span{
             padding:0 1%;
-            margin:0 3%;
+            text-align: center;
             
             &.amount{
                 font-weight: bold;
@@ -353,9 +445,6 @@ div.choose-users{
             padding:1%;
             border-bottom: 2px solid $dark-green;
             
-            
-            
-            
         }
         
         width:70%;
@@ -418,6 +507,7 @@ a{
     font-family: inherit;
     font-size: inherit;
 }
+
 
 
 
