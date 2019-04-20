@@ -34,7 +34,7 @@
                 <h1><a href="/user/index">Oink</a></h1>
             </div>
             <div class="right-side-header">
-                <h3 class="username"><a href="/user/{{ user.username }}">{{ user.username }}</a></h3>
+                <h3 class="username"><a href="/user/{{ sessionUser.username }}">{{ sessionUser.username }}</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
                 </form>
