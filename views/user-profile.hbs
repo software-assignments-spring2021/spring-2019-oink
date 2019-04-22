@@ -19,14 +19,37 @@
 </ul>
 
 <h3>Groups:</h3>
-{{#each groups}}
-	{{name}}
-	<ul>
-		{{#each inGroup}}
-			<li>{{this}}</li>
-		{{/each}}<br><br>
-	</ul>
-{{/each}}
+{{#if admin}}
+	{{#each adminGroups}}
+		<h3>{{name}}</h3>
+			<div id="groupMembers">
+				{{#each inGroup}}
+					<div class="changeable" id="{{this}}">
+						<input type="text" class="changeableUsers" value="{{this}}" readonly>
+					</div>
+				{{/each}}<br>
+				<button onclick="editGroup('{{_id}}')">Edit</button>
+				<button onclick="deleteGroup('{{_id}}')">Delete</button>
+			</div>
+	{{/each}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+			{{#each inGroup}}
+				<div id="{{this}}">
+					<input type="text" value="{{this}}" readonly>
+				</div>
+			{{/each}}<br>
+			<button onclick="leaveGroup('{{../user}}','{{_id}}')">Leave Group</button>
+	{{/each}}
+{{else}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+			{{#each inGroup}}
+				<input type="text" value="{{this}}" readonly>
+			{{/each}}<br>
+	{{/each}}
+{{/if}}
+
 
 {{#if tip}}
 	<form action="/api/change-tip" method="post">
@@ -35,6 +58,8 @@
 	</form>
 {{/if}}
 
-
+<script src="/js/search.js"></script>
+<script src="/js/addGroup.js"></script>
 <script src="/js/add_friend.js"></script>
 <script src="/js/change_tip.js"></script>
+<script src="/js/adjust_group.js"></script>

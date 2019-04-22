@@ -36,7 +36,8 @@ router.post('/add', (req, res) => {
 		const group = new Group({
 			name: req.body.name,
 			inGroup: groupMembers,
-			defaultPercentages: defaultPercentages
+			defaultPercentages: defaultPercentages,
+			administrator: req.session.user.username
 		});
 		group.save((err, addedGroup) => {
 			if (err){
@@ -59,6 +60,50 @@ router.post('/add', (req, res) => {
 	}
 });
 
+router.post('/delete/:id', (req, res) => {
+	const id = req.params.id;
+
+	Group.deleteOne({_id: id}, (err) => {
+		if(err)
+			res.json(err);
+		else{
+			res.send("group removed");
+		}
+	});
+});
+
+router.post('/remove-member', (req, res) => {
+	const username = req.body.member;
+	const groupID = req.body.group;
+	Group.findOne({_id: groupID}, (err, group) => {
+		const index = group.inGroup.indexOf(username);
+		group.inGroup.splice(index, 1);
+		group.save(function(){
+			User.findOne({username: username}, (error, user) => {
+				const i = user.groups.indexOf(group._id);
+				user.groups.splice(i, 1);
+				user.save();
+				res.send("member removed");
+			});
+		});
+	});
+});
+
+router.post('/add-member', (req, res) => {
+	const username = req.body.member;
+	const groupID = req.body.group;
+	Group.findOne({_id: groupID}, (err, group) => {
+		group.inGroup.push(username);
+		group.save(function(){
+			User.findOne({username: username}, (error, user) => {
+				user.groups.push(groupID);
+				user.save();
+				res.send("member added");
+			});
+		});
+	});
+});
+
 router.get('/:id', (req, res) => {
 	const id = req.params.id;
 	Group.findById(id, (err, group) => {
@@ -71,5 +116,6 @@ router.get('/:id', (req, res) => {
 		}
 	});
 });
+
 
 module.exports = router;

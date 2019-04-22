@@ -7,7 +7,6 @@
     <!-- font awesome icons   -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-
 	<meta charset="utf-8">
 
 </head>
@@ -21,8 +20,6 @@
             <a href="/user/my-transactions"><li>View My Transactions</li></a> -->
             <a href="/user/my-balances"><li>View My Balances</li></a>
             <a href="/group/add"><li>Create A Group</li></a>
-            <!-- <a href="/user/search"><li>Find A Friend</li></a> -->
-
         </ul>
 	</nav>
     <div class="container">
@@ -32,6 +29,12 @@
                 <i class="fas fa-bars" onclick="openSideNav()"></i>
                 <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
                 <h1><a href="/user/index">Oink</a></h1>
+            </div>
+            <div id="usersDropdown">
+                <input type="text" placeholder="Search.." onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()"><br>
+                {{#each users as |u|}}
+                    <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
+                {{/each}}
             </div>
             <div class="right-side-header">
                 <h3 class="username"><a href="/user/{{ sessionUser.username }}">{{ sessionUser.username }}</a></h3>
@@ -76,5 +79,6 @@
             document.querySelector("i.fa-times").classList.add("hidden");
         }
     </script>
+    <script src="/js/searchUser.js"></script>
 </body>
 </html>

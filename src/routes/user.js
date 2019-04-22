@@ -212,19 +212,6 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
-router.get('/search', (req, res) => {
-	const user = req.session.user;
-	if(user){
-		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-			res.render('add-friend', {"friends": users});
-		});
-	}
-	else{
-		res.redirect('/user/login');
-	}
-});
-
-
 router.get('/my-balances', (req, res) => {
 	const user = req.session.user;
 	if(user){
@@ -235,6 +222,13 @@ router.get('/my-balances', (req, res) => {
 	else{
 		res.redirect('login');
 	}
+});
+
+router.post('/members', (req, res) => {
+	const usernames = req.body.usernames.split(',');
+	User.find({username: {$nin: usernames}}, (err, users) => {
+		res.json(users);
+	});
 });
 
 //view a user
@@ -251,16 +245,24 @@ router.get('/:username', (req, res) => {
 
 			else{
 				const groups = [];
+				const adminGroups = [];
+				const allGroups = [];
 				for(let i = 0; i < foundUser.groups.length; i++){
 					Group.findById(foundUser.groups[i], (err, group) => {
-						groups.push(group);
+						if(group){
+							if(group.administrator == sessionUser.username)
+								adminGroups.push(group);
+							else
+								groups.push(group);
+							allGroups.push(group);
+						}
 					});
 				}
 				const friendsList = foundUser.friends;
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						res.render('session-user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+						res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
 					});
 				}
 
@@ -272,9 +274,9 @@ router.get('/:username', (req, res) => {
 								friend = true;
 						}
 						if(friend)
-							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "image": tempUser.img});
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "image": tempUser.img});
 						else
-							res.render('user-profile', {"user": user, "groups": groups, "friends": friendsList, "addFriend": "Add Friend"
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": "Add Friend"
 								, "image": tempUser.img});
 						});
 				}
