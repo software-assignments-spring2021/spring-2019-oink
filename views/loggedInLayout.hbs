@@ -15,6 +15,7 @@
 	<nav class="main-side-nav">
 
         <ul>
+            <a href="/user/{{sessionUser.username}}"><li>My Profile</li></a>
             <a href="/user/index"><li>Add a bill</li></a>
             <!-- <a href="/user/my-bills"><li>View My Bills</li></a>
             <a href="/user/my-transactions"><li>View My Transactions</li></a> -->
@@ -30,13 +31,21 @@
                 <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
                 <h1><a href="/user/index">Oink</a></h1>
             </div>
-            <div id="usersDropdown">
-                <input type="text" placeholder="Search.." onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()"><br>
-                {{#each users as |u|}}
-                    <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
-                {{/each}}
-            </div>
+            
             <div class="right-side-header">
+                <div id="usersDropdown">
+                    <div class="search-bar">
+                        <i class="fas fa-search" onclick="openSearch()"></i>
+                        <input type="text" placeholder="" onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()">
+                        
+                        <div class="dropdown hidden">
+                        {{#each allUsers as |u|}}
+                            <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
+                        {{/each}}
+                        </div>
+                    </div>
+                    
+                </div>
                 <h3 class="username"><a href="/user/{{ sessionUser.username }}">{{ sessionUser.username }}</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
@@ -80,5 +89,7 @@
         }
     </script>
     <script src="/js/searchUser.js"></script>
+    <script src="/js/stretchy.js"></script>
+
 </body>
 </html>

@@ -9,7 +9,7 @@
         <i class="fas fa-plus"></i>
     </div>
     
-    <h2>{{sessionUser}} Profile</h2>
+    <h2>{{user}} Profile</h2>
 
     <form id="change-profile-pic" class="hidden" action='/api/upload/image' enctype="multipart/form-data" method="post">
         <i class="fas fa-times" onclick="closeForm()"></i>
@@ -99,7 +99,7 @@
         </div>
     
         <div class="user-profile-section">
-            <h3>Groups&nbsp;<a href="#"><i class="fas fa-plus"></i></a></h3>
+            <h3>Groups&nbsp;<a href="/group/add"><i class="fas fa-plus"></i></a></h3>
             <section id="groups" class="outline">
                 <ul>
                 	{{#each groups}}
@@ -125,4 +125,4 @@
 
 <script src="/js/add_friend.js"></script>
 <script src="/js/change_tip.js"></script>
-<script src="/js/change_profile_pic"></script>
+<script src="/js/change_profile_pic.js"></script>
