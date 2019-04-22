@@ -1,19 +1,23 @@
 
+
 <div class="user-profile-header">
 
-                
-    <div class="profile-pic" id="session-user-profile-pic">
+    
+    <div class="profile-pic" id="session-user-profile-pic" onclick ="openForm()">
+        
         <img src="{{ image.src }}" class="profile-pic" alt="Anon">
+        <i class="fas fa-plus"></i>
     </div>
     
     <h2>{{sessionUser}} Profile</h2>
 
-    <form class="hidden" action='/api/upload/image' enctype="multipart/form-data" method="post">
+    <form id="change-profile-pic" class="hidden" action='/api/upload/image' enctype="multipart/form-data" method="post">
+        <i class="fas fa-times" onclick="closeForm()"></i>
+        <h2>Upload a new profile picture</h2>
         <input type="file" name="upload" accept="image/png, image/jpeg">
         <input type="submit" value="Upload">
     </form>
 </div>
-
 
 
 <div class="user-profile-content">
@@ -121,3 +125,4 @@
 
 <script src="/js/add_friend.js"></script>
 <script src="/js/change_tip.js"></script>
+<script src="/js/change_profile_pic"></script>

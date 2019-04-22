@@ -34,6 +34,37 @@ div.user-profile-header {
   justify-content: center;
   padding: 2% 0;
 }
+div.user-profile-header #change-profile-pic {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+div.user-profile-header #change-profile-pic > * {
+  width: auto;
+  margin: 1%;
+}
+div.user-profile-header #change-profile-pic i {
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  font-size: 1.8em;
+}
+div.user-profile-header #change-profile-pic i:hover {
+  cursor: pointer;
+}
+div.user-profile-header #change-profile-pic input[type=submit] {
+  background-color: #F92A82;
+  font-size: 1.3em;
+  padding: 0.5% 1%;
+}
+div.user-profile-header #change-profile-pic input[type=submit]:hover {
+  cursor: pointer;
+}
 div.user-profile-header > * {
   margin: 0 1%;
 }
@@ -42,6 +73,25 @@ div.user-profile-header h2 {
 }
 div.user-profile-header div.profile-pic {
   width: 150px;
+  height: 150px;
+  background-color: black;
+}
+div.user-profile-header div.profile-pic i {
+  display: none;
+  color: white;
+  font-size: 2em;
+  position: relative;
+  left: 40%;
+  top: -50%;
+}
+div.user-profile-header div.profile-pic:hover {
+  cursor: pointer;
+}
+div.user-profile-header div.profile-pic:hover i {
+  display: block;
+}
+div.user-profile-header div.profile-pic:hover img {
+  opacity: 0.6;
 }
 div.user-profile-header div.profile-pic img {
   object-fit: cover;

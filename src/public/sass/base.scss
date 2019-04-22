@@ -35,6 +35,46 @@ input[type="submit"]{
 
 div.user-profile-header{
     
+    #change-profile-pic{
+        position:fixed;
+        top:0;
+        left:0;
+        background-color: rgba(255, 255, 255, 0.9);
+        z-index:100;
+        
+        width:100%;
+        height:100%;
+        
+        text-align: center;
+        
+        > * {
+            width:auto;
+            margin:1%;
+            
+        }
+        
+        i{
+            position:absolute;
+            top:5%;
+            left:90%;
+            font-size: 1.8em;
+            
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        
+        input[type="submit"]{
+            background-color:$hot-pink;
+            font-size:1.3em;
+            padding:0.5% 1%;
+            
+            &:hover{
+                cursor:pointer;
+            }
+        }
+    }
+    
     @include flex(row, no-wrap, center, center, center);
     padding:2% 0;
     
@@ -49,13 +89,37 @@ div.user-profile-header{
     div.profile-pic{
         //background-color:red;
         
+        i{
+            display: none;
+            color:white;
+            font-size:2em;
+            position:relative;
+            left:40%;
+            top:-50%;
+            
+        }
+        
         width:150px;
+        height:150px;
         //object-fit: cover;
+        background-color:black;
+        
+        &:hover{
+            cursor:pointer;
+            
+            i{
+                display:block;
+            }
+            
+            img{
+               opacity:0.6; 
+            }
+        }
+        
         
         img{
             
-            object-fit: cover;
-            
+            object-fit: cover;            
         }
     
     }
