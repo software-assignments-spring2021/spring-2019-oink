@@ -20,6 +20,9 @@ function onClickUsername(username){
   input.value = username;
 }
 
-function searchUser(username){
-  
+function showDropDown(){
+  const friends = document.getElementsByClassName("friends");
+  for(let i = 0; i < friends.length; i++){
+    friends[i].removeAttribute("hidden");
+  }
 }

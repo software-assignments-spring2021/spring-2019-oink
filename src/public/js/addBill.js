@@ -57,7 +57,6 @@ function appendChildren(parent, ...children){
 function addUserToBill(username, defaultPercentage){
 
    /*
-
     <div class="userBlock">
           <h4>{{ user.username }}</h4>
           <span class="dollar">$</span>

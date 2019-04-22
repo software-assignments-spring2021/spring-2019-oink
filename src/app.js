@@ -3,6 +3,10 @@ const app = express();
 const path = require('path');
 const session = require('express-session');
 
+require('./schemas'); 
+const mongoose = require('mongoose');
+const User = mongoose.model("User");
+
 //find all the routes
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
@@ -46,6 +50,9 @@ app.use(session({
 app.use((req, res, next) => {
 	if(req.session.user){
 		res.locals.user = req.session.user;
+		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
+			res.locals.users = users;
+		});
 		app.set('view options', { layout: 'loggedInLayout' });
 		next();
 	}
