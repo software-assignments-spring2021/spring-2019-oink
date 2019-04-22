@@ -7,7 +7,9 @@
     <!-- font awesome icons   -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
+
 	<meta charset="utf-8">
+    <script type="text/javascript" src="/js/open_and_close_controller.js"></script>
 
 </head>
 <body>
@@ -26,8 +28,8 @@
 
         <header>
             <div class="left-side-header">
-                <i class="fas fa-bars" onclick="openSideNav()"></i>
-                <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
+                <i class="fas fa-bars" ></i>
+                <i class="fas fa-times hidden" ></i>
                 <h1><a href="/user/index">Oink</a></h1>
             </div>
             <div id="usersDropdown">
@@ -65,19 +67,19 @@
     <!--  script for moving the sidebar  -->
     <script>
         //for the sidebar
-        function openSideNav(){
-            document.querySelector("nav.main-side-nav").style.width = "16%";
-            document.querySelector("div.container").style.marginLeft = "16%";
-            document.querySelector("i.fa-bars").classList.add("hidden");
-            document.querySelector("i.fa-times").classList.remove("hidden")
-        }
+        // function openSideNav(){
+        //     document.querySelector("nav.main-side-nav").style.width = "16%";
+        //     document.querySelector("div.container").style.marginLeft = "16%";
+        //     document.querySelector("i.fa-bars").classList.add("hidden");
+        //     document.querySelector("i.fa-times").classList.remove("hidden")
+        // }
         
-        function closeSideNav(){
-            document.querySelector("nav.main-side-nav").style.width = "0";
-            document.querySelector("div.container").style.marginLeft = "0";
-            document.querySelector("i.fa-bars").classList.remove("hidden");
-            document.querySelector("i.fa-times").classList.add("hidden");
-        }
+        // function closeSideNav(){
+        //     document.querySelector("nav.main-side-nav").style.width = "0";
+        //     document.querySelector("div.container").style.marginLeft = "0";
+        //     document.querySelector("i.fa-bars").classList.remove("hidden");
+        //     document.querySelector("i.fa-times").classList.add("hidden");
+        // }
     </script>
     <script src="/js/searchUser.js"></script>
 </body>
