@@ -15,10 +15,137 @@
   font-family: "Open Sans", sans-serif;
 }
 
+.hidden {
+  display: none;
+}
+
 input[type=submit]:active {
   transition: translate 2s ease-in-out;
   transform: translate(3px, 5px);
   box-shadow: 2px 2px #729956;
+}
+
+div.user-profile-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding: 2% 0;
+}
+div.user-profile-header #change-profile-pic {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+div.user-profile-header #change-profile-pic > * {
+  width: auto;
+  margin: 1%;
+}
+div.user-profile-header #change-profile-pic i {
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  font-size: 1.8em;
+}
+div.user-profile-header #change-profile-pic i:hover {
+  cursor: pointer;
+}
+div.user-profile-header #change-profile-pic input[type=submit] {
+  background-color: #F92A82;
+  font-size: 1.3em;
+  padding: 0.5% 1%;
+}
+div.user-profile-header #change-profile-pic input[type=submit]:hover {
+  cursor: pointer;
+}
+div.user-profile-header > * {
+  margin: 0 1%;
+}
+div.user-profile-header h2 {
+  width: auto;
+}
+div.user-profile-header div.profile-pic {
+  width: 150px;
+  height: 150px;
+  background-color: black;
+}
+div.user-profile-header div.profile-pic i {
+  display: none;
+  color: white;
+  font-size: 2em;
+  position: relative;
+  left: 40%;
+  top: -50%;
+}
+div.user-profile-header div.profile-pic:hover {
+  cursor: pointer;
+}
+div.user-profile-header div.profile-pic:hover i {
+  display: block;
+}
+div.user-profile-header div.profile-pic:hover img {
+  opacity: 0.6;
+}
+div.user-profile-header div.profile-pic img {
+  object-fit: cover;
+}
+
+div.user-profile-content {
+  height: 70vh;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: flex-start;
+  justify-content: stretch;
+}
+div.user-profile-content h3 {
+  padding: 1%;
+  font-family: "Open Sans Condensed", sans-serif;
+  font-size: 1.5em;
+  text-align: center;
+  display: inline-block;
+}
+div.user-profile-content h3 > a > i {
+  width: auto;
+  font-size: 0.8em;
+}
+div.user-profile-content > * {
+  margin: 0 0.5%;
+  width: 50%;
+  height: 60vh;
+}
+div.user-profile-content section#bills, div.user-profile-content section#transactions {
+  height: 100%;
+  overflow-y: scroll;
+}
+div.user-profile-content section#friends, div.user-profile-content section#groups {
+  height: 27vh;
+}
+div.user-profile-content section#friends ul, div.user-profile-content section#groups ul {
+  height: 100%;
+  overflow-y: scroll;
+}
+div.user-profile-content .outline {
+  border: 5px solid black;
+}
+div.user-profile-content .friends-and-groups {
+  width: 40%;
+  text-align: center;
+}
+div.user-profile-content .friends-and-groups a:hover li {
+  background-color: #7AC74F;
+}
+div.user-profile-content .friends-and-groups li {
+  padding: 3% 0;
+  font-size: 1.2em;
 }
 
 div.container {
@@ -48,6 +175,9 @@ header div.left-side-header, header div.right-side-header {
 header div.left-side-header > *, header div.right-side-header > * {
   font-size: 1.3em;
 }
+header div.left-side-header i:hover, header div.right-side-header i:hover {
+  cursor: pointer;
+}
 header div.left-side-header {
   display: flex;
   flex-direction: row;
@@ -69,9 +199,6 @@ header div.left-side-header i {
 header div.left-side-header i.hidden {
   display: none;
 }
-header div.left-side-header i:hover {
-  cursor: pointer;
-}
 header div.right-side-header {
   display: flex;
   flex-direction: row;
@@ -80,6 +207,24 @@ header div.right-side-header {
   align-items: center;
   justify-content: flex-end;
   text-align: right;
+}
+header div.right-side-header div.search-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+header div.right-side-header div.search-bar i {
+  width: auto;
+  padding: 3%;
+}
+header div.right-side-header div.search-bar input#search {
+  font-size: 0.8em;
+  width: 0;
+  transition: width ease-in-out 0.5s;
+  font-family: "Open Sans", sans-serif;
 }
 header div.right-side-header h3.username {
   text-align: right;
@@ -149,12 +294,12 @@ section article {
   align-content: center;
   align-items: center;
   justify-content: center;
-  font-size: 1.3em;
-  padding: 1.2% 0;
-  margin: 1% 10%;
+  font-size: 1.2em;
+  padding: 0.5% 0;
+  margin: 1%;
   width: auto;
   border-style: solid;
-  border-width: medium;
+  border-width: thin;
 }
 section article.paid {
   background-color: #b5d99c;
@@ -166,7 +311,7 @@ section article.unpaid {
 }
 section article span {
   padding: 0 1%;
-  margin: 0 3%;
+  text-align: center;
 }
 section article span.amount {
   font-weight: bold;

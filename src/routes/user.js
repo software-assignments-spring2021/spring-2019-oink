@@ -234,6 +234,7 @@ router.post('/members', (req, res) => {
 //view a user
 router.get('/:username', (req, res) => {
 
+
 	if(req.session.user){
 		const user = req.params.username;
 		const sessionUser = req.session.user;
@@ -260,9 +261,10 @@ router.get('/:username', (req, res) => {
 				const friendsList = foundUser.friends;
 				console.log(friendsList);
 				if(user === sessionUser.username){
-					User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-						res.render('user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
-					});
+					res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": sessionUser.img, "tip":sessionUser.defaultTip});
+					// User.findOne({"username": sessionUser.username}, (err, foundUser) => {
+					// 	res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+					// });
 				}
 
 				else{

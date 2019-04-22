@@ -17,12 +17,8 @@ const groupRouter = require('./routes/group');
 
 /*Any middleware added needs to go here*/
 
-//for debugging
-app.use(function(req, res, next){
 
-	console.log(`request made to ${req.path}`)
-	next();
-});
+
 /*
 app.use(multer({ dest: './public/img/',
 	rename: function (fieldname, filename) {
@@ -49,9 +45,9 @@ app.use(session({
 
 app.use((req, res, next) => {
 	if(req.session.user){
-		res.locals.user = req.session.user;
+		res.locals.sessionUser = req.session.user;
 		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-			res.locals.users = users;
+			res.locals.allUsers = users;
 		});
 		app.set('view options', { layout: 'loggedInLayout' });
 		next();
@@ -60,6 +56,16 @@ app.use((req, res, next) => {
 		app.set('view options', { layout: 'layout' });
 		next();
 	}
+});
+
+//for debugging
+app.use(function(req, res, next){
+
+	console.log(`request made to ${req.path}`);
+	if(req.session.user){
+		console.log(req.session.user);
+	}
+	next();
 });
 
 

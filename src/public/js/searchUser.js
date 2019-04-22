@@ -62,3 +62,10 @@ for(let i = 0 ; i < a.length; i++)
   hideOnClickOutside(a[i]);
 //const dropdown = document.getElementById('usersDropdown');
 //hideOnClickOutside(dropdown);
+
+
+function openSearch(){
+  document.querySelector(".search-bar #search").style.width = "100%";
+  document.querySelector(".search-bar #search").placeholder = "Search..."
+
+}

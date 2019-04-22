@@ -6,15 +6,16 @@ const Group = mongoose.model("Group");
 
 
 router.get('/add',(req,res)=>{
-	User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-		const user = req.session.user;
-		if(user){
-			res.render('add-group', {'friends': users, 'user': user.username});
-		}
-		else{
-			res.redirect('/user/login');
-		}
-	});
+	if(req.session.user){
+
+		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
+
+			res.render('add-group', {'friends': users, 'user': req.session.user});
+		});
+	}
+	else{
+		res.redirect('/user/login');
+	}
 });
 
 router.post('/add', (req, res) => {
@@ -61,60 +62,83 @@ router.post('/add', (req, res) => {
 });
 
 router.post('/delete/:id', (req, res) => {
-	const id = req.params.id;
 
-	Group.deleteOne({_id: id}, (err) => {
-		if(err)
-			res.json(err);
-		else{
-			res.send("group removed");
-		}
-	});
+	if(req.session.user){
+		const id = req.params.id;
+
+		Group.deleteOne({_id: id}, (err) => {
+			if(err)
+				res.json(err);
+			else{
+				res.send("group removed");
+			}
+		});
+
+	}else{
+		res.redirect('/user/login');
+	}
 });
 
 router.post('/remove-member', (req, res) => {
-	const username = req.body.member;
-	const groupID = req.body.group;
-	Group.findOne({_id: groupID}, (err, group) => {
-		const index = group.inGroup.indexOf(username);
-		group.inGroup.splice(index, 1);
-		group.save(function(){
-			User.findOne({username: username}, (error, user) => {
-				const i = user.groups.indexOf(group._id);
-				user.groups.splice(i, 1);
-				user.save();
-				res.send("member removed");
+	if (req.session.user){
+
+		const username = req.body.member;
+		const groupID = req.body.group;
+		Group.findOne({_id: groupID}, (err, group) => {
+			const index = group.inGroup.indexOf(username);
+			group.inGroup.splice(index, 1);
+			group.save(function(){
+				User.findOne({username: username}, (error, user) => {
+					const i = user.groups.indexOf(group._id);
+					user.groups.splice(i, 1);
+					user.save();
+					res.send("member removed");
+				});
 			});
 		});
-	});
+	}else{
+		res.redirect('/user/login');
+	}
 });
 
 router.post('/add-member', (req, res) => {
-	const username = req.body.member;
-	const groupID = req.body.group;
-	Group.findOne({_id: groupID}, (err, group) => {
-		group.inGroup.push(username);
-		group.save(function(){
-			User.findOne({username: username}, (error, user) => {
-				user.groups.push(groupID);
-				user.save();
-				res.send("member added");
+	if(req.session.user){
+
+		const username = req.body.member;
+		const groupID = req.body.group;
+		Group.findOne({_id: groupID}, (err, group) => {
+			group.inGroup.push(username);
+			group.save(function(){
+				User.findOne({username: username}, (error, user) => {
+					user.groups.push(groupID);
+					user.save();
+					res.send("member added");
+				});
 			});
 		});
-	});
+	}else{
+		res.redirect('/user/login');
+	}
 });
 
 router.get('/:id', (req, res) => {
-	const id = req.params.id;
-	Group.findById(id, (err, group) => {
-		if(group){
-			res.json(group);
-		}
-		else{
-			res.send(err);
-			console.log(err);
-		}
-	});
+
+	if(req.session.user){
+
+
+		const id = req.params.id;
+		Group.findById(id, (err, group) => {
+			if(group){
+				res.json(group);
+			}
+			else{
+				res.send(err);
+				console.log(err);
+			}
+		});
+	}else{
+		res.redirect('/user/login');
+	}
 });
 
 
