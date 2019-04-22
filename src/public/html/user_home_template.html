@@ -20,7 +20,6 @@
             <a href="/user/my-bills"><li>View My Bills</li></a>
             <a href="/user/my-transactions"><li>View My Transactions</li></a>
             <a href="/user/my-balances"><li>View My Balances</li></a>
-            <a href="#"><li>Find A Friend</li></a>
 
         </ul>
 	</nav>
@@ -33,6 +32,17 @@
                 <h1><a href="#">Oink</a></h1>
             </div>
             <div class="right-side-header">
+                <div id="usersDropdown">
+                    <div class="search-bar">
+                        <i class="fas fa-search" onclick="openSearch()"></i>
+                        <input type="text" placeholder="Search.." onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()">
+                    </div>
+                        <!--
+                    {{#each users as |u|}}
+                        <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
+                    {{/each}}
+-->
+                </div>
                 <h3 class="username"><a href="#">Jessica Ingraham</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
@@ -198,7 +208,7 @@
                     </div>
                 
                     <div class="user-profile-section">
-                        <h3>Groups</h3>
+                        <h3>Groups&nbsp;<a href="#"><i class="fas fa-plus"></i></a></h3>
                         <section id="groups" class="outline">
                             <ul>
 
@@ -254,6 +264,10 @@
             document.querySelector("div.container").style.marginLeft = "0";
             document.querySelector("i.fa-bars").classList.remove("hidden");
             document.querySelector("i.fa-times").classList.add("hidden");
+        }
+        
+        function openSearch(){
+            document.querySelector(".search-bar #search").style.width = "100%";
         }
     </script>
     

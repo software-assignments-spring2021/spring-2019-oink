@@ -60,6 +60,12 @@ div.user-profile-content h3 {
   padding: 1%;
   font-family: "Open Sans Condensed", sans-serif;
   font-size: 1.5em;
+  text-align: center;
+  display: inline-block;
+}
+div.user-profile-content h3 > a > i {
+  width: auto;
+  font-size: 0.8em;
 }
 div.user-profile-content > * {
   margin: 0 0.5%;
@@ -119,6 +125,9 @@ header div.left-side-header, header div.right-side-header {
 header div.left-side-header > *, header div.right-side-header > * {
   font-size: 1.3em;
 }
+header div.left-side-header i:hover, header div.right-side-header i:hover {
+  cursor: pointer;
+}
 header div.left-side-header {
   display: flex;
   flex-direction: row;
@@ -140,9 +149,6 @@ header div.left-side-header i {
 header div.left-side-header i.hidden {
   display: none;
 }
-header div.left-side-header i:hover {
-  cursor: pointer;
-}
 header div.right-side-header {
   display: flex;
   flex-direction: row;
@@ -151,6 +157,24 @@ header div.right-side-header {
   align-items: center;
   justify-content: flex-end;
   text-align: right;
+}
+header div.right-side-header div.search-bar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+header div.right-side-header div.search-bar i {
+  width: auto;
+  padding: 3%;
+}
+header div.right-side-header div.search-bar input#search {
+  font-size: 0.8em;
+  width: 0;
+  transition: width ease-in-out 0.5s;
+  font-family: "Open Sans", sans-serif;
 }
 header div.right-side-header h3.username {
   text-align: right;

@@ -68,9 +68,18 @@ div.user-profile-content{
     @include flex(row, no-wrap, center, flex-start, stretch);
     
     h3{
+        > a > i{
+            //display: inline-block;
+            width:auto;
+            font-size: 0.8em;
+            
+        }
+        
         padding:1%;
         font-family: $open-sans-condensed;
         font-size: 1.5em;
+        text-align: center;
+        display: inline-block;
         
     }
     
@@ -143,10 +152,13 @@ header{
         > *{
             font-size:1.3em;
         }
+        
+        i:hover{
+            cursor: pointer;
+        }
     }
     div.left-side-header{
-        @include flex(row, no-wrap, flex-start, center, flex-start);
-        
+        @include flex(row, no-wrap, flex-start, center, flex-start);        
         
         h1{
             font-size:2.4em;
@@ -161,14 +173,30 @@ header{
         i.hidden{
             display:none;
         }
-        i:hover{
-            cursor: pointer;
-        }
+        
 
     }
     div.right-side-header{
         @include flex(row, no-wrap, flex-end, center, flex-end);
         text-align: right;
+        
+        div.search-bar{
+            @include flex(row, no-wrap, center, center, center);
+            
+            
+            i{
+                width:auto;
+                padding:3%;
+            }
+            
+            input#search{
+                font-size:0.8em;
+                width:0;
+                //width:0;
+                transition: width ease-in-out 0.5s;
+                font-family:$default;
+            }
+        }
         
         h3.username{
             text-align: right;
