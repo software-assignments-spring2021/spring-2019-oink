@@ -1,0 +1,10 @@
+<h3>Search for a User!</h3>
+
+<div id="friendsDropdown">
+	Add a user: <input type="text" placeholder="Search.." onclick="showDropDown()" id="searchUser" name="username" onkeyup="searchUserFilter()"><br>
+	{{#each friends as |f|}}
+		<a class="friends" href="/user/{{ f.username }}" hidden>{{ f.username }}</a><br>
+	{{/each}}
+</div>
+
+<script src="/js/search.js"></script>

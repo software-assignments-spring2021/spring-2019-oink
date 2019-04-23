@@ -1,12 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const async = require('async');
 const router = express.Router(); 
+const fs = require('fs');
 require('../schemas'); 
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
+const Friend = mongoose.model("Friend");
 const Transaction = mongoose.model("Transaction");
 
+const Group = mongoose.model("Group");
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -22,7 +26,7 @@ router.get('/register', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 
 	if(req.session.user){
-		res.redirect(`/user/${req.session.user.username}`)
+		res.redirect('/user/index');
 	}
 	else{
 		res.render('registration');
@@ -30,7 +34,11 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-	user = {username: req.body.username, email: req.body.email};
+	const img = {};
+	img.src = '/images/no_profile_picture.png';
+	img.contentType = '/image/png';
+	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
+	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
 
 	User.register(new User(user), req.body.password, function(err, user){
 		if(err){
@@ -43,8 +51,7 @@ router.post('/register', (req, res) => {
 				req.session.regenerate((err) => {
 					if(!err){
 						req.session.user = user;
-						//res.redirect(`/user/${user.username}`);
-						res.redirect('/user/'+req.session.user.username); // Until User web pages created
+						res.redirect('/user/index'); // Until User web pages created
 					}
 				});
 			});
@@ -55,7 +62,7 @@ router.post('/register', (req, res) => {
 router.get('/login', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 	if(req.session.user){
-		res.redirect(`/user/${req.session.user.username}`)
+		res.redirect('/user/index');
 	}
 	else{
 		res.render('Login');
@@ -74,8 +81,7 @@ router.post('/login', (req, res) => {
 			req.session.regenerate((err) => { // OTHERWISE, BEGIN SESSION WITH USER
 				if(!err){
 					req.session.user = user;
-					//res.redirect(`/user/${user.username}`); // REDIRECT TO HOME PAGE
-					res.redirect('/user/'+req.session.user.username); // Until User web pages created
+					res.redirect('/user/index'); // Until User web pages created
 				}
 			});
 		}
@@ -93,52 +99,89 @@ router.get('/logout', (req, res) => {
 			res.redirect('/');
 		}
 	});
-
 });
 
-router.get('/transactions', (req, res) => {
-	if(req.session.user){
-		const transactionIDs = req.session.user.transactions;
-		const transactions = [];
-
-		let searchUser = "";
-		if(req.query.searchUser !== undefined)
-			searchUser = req.query.searchUser;
-		
-		for(let i = 0 ; i < transactionIDs.length; i++){
-			const id = transactionIDs[i];
-			Transaction.findById(id, (err, transaction)=>{
-				if(!err){
-					if(transaction.paidTo == searchUser || searchUser == ""){
-						if(transaction.isPaid == false) // only display current, non-paid transactions
-							transactions.push(transaction);
-					}
-				}
-				else{
-					res.send('error');
-				}
-			});
-		}
-		res.render("transactions", {"user": req.session.user.username, "transactions": transactions});
+router.get('/my-transactions', (req, res) => {
+	const user = req.session.user;
+	if(user){
+		Transaction.find({"paidBy": user.username}, (err, transactions) => {
+			const unpaid = [];
+			const paid = [];
+			for (let i = 0 ; i < transactions.length; i++){
+				if(transactions[i].isPaid === true)
+					paid.push(transactions[i]);
+				else
+					unpaid.unshift(transactions[i]);
+			}
+			res.render('my-transactions', {"paid": paid, "unpaid": unpaid});
+		});
 	}
 	else{
-		res.redirect('login');
+		res.redirect('/user/login');
 	}
 });
 
-router.get("/my-bills", (req, res)=>{
-	//view all bills added by the user
-	
+router.post('/pay-transaction/:id', (req, res) => {
+	const id = req.params.id;
+	Transaction.findById(id, (err, transaction) => {
+		if(transaction){
+			transaction.isPaid = true;
+			transaction.save();
+			console.log("Transaction paid");
 
+			// UPDATE BALANCES
+			User.findOne({"username": transaction.paidBy}, (error, user) => {
+				for(let i = 0; i < user.friends.length; i++){
+					if(user.friends[i].user === transaction.paidTo){
+						user.friends[i].balance += transaction.amount;
+						user.markModified('friends');
+						user.save();
+					}
+				}
+			});
+			res.send("ok");
+			
+		}
+		else{
+			console.log(err);
+			res.send("error");
+		}
+	});
+});
+
+router.get('/index', (req, res) => {
 	if(req.session.user){
-
-		const bills = req.session.user.bills;
-
-		//in this format so that we can also sort by date
-		Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
-			console.log(docs);
-			res.render("allUserBills", {"bills":docs});
-
+		User.find({"username": { $ne: req.session.user.username}}, function(err, users, count){
+			User.findOne({"username": req.session.user.username}, function(err, user){
+				
+				const transactionIDs = user.transactions;
+				let found = false;
+				let notification;
+				
+				async.forEach(transactionIDs, function(item, callback){
+					Transaction.findById(item, (err, transaction) => {
+						if(transaction){
+							if(!transaction.isPaid && !found){
+								notification = transaction;
+								found = true;
+							}
+						}
+						callback();
+					});
+				}, function(err){
+					const groups = [];
+					for(let i = 0; i < user.groups.length; i++){
+						Group.findById(user.groups[i], (err, group) => {
+							groups.push(group);
+						});
+					}
+					if(notification !== undefined)
+						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+					else
+						res.render('user', {"user": user, "friends": users, "groups": groups});
+					});	
+					
+			});
 		});
 	}
 	else{
@@ -147,17 +190,99 @@ router.get("/my-bills", (req, res)=>{
 });
 
 
+router.get("/my-bills", (req, res)=>{
+	//view all bills added by the user
+	
+
+	if(req.session.user){
+		User.findOne({"username": req.session.user.username}, (err, user) => {
+			const bills = user.bills;
+
+			//in this format so that we can also sort by date
+			Bill.find({"_id":{$in:bills}}).exec((err, docs)=>{
+				//console.log(docs);
+				res.render("allUserBills", {"bills":docs});
+
+			});
+		});
+		
+	}
+	else{
+		res.redirect('/user/login');
+	}
+});
+
+router.get('/my-balances', (req, res) => {
+	const user = req.session.user;
+	if(user){
+		User.findOne({"username": user.username}, (err, sessionUser) => {
+			res.render('my-balances', {friends: sessionUser.friends});
+		});
+	}
+	else{
+		res.redirect('login');
+	}
+});
+
+router.post('/members', (req, res) => {
+	const usernames = req.body.usernames.split(',');
+	User.find({username: {$nin: usernames}}, (err, users) => {
+		res.json(users);
+	});
+});
+
 //view a user
 router.get('/:username', (req, res) => {
+
+
 	if(req.session.user){
-		const username = req.params.username;
-		//if it's the session user, there's no need to go to the database again
-		if(username === req.session.user.username){
-			res.render('user', {"username": username});
-		}
-		else{
-			res.send("Error: User not found");
-		}
+		const user = req.params.username;
+		const sessionUser = req.session.user;
+		User.findOne({"username": user}, (err, foundUser) => {
+			if(!foundUser){
+				res.redirect('/user/index');
+			}
+
+			else{
+				const groups = [];
+				const adminGroups = [];
+				const allGroups = [];
+				for(let i = 0; i < foundUser.groups.length; i++){
+					Group.findById(foundUser.groups[i], (err, group) => {
+						if(group){
+							if(group.administrator == sessionUser.username)
+								adminGroups.push(group);
+							else
+								groups.push(group);
+							allGroups.push(group);
+						}
+					});
+				}
+				const friendsList = foundUser.friends;
+				console.log(friendsList);
+				if(user === sessionUser.username){
+					res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": sessionUser.img, "tip":sessionUser.defaultTip});
+					// User.findOne({"username": sessionUser.username}, (err, foundUser) => {
+					// 	res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
+					// });
+				}
+
+				else{
+					let friend = false;
+					User.findOne({"username": sessionUser.username}, (err, tempUser) => {
+						for(let i = 0; i < tempUser.friends.length; i++){
+							if(tempUser.friends[i].user == user)
+								friend = true;
+						}
+						if(friend)
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "image": tempUser.img});
+						else
+							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": "Add Friend"
+								, "image": tempUser.img});
+						});
+				}
+			}
+		});
 	}
 	else{
 		res.redirect('login');

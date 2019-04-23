@@ -7,6 +7,7 @@
     padding:0;
     margin:0;
     font-size:100%;
+    width:100%;
     box-sizing: border-box;
     color:black;
     list-style: none;
@@ -14,8 +15,183 @@
     text-decoration: none;
     outline:none;
     font-family: $default;
-
 }
+
+.hidden{
+    display:none;
+}
+
+input[type="submit"]{
+    
+    &:active{
+        transition: translate 2s ease-in-out;
+
+        transform:translate(3px, 5px);
+        box-shadow: 2px 2px $dark-green;
+        
+    }
+}
+
+
+div.user-profile-header{
+    
+    #change-profile-pic{
+        position:fixed;
+        top:0;
+        left:0;
+        background-color: rgba(255, 255, 255, 0.9);
+        z-index:100;
+        
+        width:100%;
+        height:100%;
+        
+        text-align: center;
+        
+        > * {
+            width:auto;
+            margin:1%;
+            
+        }
+        
+        i{
+            position:absolute;
+            top:5%;
+            left:90%;
+            font-size: 1.8em;
+            
+            &:hover{
+                cursor: pointer;
+            }
+        }
+        
+        input[type="submit"]{
+            background-color:$hot-pink;
+            font-size:1.3em;
+            padding:0.5% 1%;
+            
+            &:hover{
+                cursor:pointer;
+            }
+        }
+    }
+    
+    @include flex(row, no-wrap, center, center, center);
+    padding:2% 0;
+    
+    > *{
+        margin:0 1%;
+    }
+    
+    h2{
+        width:auto;
+    }
+    
+    div.profile-pic{
+        //background-color:red;
+        
+        i{
+            display: none;
+            color:white;
+            font-size:2em;
+            position:relative;
+            left:40%;
+            top:-50%;
+            
+        }
+        
+        width:150px;
+        height:150px;
+        //object-fit: cover;
+        background-color:black;
+        
+        &:hover{
+            cursor:pointer;
+            
+            i{
+                display:block;
+            }
+            
+            img{
+               opacity:0.6; 
+            }
+        }
+        
+        
+        img{
+            
+            object-fit: cover;            
+        }
+    
+    }
+
+    
+}
+
+div.user-profile-content{
+    height:70vh;
+    @include flex(row, no-wrap, center, flex-start, stretch);
+    
+    h3{
+        > a > i{
+            //display: inline-block;
+            width:auto;
+            font-size: 0.8em;
+            
+        }
+        
+        padding:1%;
+        font-family: $open-sans-condensed;
+        font-size: 1.5em;
+        text-align: center;
+        display: inline-block;
+        
+    }
+    
+    > *{
+        margin:0 0.5%;
+        width:50%;
+        height:60vh;     
+        
+    }
+    
+    section#bills, section#transactions{
+        height: 100%;
+        overflow-y: scroll;
+    }
+    
+    section#friends, section#groups{
+        height: 27vh;
+        
+        ul{
+            height:100%;
+            overflow-y: scroll;
+        }
+    }
+    
+    .outline{
+        border: 5px solid black;
+    }
+    
+
+    
+    .friends-and-groups{
+        width:40%;
+        
+        text-align: center;
+        
+        a:hover li{
+            background-color:$bright-green;
+        }
+            
+        li{
+            padding:3% 0;
+            font-size:1.2em;
+
+        }
+    }
+}
+
+
 
 
 div.container{
@@ -26,8 +202,10 @@ header{
     width:100%;
     position: sticky;
     top:0; left:0;
+    border-bottom:3px solid $purple-pink;
+    box-shadow: 4px 4px 4 grey;
     
-    background-color:$light-red;
+    background-color:$hot-pink;
     
     @include flex(row, no-wrap, center, center, center);
     
@@ -38,38 +216,70 @@ header{
         > *{
             font-size:1.3em;
         }
+        
+        i:hover{
+            cursor: pointer;
+        }
     }
     div.left-side-header{
-        @include flex(row, no-wrap, flex-start, center, flex-start);
-        
+        @include flex(row, no-wrap, flex-start, center, flex-start);        
         
         h1{
             font-size:2.4em;
             font-family: $oswald;
             padding:0 3%;
+            text-align: left;
+        }
+        i{
+            width:auto;
+            padding:1% 3%;
         }
         i.hidden{
             display:none;
         }
-        i:hover{
-            cursor: pointer;
-        }
+        
 
     }
     div.right-side-header{
-        @include flex(row, no-wrap, center, center, flex-end);
+        @include flex(row, no-wrap, flex-end, center, flex-end);
+        text-align: right;
+        
+        div.search-bar{
+            @include flex(row, no-wrap, center, center, center);
+            
+            
+            i{
+                width:auto;
+                padding:3%;
+            }
+            
+            input#search{
+                font-size:0.8em;
+                width:0;
+                //width:0;
+                transition: width ease-in-out 0.5s;
+                font-family:$default;
+            }
+        }
+        
         h3.username{
-            width:60%;
             text-align: right;
             font-family: $open-sans-condensed;
             font-size: 1.5em;
             padding:0 4%;
             letter-spacing: 0.5%;
+            
         }
+        
+        form{
+            width:auto;
+        }
+        
         input[type="submit"]{
             background-color:$medium-green;
             color:$white-pink;
-            padding:4% 10%;
+            padding:1% 10%;
+            width:auto;
 
 
             
@@ -87,7 +297,7 @@ nav.main-side-nav{
     top:0;left:0;
     height:100%;
     width:0;
-    background-color:$light-red;
+    background-color:$hot-pink;
     padding-top:10vh;
     overflow-x: hidden;
     transition:width ease-in-out 0.5s;
@@ -114,3 +324,282 @@ nav.main-side-nav{
         }
     }
 }
+
+
+div.content, form{
+    @include flex(column, no-wrap, center, center, center);
+    width:100%;    
+}
+
+h2{
+
+}
+
+section{
+    width:100%;
+    
+    
+    article{
+        @include flex(row, no-wrap, center, center, center);
+        
+        font-size:1.2em;
+        padding:0.5% 0;
+        margin:1%;
+        width:auto;
+        
+        border-style:solid;
+        border-width: thin;
+        
+        
+        &.paid{
+            //background is green and border is darker green
+            background-color:$light-green;
+            border-color:$medium-green;
+        }
+        
+        &.unpaid{
+            //background is light red and border is darker red
+            background-color:$brown-pink;
+            border-color:$light-red;
+        }
+        
+        span{
+            padding:0 1%;
+            text-align: center;
+            
+            &.amount{
+                font-weight: bold;
+            
+            }
+        }
+    }
+}
+
+div.content{
+    padding-bottom:5%;
+    
+    button{
+        width:auto;
+    }
+    
+    h2, h3, h4, h5, h6{
+        text-align: center;
+    }
+    
+    h2{
+        font-size:2em;
+        font-family: $open-sans-condensed;
+        padding:1% 0;
+    }
+    
+    h3{
+        padding:0.5% 0;
+    }
+    
+}
+
+div.notification{
+    width:100%;
+    text-align: center;
+    background-color:$medium-green;
+    color:$white-pink;
+    font-size: 1.2em;
+    padding:0.2%;
+}
+
+form.addbill{
+    
+    input[type="submit"]{
+        width:auto;
+        padding:1%;
+        font-size:1.3em;
+        
+        &:hover{
+            cursor:pointer;
+        }
+    }
+    
+    div.comment{
+        text-align: center;
+        
+        font-size:1em;
+        width:44%;
+        
+        textarea{
+            border-bottom: 3px solid black;
+            resize:none;
+        }
+    }
+    
+    
+    >*{
+        margin:1% 0;
+    }
+    
+    label{
+        font-size:1.2em;
+    }
+    
+    .total{
+        width:100%;
+        
+    }
+    
+    input[type="text"]{
+        font-size: 1.2em;
+        
+    }
+    
+    div.pretipAndTip{
+        @include flex(row, no-wrap, center, center, space-evenly);
+        
+        
+        >*{
+            
+            font-size:1.4em;
+            width:auto;
+        }
+        
+        
+        .tip{
+            @include flex(row, no-wrap, center, center,center);
+            
+            #tip{
+                text-align: right;
+            }
+            
+            button{
+                
+                width:100%;
+            }
+        }    
+            
+    }
+    
+    .userAmounts{
+        text-align:center;
+        
+        div.userBlock{
+            font-size:1.3em;
+            
+            .hidden{
+                display: none;
+            }
+            
+            span{
+                font-size: inherit;
+            }
+            >*{
+                display: inline-block;
+                width:auto;
+                
+            }
+            h4{
+                padding:0 2%;
+                font-size:1.3em;
+                
+                font-family:$open-sans-condensed;
+            }
+            
+            padding:0.5% 0;
+        }
+
+        
+        input[type="radio"]{
+            display:none;
+            
+            +label{
+                
+            }
+            
+            &:checked+label{
+                font-weight: bold;
+            }
+            
+        }
+    }
+}
+
+div.choose-users{
+    @include flex(row, no-wrap, center, center, center);
+    margin-top:2%;
+    
+    h3{
+        font-size:1.3em;
+    }
+    
+    div.groups, div.friends{
+        
+        input[type="text"]#search{
+            position:sticky;
+            top:0; left:0;
+            width:100%;
+            padding:1%;
+            border-bottom: 2px solid $dark-green;
+            
+        }
+        
+        width:70%;
+        margin:auto;
+        border:medium solid $dark-green;
+        height:30vh;
+        overflow-y:scroll;
+    }
+    
+    h4{
+        font-size: 1.4em;
+        
+        padding:1% 0;
+        
+        font-family: $open-sans-condensed;
+        
+        &:hover{
+            cursor:pointer;
+            background-color:$light-green;
+        }
+    }
+    
+}
+
+div.total{
+    font-size:1.4em;
+    text-align: center;
+}
+
+button:hover{
+    cursor:pointer;
+}
+
+
+
+button{
+    padding:0 3%;
+    
+    background-color:$bright-green;
+//    border: solid medium $medium-green;
+    box-shadow: 3px 3px 2px $dark-green;
+    
+    transition: translate 2s ease-in-out;
+    
+    &:active{
+        transition: translate 2s ease-in-out;
+
+        transform:translate(3px, 5px);
+        box-shadow: 2px 2px $dark-green;
+        
+    }
+    
+    
+    &.pay{
+        background-color:$light-green;
+    }
+}
+
+a{
+    font-family: inherit;
+    font-size: inherit;
+}
+
+
+
+

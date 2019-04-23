@@ -1,0 +1,128 @@
+
+
+<div class="user-profile-header">
+
+    
+    <div class="profile-pic" id="session-user-profile-pic" onclick ="openForm()">
+        
+        <img src="{{ image.src }}" class="profile-pic" alt="Anon">
+        <i class="fas fa-plus"></i>
+    </div>
+    
+    <h2>{{user}} Profile</h2>
+
+    <form id="change-profile-pic" class="hidden" action='/api/upload/image' enctype="multipart/form-data" method="post">
+        <i class="fas fa-times" onclick="closeForm()"></i>
+        <h2>Upload a new profile picture</h2>
+        <input type="file" name="upload" accept="image/png, image/jpeg">
+        <input type="submit" value="Upload">
+    </form>
+</div>
+
+
+<div class="user-profile-content">
+    
+    <div class="user-profile-section">
+        
+        <h3>Bills</h3>
+        <section id="bills" class="outline">
+
+        {{#each bills as |bill|}}
+            <article>
+                <span class="amount">${{ bill.amount }}</span>
+				<span class="date">added</span>
+				<span class="view"><a href="/bill/view/{{bill._id}}">View Bill <i class="fas fa-arrow-right"></i></a></span>
+            </article>  
+        {{/each}}
+
+
+        </section>
+    
+    </div>
+    
+    
+    <div class="user-profile-section">
+        
+        <h3>Transactions</h3>
+        <section id="transactions" class="outline">
+            <h4>Unpaid</h4>
+            <section id="unpaid-transactions">
+
+            	{{#each unpaid as |u|}}
+
+                <article class="unpaid">
+                    <span class="amount">${{ u.amount }}</span>
+                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+                    <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
+                    <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+                </article>
+
+                {{/each}}
+
+
+                
+            </section>
+
+            <h4>Paid</h4>
+            <section id="paid-transactions">
+
+            	{{#each paid as |p|}}
+
+                <article class="paid">
+					<span class="amount">${{ p.amount }}</span>
+					<span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
+					<span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
+				</article>
+
+				{{/each}}
+
+
+            </section>
+
+        </section>
+        
+    </div>
+    
+    <div class="friends-and-groups">
+    
+        <div class="user-profile-section">
+            <h3>Friends</h3>
+            <section id="friends" class="outline">
+                
+                <ul>
+                	{{#each friends as |f|}}
+                    <a href="/user/{{ f.user }}"><li>{{f.name}}</li></a>
+                	{{/each}}
+                </ul>
+
+            </section>
+        </div>
+    
+        <div class="user-profile-section">
+            <h3>Groups&nbsp;<a href="/group/add"><i class="fas fa-plus"></i></a></h3>
+            <section id="groups" class="outline">
+                <ul>
+                	{{#each groups}}
+                    <a href="/group/{{_id}}"><li>{{name}}</li></a>
+                	{{/each}}
+
+                </ul>
+
+            </section>
+        </div>
+    
+    </div>
+
+</div>
+
+
+{{#if tip}}
+ <form action="/api/change-tip" method="post">
+    <h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
+    <input type="submit" value="Change Default">
+</form>
+{{/if}}
+
+<script src="/js/add_friend.js"></script>
+<script src="/js/change_tip.js"></script>
+<script src="/js/change_profile_pic.js"></script>

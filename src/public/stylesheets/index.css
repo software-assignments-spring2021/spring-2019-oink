@@ -1,0 +1,23 @@
+/* Coolors Exported Palette - coolors.co/fde8e9-e3bac6-cc8b86-b5d99c-daa89b */
+/* HSL */
+/* RGB */
+body {
+  margin: 0;
+  padding: 0;
+  height: 600vh;
+}
+
+header {
+  height: 30vh;
+  background: #cc8b86 url("../images/piggybank-background.png") repeat center;
+}
+header nav h1 {
+  text-align: center;
+  width: auto;
+  background-color: #fde8e9;
+  color: #729956;
+  font-size: 4em;
+  padding: 2% 3%;
+}
+
+/*# sourceMappingURL=index.css.map */

@@ -1,20 +1,27 @@
 
 {{#unless bills}}
 <h2>You have not created any bills yet</h2>
-<a href="/bill/add"><h4>You can create one here</h4></a>
+<a href="/user/index"><h4>You can create one here</h4></a>
 
 {{else}}
 
+<h2>My Bills</h2>
+
+<section>
+
 {{#each bills as |bill|}}
 
-<div class="bill">
+<article>
 
-	<div class="amount">${{ bill.amount }}</div>
-	<div class="date">date added</div>
-	<div class="view"><a href="/bill/view/{{bill._id}}">View Bill</a></href>
+	<span class="amount">${{ bill.amount }}</span>
+	<span class="date">date added</span>
+	<span class="view"><a href="/bill/view/{{bill._id}}">View Bill <i class="fas fa-arrow-right"></i></a></span>
 
-</div>
+</article>
+
 
 {{/each}}
+
+</section>
 
 {{/unless}}

@@ -1,0 +1,65 @@
+<h2>{{ user }}'s Profile!</h2>
+
+<img src="{{ image.src }}" alt="Anon" width="225" height="225">
+
+<form action='/api/upload/image' enctype="multipart/form-data" method="post">
+	<input type="file" name="upload" accept="image/png, image/jpeg">
+	<input type="submit" value="Upload">
+</form>
+
+{{#if addFriend}}
+	<button onclick="addFriend('{{ user }}')">{{ addFriend }}</button><br>
+{{/if}}
+
+<h3>Friends:</h3>
+<ul>
+{{#each friends as |f|}}
+	<a href="/user/{{ f.user }}"><li>{{ f.user }}</li></a>
+{{/each}}
+</ul>
+
+<h3>Groups:</h3>
+{{#if admin}}
+	{{#each adminGroups}}
+		<h3>{{name}}</h3>
+			<div id="groupMembers">
+				{{#each inGroup}}
+					<div class="changeable" id="{{this}}">
+						<input type="text" class="changeableUsers" value="{{this}}" readonly>
+					</div>
+				{{/each}}<br>
+				<button onclick="editGroup('{{_id}}')">Edit</button>
+				<button onclick="deleteGroup('{{_id}}')">Delete</button>
+			</div>
+	{{/each}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+			{{#each inGroup}}
+				<div id="{{this}}">
+					<input type="text" value="{{this}}" readonly>
+				</div>
+			{{/each}}<br>
+			<button onclick="leaveGroup('{{../user}}','{{_id}}')">Leave Group</button>
+	{{/each}}
+{{else}}
+	{{#each groups}}
+		<h3>{{name}}</h3>
+			{{#each inGroup}}
+				<input type="text" value="{{this}}" readonly>
+			{{/each}}<br>
+	{{/each}}
+{{/if}}
+
+
+{{#if tip}}
+	<form action="/api/change-tip" method="post">
+		<h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
+		<input type="submit" value="Change Default">
+	</form>
+{{/if}}
+
+<script src="/js/search.js"></script>
+<script src="/js/addGroup.js"></script>
+<script src="/js/add_friend.js"></script>
+<script src="/js/change_tip.js"></script>
+<script src="/js/adjust_group.js"></script>

@@ -9,6 +9,7 @@
 
 
 	<meta charset="utf-8">
+    <script type="text/javascript" src="/js/open_and_close_controller.js"></script>
 
 </head>
 <body>
@@ -16,24 +17,38 @@
 	<nav class="main-side-nav">
 
         <ul>
-            <a href="/user/{{user.username}}"><li>Add a bill</li></a>
-            <a href="/user/my-bills"><li>View My Bills</li></a>
-            <a href="/user/my-transactions"><li>View My Transactions</li></a>
+            <a href="/user/{{sessionUser.username}}"><li>My Profile</li></a>
+            <a href="/user/index"><li>Add a bill</li></a>
+            <!-- <a href="/user/my-bills"><li>View My Bills</li></a>
+            <a href="/user/my-transactions"><li>View My Transactions</li></a> -->
             <a href="/user/my-balances"><li>View My Balances</li></a>
-            <a href="#"><li>Find A Friend</li></a>
-
+            <a href="/group/add"><li>Create A Group</li></a>
         </ul>
 	</nav>
     <div class="container">
 
         <header>
             <div class="left-side-header">
-                <i class="fas fa-bars" onclick="openSideNav()"></i>
-                <i class="fas fa-times hidden" onclick="closeSideNav()"></i>
-                <h1>Oink</h1>
+                <i class="fas fa-bars" ></i>
+                <i class="fas fa-times hidden" ></i>
+                <h1><a href="/user/index">Oink</a></h1>
             </div>
+            
             <div class="right-side-header">
-                <h3 class="username">{{ user.username }}</h3>
+                <div id="usersDropdown">
+                    <div class="search-bar">
+                        <i class="fas fa-search" onclick="openSearch()"></i>
+                        <input type="text" placeholder="" onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()">
+                        
+                        <div class="dropdown hidden">
+                        {{#each allUsers as |u|}}
+                            <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
+                        {{/each}}
+                        </div>
+                    </div>
+                    
+                </div>
+                <h3 class="username"><a href="/user/{{ sessionUser.username }}">{{ sessionUser.username }}</a></h3>
                 <form action="/user/logout" method="get">
                     <input type="submit" name="Logout" value="Logout" />
                 </form>
@@ -57,23 +72,9 @@
         </footer>
     </div>
     
-    
-    <!--  script for moving the sidebar  -->
-    <script>
-        //for the sidebar
-        function openSideNav(){
-            document.querySelector("nav.main-side-nav").style.width = "16%";
-            document.querySelector("div.container").style.marginLeft = "16%";
-            document.querySelector("i.fa-bars").classList.add("hidden");
-            document.querySelector("i.fa-times").classList.remove("hidden")
-        }
-        
-        function closeSideNav(){
-            document.querySelector("nav.main-side-nav").style.width = "0";
-            document.querySelector("div.container").style.marginLeft = "0";
-            document.querySelector("i.fa-bars").classList.remove("hidden");
-            document.querySelector("i.fa-times").classList.add("hidden");
-        }
-    </script>
+
+    <script src="/js/searchUser.js"></script>
+    <script src="/js/stretchy.js"></script>
+
 </body>
 </html>

@@ -15,18 +15,14 @@ function searchUserFilter() {
   }
 }
 
-function onClickUserDropdown(){
-  // clear user search bar
-  const input = document.getElementById("searchUser");
-  const username = input.value;
-  input.textContent = "";
-  // add username to list of Friends to add to a bill
-  const txt = username + ',';
-  const splitWith = document.getElementById("splitWith");
-  splitWith.value += txt;
-} 
-
 function onClickUsername(username){
   const input = document.getElementById("searchUser");
   input.value = username;
+}
+
+function showDropDown(){
+  const friends = document.getElementsByClassName("friends");
+  for(let i = 0; i < friends.length; i++){
+    friends[i].removeAttribute("hidden");
+  }
 }

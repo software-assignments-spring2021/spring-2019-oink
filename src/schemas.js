@@ -8,7 +8,8 @@ const TransactionSchema = new Schema({
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
 	paidTo:{type:String, required:true},
 	isPaid:{type:Boolean},
-	bill:{type: Schema.Types.ObjectId, ref:"Bill"}
+	bill:{type: Schema.Types.ObjectId, ref:"Bill"},
+	isFriends:{type:Boolean}
 });
 
 const BillSchema = new Schema({
@@ -28,14 +29,17 @@ const BillSchema = new Schema({
 	notSplit:{type:Boolean, required:false},
 
 	//only matters if not split is true
-	paidBy:{type:String, required: false}
+	paidBy:{type:String, required: false},
 
+	dateCreated:{type:String, required: true}
 });
 
 const GroupSchema = new Schema({
 
 	name:{type:String, required:true},
-	inGroup:[String] //will be usernames
+	inGroup:[String], //will be usernames
+	defaultPercentages:[Number], // will be same length as inGroup
+	administrator: String //username of person who created the group / has administrative access
 
 });
 
@@ -48,11 +52,12 @@ const UserSchema = new Schema({
 	username:{type: String, unique:true, required:true, index:true},
 	email:{type:String, unique:true, index:true},
 	password:{type:String},
-	groups:[GroupSchema],
+	groups:[{type: Schema.Types.ObjectId, ref:"Group"}],
 	bills:[{type: Schema.Types.ObjectId, ref:"Bill"}],
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
-	friends:[FriendSchema]
-
+	friends:[FriendSchema],
+	img: { src: String, contentType: String, rawSRC: String },
+	defaultTip: Number
 });
 
 
