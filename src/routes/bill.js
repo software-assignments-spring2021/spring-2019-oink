@@ -7,6 +7,8 @@ const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 const Friend = mongoose.model("Friend");
 
+const BF = require('../public/js/BillFactory');
+
 const dateTime = require('node-datetime');
 
 const dbHelp = require('../helpers/db_helpers.js');
@@ -31,135 +33,10 @@ router.post('/add', (req, res)=>{
 		const formatted = dt.format('m/d/Y');
 
 		let friendsToSplit = req.body.splitWith.split(','); friendsToSplit[friendsToSplit.length-1] = req.session.user.username;
-		const bill = new Bill({
-			amount:req.body.amount,
-			splitWith:friendsToSplit,
-			comment:req.body.comment,
-			dateCreated: formatted
-		});
-		let id;
-		bill.save((err, addedBill)=>{
-			if (err){
-				res.send("Error adding bill");
-				console.log(err);
-			}
-			else{
-				User.findOne({username: user.username}, (err, doc)=>{
-					doc.bills.push(mongoose.Types.ObjectId(addedBill._id));
-					id = addedBill._id;
-					doc.save(function(){
-						req.body = JSON.parse(JSON.stringify(req.body));
-						friendsToSplit = [];
-						for(let key in req.body){
-							if(req.body.hasOwnProperty(key)){
-								if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
-										key !== "typeOfPayment" && key !== "amount"){
-									const a = {}
-									a.user = key;
-									a.amount = req.body[key];
-									friendsToSplit.unshift(a);
-								}
-							}
-						}
-						console.log(friendsToSplit);
-						for(let i = 0; i < friendsToSplit.length; i ++){
-							let transaction;
-							let amount = friendsToSplit[i].amount;
-							console.log(req.body.typeOfPayment);
-							if (req.body.typeOfPayment=="%"){
-								amount = amount * .01 * req.body.amount;
-							}
-							if(i !== friendsToSplit.length-1){
-								let isFriends = false;
-								for(let j = 0; j < doc.friends.length; j++){
-									if(doc.friends[j].user == friendsToSplit[i].user)
-										isFriends = true;
-								}								
-								
-								transaction = new Transaction({
-									amount:amount,
-									paidBy:friendsToSplit[i].user,
-									paidTo:friendsToSplit[friendsToSplit.length-1].user,
-									isPaid: false,
-									//bill: mongoose.Types.ObjectId(id)
-									bill: id,
-									isFriends: isFriends
-								});
-							}
-							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
-								transaction = new Transaction({
-									amount:amount,
-									paidBy:friendsToSplit[i].user,
-									paidTo:friendsToSplit[friendsToSplit.length-1].user,
-									isPaid: true,
-									//bill: mongoose.Types.ObjectId(id)
-									bill: id,
-									isFriends: false
-								});
-							}
-
-							transaction.save((err, addedTransaction)=>{
-								if (err){
-									console.log(err);
-									res.send("Error adding Transaction");
-									
-								}
-								else{
-									User.findOne({username: friendsToSplit[i].user}, (err, doc)=>{
-										doc.transactions.push(mongoose.Types.ObjectId(addedTransaction._id));
-										doc.save();
-									});
-								}
-							});
-						}
-
-						// SEE IF ANY USERS ARE FRIENDS OF BILL CREATOR
-							// IF YES, UPDATE BALANCES
-
-						for(let i = 0; i < friendsToSplit.length-1; i++){
-							const friendName = friendsToSplit[i].user;
-							console.log(friendName);
-							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
-
-							User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
-								for(let j = 0; j < sessionUser.friends.length; j++){
-									const friend = sessionUser.friends[j];
-									if(friend.user == friendName){
-										User.findOne({'username': friend.user}, (err, friendUser) => {
-
-											for(let k = 0; k < friendUser.friends.length; k++){
-												if(friendUser.friends[k].user == sessionUser.username){
-													//	console.log('test');
-													const newBalance = friendUser.friends[k].balance - updateBalance;
-													console.log('test: ' + friendUser.friends[k]);
-													/*
-													friendUser.markModified('friends');
-													friendUser.save(function(){
-														console.log("save complete");
-														console.log(friendUser);
-													});*/
-													User.updateOne({'friends._id': friendUser.friends[k]._id}, {'$set': {
-														'friends.$.balance': newBalance
-													}}, function(){
-														User.findOne({'username': friendUser.username}, (err, tmp) => {
-															console.log('test');
-															console.log(tmp);
-														})
-													});
-													
-												}
-											}
-										});
-									}
-								}
-							});
-						}
-
-						res.redirect(`/bill/view/${id}`);
-					});
-				});
-			}
-		});		
+		formattedBody = JSON.parse(JSON.stringify(req.body));
+		const BillFactory = new BF.BillFactory(formattedBody);
+		
+		BillFactory.createBill(formatted, user, req.body.amount, friendsToSplit, req.body.comment, res);		
 	}
 
 	else{
