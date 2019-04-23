@@ -15,6 +15,8 @@ const Group = mongoose.model("Group");
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+const IP = require('../public/js/iteratorPattern');
+
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -157,7 +159,7 @@ router.get('/index', (req, res) => {
 				const transactionIDs = user.transactions;
 				let found = false;
 				let notification;
-				
+
 				async.forEach(transactionIDs, function(item, callback){
 					Transaction.findById(item, (err, transaction) => {
 						if(transaction){
