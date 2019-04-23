@@ -37,6 +37,8 @@
     "handlebars": "^4.1.0",
     "hbs": "^4.0.3",
     "mocha": "^6.0.2",
+    "mongoose-cron": "^0.5.7",
+    "node-cron": "^2.0.3",
     "node-datetime": "^2.1.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0",

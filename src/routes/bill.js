@@ -13,7 +13,19 @@ const dateTime = require('node-datetime');
 
 const dbHelp = require('../helpers/db_helpers.js');
 const valHelpers = require('../helpers/validation_helpers.js');
+const cron = require("node-cron");
 
+router.get('/testSchedule', (req, res) => {
+	cron.schedule("* * * * * *", function() {
+      	const friend = new Friend({
+      		user: "Sam",
+      		balance: 0
+      	});
+      	console.log(friend);
+      	friend.save();
+    });
+    res.send("scheduled");
+});
 
 router.post('/add', (req, res)=>{
 	console.log(req.body);

@@ -72,6 +72,4 @@ mongoose.model('Group', GroupSchema);
 mongoose.model('Friend', FriendSchema);
 mongoose.model('User', UserSchema);
 
-
-
 mongoose.connect('mongodb://localhost/oink_dev');
