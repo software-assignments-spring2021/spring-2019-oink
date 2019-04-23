@@ -1,3 +1,7 @@
+
+
+
+
 function onClickAddUserToBill(){
   // clear user search bar
   const input = document.getElementById("searchUser");
