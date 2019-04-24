@@ -36,8 +36,9 @@
         <section id="friends" class="outline">
 
             <ul>
-            	{{#each friends as |f|}}
+            {{#each friends as |f|}}
                 <a href="/user/{{ f.user }}"><li>{{f.user}}</li></a>
+            {{/each}}
             </ul>
 
         </section>

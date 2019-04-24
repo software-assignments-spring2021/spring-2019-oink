@@ -164,7 +164,7 @@ div.user-profile-content{
         
     }
     
-    section{
+    section#transactions, section#bills, section#friends, section#groups{
         height: 100%;
         
         overflow-y: scroll;

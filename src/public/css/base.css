@@ -128,18 +128,18 @@ div.user-profile-content > * {
   width: 50%;
   height: 60vh;
 }
-div.user-profile-content section {
+div.user-profile-content section#transactions, div.user-profile-content section#bills, div.user-profile-content section#friends, div.user-profile-content section#groups {
   height: 100%;
   overflow-y: scroll;
 }
-div.user-profile-content section ul {
+div.user-profile-content section#transactions ul, div.user-profile-content section#bills ul, div.user-profile-content section#friends ul, div.user-profile-content section#groups ul {
   height: 100%;
   text-align: center;
 }
-div.user-profile-content section ul a:hover li {
+div.user-profile-content section#transactions ul a:hover li, div.user-profile-content section#bills ul a:hover li, div.user-profile-content section#friends ul a:hover li, div.user-profile-content section#groups ul a:hover li {
   background-color: #7AC74F;
 }
-div.user-profile-content section ul li {
+div.user-profile-content section#transactions ul li, div.user-profile-content section#bills ul li, div.user-profile-content section#friends ul li, div.user-profile-content section#groups ul li {
   padding: 3% 0;
   font-size: 1.2em;
 }
