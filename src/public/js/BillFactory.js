@@ -7,14 +7,30 @@ function isError(reqBody){
 	if(Number.isNaN(parseInt(reqBody.amount))){
 		return true;
 	}
+	let total = 0;
+	let count = 0;
 	for(let key in reqBody){
 		if(reqBody.hasOwnProperty(key)){
 			if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
 					key !== "typeOfPayment" && key !== "amount"){
+				count++;
 				if(Number.isNaN(parseInt(reqBody[key])))
 					return true;
+				else
+					total += parseInt(reqBody[key]);
 			}
 		}
+	}
+	if(count <= 1)
+		return true;
+
+	if(reqBody.typeOfPayment == '%'){
+		if(total != 100)
+			return true;
+	}
+	else{
+		if(total != reqBody.amount)
+			return true;
 	}
 
 	return false;
