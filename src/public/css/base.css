@@ -112,6 +112,11 @@ div.user-profile-content {
   align-items: flex-start;
   justify-content: stretch;
 }
+div.user-profile-content h4 {
+  font-size: 1.2em;
+  background-color: #F92A82;
+  padding: 1.2%;
+}
 div.user-profile-content h3 {
   padding: 1%;
   font-family: "Open Sans Condensed", sans-serif;

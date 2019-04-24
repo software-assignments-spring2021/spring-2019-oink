@@ -141,6 +141,12 @@ div.user-profile-content{
     height:70vh;
     @include flex(row, no-wrap, center, flex-start, stretch);
     
+    h4{
+        font-size:1.2em;
+        background-color:$hot-pink;
+        padding:1.2%;
+    }
+    
     h3{
         > a > i{
             //display: inline-block;
