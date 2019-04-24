@@ -23,7 +23,7 @@
 	    {{#each bills as |b|}}
 	    	<article>
 	            <span class="amount">{{ b.amount }}</span>
-	            <span class="date">{{b.date}}</span>
+	            <span class="date">{{bill.dateCreated}}</span>
 	            <span class="view"><a href="/bill/view/{{b._id}}">View <i class="fas fa-arrow-right"></i></a></span>
 	        </article>
 	    {{/each}}
