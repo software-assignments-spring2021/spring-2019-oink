@@ -182,13 +182,25 @@ router.get('/index', (req, res) => {
 					if(notification !== undefined)
 						if(req.query.error == undefined)
 							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
-						else
-							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Error Processing Bill"});
+						else{
+							if(req.query.error == "error1")
+								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "At Least Two Members Needed for a Bill"});
+							if(req.qery.error == "error2")
+								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Bill Portions Should Add Up To Bill Total"});
+							else
+								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Error Processing Bill"});
+						}
 					else
 						if(req.query.error == undefined)
 							res.render('user', {"user": user, "friends": users, "groups": groups});
-						else
-							res.render('user', {"user": user, "friends": users, "groups": groups, error: "Error Processing Bill"});
+						else{
+							if(req.query.error == "error1")
+								res.render('user', {"user": user, "friends": users, "groups": groups, error: "At Least Two Members Needed for a Bill"});
+							if(req.query.error == "error2")
+								res.render('user', {"user": user, "friends": users, "groups": groups, error: "Bill Portions Should Add Up To Bill Total"});
+							else
+								res.render('user', {"user": user, "friends": users, "groups": groups, error: "Error Processing Bill"});
+						}
 					});	
 					
 			});
@@ -271,7 +283,12 @@ router.get('/:username', (req, res) => {
 				const friendsList = foundUser.friends;
 				if(user == sessionUser.username){
 					User.findOne({username: sessionUser.username}, (err, tempUser) => {
-						res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip});
+						if(req.query.error == undefined)
+							res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip});
+						else
+							res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip
+											,error: "Tip needs to be a number"
+						});			
 					});
 				}
 

@@ -7,13 +7,13 @@ function isError(reqBody){
 	if(Number.isNaN(parseInt(reqBody.amount))){
 		return true;
 	}
+	if(parseInt(reqBody.amount) == 0)
+		return true;
 	let total = 0;
-	let count = 0;
 	for(let key in reqBody){
 		if(reqBody.hasOwnProperty(key)){
 			if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
 					key !== "typeOfPayment" && key !== "amount"){
-				count++;
 				if(Number.isNaN(parseInt(reqBody[key])))
 					return true;
 				else
@@ -21,9 +21,36 @@ function isError(reqBody){
 			}
 		}
 	}
+
+	return false;
+}
+
+function correctMembersLength(reqBody){
+	let count = 0;
+	for(let key in reqBody){
+		if(reqBody.hasOwnProperty(key)){
+			if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
+					key !== "typeOfPayment" && key !== "amount"){
+				count++;
+			}
+		}
+	}
 	if(count <= 1)
 		return true;
+	return false;
+}
 
+function countTotals(reqBody){
+	let total = 0;
+	for(let key in reqBody){
+		if(reqBody.hasOwnProperty(key)){
+			if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
+					key !== "typeOfPayment" && key !== "amount"){
+				if(!Number.isNaN(parseInt(reqBody[key])))
+					total += parseInt(reqBody[key]);
+			}
+		}
+	}
 	if(reqBody.typeOfPayment == '%'){
 		if(total != 100)
 			return true;
@@ -32,8 +59,6 @@ function isError(reqBody){
 		if(total != reqBody.amount)
 			return true;
 	}
-
-	return false;
 }
 
 class BillFactory {
@@ -50,7 +75,10 @@ class BillFactory {
 		});
 		let id;
 		const reqBody = this.reqBody;
-		if(!isError(reqBody)){
+		let isErrorBool = isError(reqBody);
+		let correctMembersLengthBool = correctMembersLength(reqBody);
+		let countTotalsBool = countTotals(reqBody);
+		if(!isErrorBool && !correctMembersLengthBool && !countTotalsBool){
 			bill.save((err, addedBill)=>{
 				if (err){
 					res.send(err);
@@ -159,7 +187,12 @@ class BillFactory {
 			});
 		}
 		else{
-			res.redirect('/user/index?error=error');
+			if(correctMembersLengthBool)
+				res.redirect('/user/index?error=error1');
+			else if(countTotalsBool)
+				res.redirect('/user/index?error=error2');
+			else if(isErrorBool)
+				res.redirect('/user/index?error=error3');
 		}
 	}
 }
