@@ -41,24 +41,27 @@ router.post('/register', (req, res) => {
 	img.contentType = '/image/png';
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
 	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
-
-	User.register(new User(user), req.body.password, function(err, user){
-		if(err){
-			res.send(err)
-			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
-			// If error, reload page with error message
-		}
-		else{
-			passport.authenticate('local')(req, res, function() {
-				req.session.regenerate((err) => {
-					if(!err){
-						req.session.user = user;
-						res.redirect('/user/index'); // Until User web pages created
-					}
+	if(req.body.email == ""){
+		res.render('registration', {error: "No email provided"});
+	}
+	else{
+		User.register(new User(user), req.body.password, function(err, user){
+			if(err){
+				res.render('registration', {error: err.message});
+				// If error, reload page with error message
+			}
+			else{
+				passport.authenticate('local')(req, res, function() {
+					req.session.regenerate((err) => {
+						if(!err){
+							req.session.user = user;
+							res.redirect('/user/index'); // Until User web pages created
+						}
+					});
 				});
-			});
-		}
-	});
+			}
+		});
+	}
 });
 
 router.get('/login', (req, res) => {
@@ -75,8 +78,7 @@ router.post('/login', (req, res) => {
 
   	passport.authenticate('local', function(err, user){
 		if(!user){
-			res.send("no user found");
-			//res.render('login', {errMessage: "Error processing Login request"});
+			res.render('Login', {error: "Error in Username or Password"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
@@ -178,9 +180,15 @@ router.get('/index', (req, res) => {
 						});
 					}
 					if(notification !== undefined)
-						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+						if(req.query.error == undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Error Processing Bill"});
 					else
-						res.render('user', {"user": user, "friends": users, "groups": groups});
+						if(req.query.error == undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups, error: "Error Processing Bill"});
 					});	
 					
 			});
@@ -261,12 +269,10 @@ router.get('/:username', (req, res) => {
 					});
 				}
 				const friendsList = foundUser.friends;
-				console.log(friendsList);
-				if(user === sessionUser.username){
-					res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": sessionUser.img, "tip":sessionUser.defaultTip});
-					// User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-					// 	res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
-					// });
+				if(user == sessionUser.username){
+					User.findOne({username: sessionUser.username}, (err, tempUser) => {
+						res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip});
+					});
 				}
 
 				else{
