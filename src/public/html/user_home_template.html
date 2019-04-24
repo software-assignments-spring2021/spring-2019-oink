@@ -55,20 +55,15 @@
             <div class="user-profile-header">
 
                 
-                <div class="profile-pic" id="session-user-profile-pic" onclick ="openForm()">
+                <div class="profile-pic">
                     
                     <img src="../images/no_profile_picture.png" class="profile-pic" alt="Anon">
-                    <i class="fas fa-plus"></i>
+<!--                <i class="fas fa-plus"></i>-->
                 </div>
                 
                 <h2>Friend 1's Profile</h2>
 
-                <form id="change-profile-pic" class="hidden" action='/api/upload/image' enctype="multipart/form-data" method="post">
-                    <i class="fas fa-times" onclick="closeForm()"></i>
-                    <h2>Upload a new profile picture</h2>
-                    <input type="file" name="upload" accept="image/png, image/jpeg">
-                    <input type="submit" value="Upload">
-                </form>
+                <button id="add-friend" onclick="addFriend('{{ user }}')"><i class="fas fa-plus"></i>&nbsp;Add Friend</button><br>
             </div>
             
             
@@ -125,121 +120,47 @@
                 
                 </div>
                 
+
                 
                 <div class="user-profile-section">
-                    
-                    <h3>Transactions</h3>
-                    <section id="transactions" class="outline">
-                        <h4>Unpaid</h4>
-                        <section id="unpaid-transactions">
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                        </section>
+                    <h3>Friends</h3>
+                    <section id="friends" class="outline">
 
-                        <h4>Paid</h4>
-                        <section id="paid-transactions">
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                        </section>
+                        <ul>
+
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Friend</li></a>
+
+                        </ul>
 
                     </section>
-                    
                 </div>
                 
-                <div class="friends-and-groups">
-                
-                    <div class="user-profile-section">
-                        <h3>Friends</h3>
-                        <section id="friends" class="outline">
-                            
-                            <ul>
+                <div class="user-profile-section">
+                    <h3>Groups</h3>
+                    <section id="groups" class="outline">
+                        <ul>
 
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
+                            <a href="/user/{{ f.user }}"><li>Brunch Crew</li></a>
+                            <a href="/user/{{ f.user }}"><li>Study Group</li></a>
+                            <a href="/user/{{ f.user }}"><li>Roommates</li></a>
+                            <a href="/user/{{ f.user }}"><li>Group</li></a>
+                            <a href="/user/{{ f.user }}"><li>Group</li></a>
+                            <a href="/user/{{ f.user }}"><li>Group</li></a>
+                            <a href="/user/{{ f.user }}"><li>Group</li></a>
+                        </ul>
 
-                            </ul>
-
-                        </section>
-                    </div>
-                
-                    <div class="user-profile-section">
-                        <h3>Groups&nbsp;<a href="#"><i class="fas fa-plus"></i></a></h3>
-                        <section id="groups" class="outline">
-                            <ul>
-
-                                <a href="/user/{{ f.user }}"><li>Brunch Crew</li></a>
-                                <a href="/user/{{ f.user }}"><li>Study Group</li></a>
-                                <a href="/user/{{ f.user }}"><li>Roommates</li></a>
-                                <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                <a href="/user/{{ f.user }}"><li>Group</li></a>
-                            </ul>
-
-                        </section>
-                    </div>
-                
+                    </section>
                 </div>
+                
             
             </div>
-            
-            
-             <form action="/api/change-tip" method="post">
-                <h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
-                <input type="submit" value="Change Default">
-            </form>
-            
-            
-            
+                  
         </div>
 
         <footer>
