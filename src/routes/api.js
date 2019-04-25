@@ -9,67 +9,91 @@ const fs = require('fs');
 const formidable = require('formidable');
 const async = require('async');
 
-router.post('/add-friend',(req,res)=>{
-	const username = req.body.username; //username of the friend being added
-
+function addFriend(username, sessionUser, cb){
 	const newFriend = new Friend({
 		user: username,
 		balance: 0.00
 	});
 	const secondFriend = new Friend({
-		user: req.session.user.username,
+		user: sessionUser.username,
 		balance: 0.00
 	});
 
 	
-	User.findOne({"username": req.session.user.username},(err, doc)=>{
-		doc.friends.push(newFriend);
-		doc.save((err,saved)=>{
-			if(err){
-				console.log(err);
-				res.send({result: "error"});
+	User.findOne({"username": sessionUser.username},(err, doc)=>{
+		if(doc){
+			doc.friends.push(newFriend);
+			doc.save((err,saved)=>{
+				if(err){
+					console.log(err);
+					return cb(false);
+				}
+				else{
+					//add the friend so it's immediatly accessible
+					console.log(doc)
+					//req.session.user.friends.push(newFriend);
+					User.findOne({"username": username},(err, user)=>{
+						user.friends.push(secondFriend);
+						
+						user.save();
+						console.log(sessionUser);
+						return cb(true);
+					});
+				}
+			});
+		}
+		else
+			return cb(false);
+	});
+}
+/*
+router.post('/add-friend',(req,res)=>{
+	const username = req.body.username; //username of the friend being added
+	addFriend(username, req.session.user, function(bool){
+		if(bool)
+			res.send({result: "added"});
+		else
+			res.send({result: "error"});
+	});
+});*/
+
+function isFriend(username, user, cb){
+	User.findOne({"username": user.username}, (err, sessionUser) => {
+		if(sessionUser){
+			let friends = false;
+			for(let i = 0;i < sessionUser.friends.length; i++){
+
+				if(sessionUser.friends[i].user == username)
+					friends = true;
+			}
+			if(friends){
+				return cb(true);
 			}
 			else{
-				//add the friend so it's immediatly accessible
-				console.log(doc)
-				//req.session.user.friends.push(newFriend);
-				User.findOne({"username": username},(err, user)=>{
-					user.friends.push(secondFriend);
-					
-					user.save();
-					console.log(req.session.user);
-					res.send({result: "added"});
-					
-					
-				});
+				return cb(false);
 			}
-		});
+		}
+		else
+			return cb(false);
 	});
-});
+}
 
 // Used to determine whether a given username is friends
 // with the session user. Used for AJAX requests
 // meant to determine if an "Add Friend" button is needed
 // next to a given username
+/*
 router.post('/is-friend', (req, res) => {
 	const username = req.body.username;
 	const user = req.session.user;
-	User.findOne({"username": user.username}, (err, sessionUser) => {
-		let friends = false;
-		for(let i = 0;i < sessionUser.friends.length; i++){
-
-			if(sessionUser.friends[i].user == username)
-				friends = true;
-		}
-		if(friends){
+	isFriend(username, user, function(bool){
+		if(bool)
 			res.send("friends");
-		}
-		else{
+		else
 			res.send("not_friends");
-		}
 	});
-});
-
+});*/
+/*
 router.post('/upload/image', (req, res) => {
 	User.findOne({"username": req.session.user.username}, (err,sessionUser) => {
 		console.log(sessionUser);
@@ -187,6 +211,8 @@ router.post('/change-tip', (req, res) => {
 		//res.redirect('/user/'+req.session.user.username + "?error=error");
 		res.send("Error");
 	}
-});
+});*/
 
-module.exports = router;
+//module.exports = router;
+module.exports["addFriend"] = addFriend;
+module.exports["isFriend"] = isFriend;
