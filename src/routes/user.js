@@ -277,6 +277,7 @@ router.get('/:username', (req, res) => {
 
 				});
 
+				//get all transactions
 				const paid = []
 				const unpaid = []
 
@@ -291,25 +292,7 @@ router.get('/:username', (req, res) => {
 						}
 					});
 
-					console.log(paid, unpaid);
 				});
-
-
-				// for(let i = 0; i < foundUser.groups.length; i++){
-				// 	Group.findById(foundUser.groups[i], (err, group) => {
-				// 		if(group){
-				// 			if(group.administrator == sessionUser.username)
-				// 				adminGroups.push(group);
-				// 			else
-				// 				groups.push(group);
-				// 			allGroups.push(group);
-				// 		}
-				// 	});
-				// }
-				//const friendsList = foundUser.friends;
-				//console.log(friendsList);
-
-
 
 				if(user === sessionUser.username){
 					res.render("session-user-profile", {
@@ -321,10 +304,8 @@ router.get('/:username', (req, res) => {
 						"groups":groups, 
 						"friends": foundUser.friends, 
 						"image": sessionUser.img, 
-						"tip":sessionUser.defaultTip});
-					// User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-					// 	res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
-					// });
+						"tip":sessionUser.defaultTip
+					});
 				}
 
 				else{
@@ -336,7 +317,14 @@ router.get('/:username', (req, res) => {
 							friend = true;
 					}
 
-					res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": friend,  "image": tempUser.img});
+					res.render('user-profile', {
+						"user": user, 
+						"bills":allBills,
+						"groups": allGroups, 
+						"friends": foundUser.friends, 
+						"addFriend": friend,  
+						"image": foundUser.img
+					});
 
 				}
 			}
