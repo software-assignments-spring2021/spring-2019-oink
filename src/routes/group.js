@@ -47,7 +47,7 @@ router.post('/add', (req, res) => {
 						}
 
 						defaultPercentages[defaultPercentages.length-1] += (100 - sum);
-
+						console.log(groupMembers);
 						const group = new Group({
 							name: req.body.name,
 							inGroup: groupMembers,

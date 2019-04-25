@@ -13,11 +13,11 @@ function removeUser(username){
 
   div.parentNode.removeChild(div);
   const splitWith = document.getElementById('splitWith');
-  const users = splitWith.split(',');
+  const users = splitWith.value.split(',');
   let newString = "";
-  for(let i = 0; i < user.length; i++){
-    if(user[i] != username)
-      newString += user[i] + ',';
+  for(let i = 0; i < users.length; i++){
+    if(users[i] != username)
+      newString += users[i] + ',';
   }
   splitWith.value = newString;
 }

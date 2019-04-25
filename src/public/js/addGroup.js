@@ -4,19 +4,39 @@ function onClickAddUserToGroup(){
   const username = input.value;
   input.textContent = "";
   // add username to list of Friends to add to a bill
-  
 
   const div = document.getElementById("members");
+
+  const userDiv = document.createElement("div");
+  userDiv.setAttribute("id", username + "Block");
+
   const ul = div.childNodes[2];
 
   const li = document.createElement("li");
   li.textContent = username;
-  ul.appendChild(li);
 
   const txt = username + ',';
   const splitWith = document.getElementById("splitWith");
   splitWith.value += txt;
 
+  const button = document.createElement("button");
+  button.textContent = "Remove";
+  li.appendChild(button);
+  userDiv.appendChild(li);
+  ul.appendChild(userDiv);
+
+  button.onclick = function(){
+    while(userDiv.firstChild)
+      userDiv.removeChild(userDiv.firstChild);
+    const users = splitWith.value.split(',');
+    console.log(users);
+    let newString = "";
+    for(let i = 0; i < users.length; i++){
+      if(users[i] != username && users[i] != '')
+        newString += users[i] + ',';
+    }
+    splitWith.value = newString;
+  }
 } 
 
 function addNewUserToGroup(username, id){
