@@ -184,7 +184,7 @@ function handleAddGroup(req, user){
 function onClickAddGroup(id, user){
   const req = new XMLHttpRequest();
   console.log(user);
-  req.open('get', '/group/' + id, true);
+  req.open('get', '/group/get/' + id, true);
   req.addEventListener('load', () => {handleAddGroup(req, user);});
   req.send();
 }

@@ -67,8 +67,8 @@ router.post('/add', (req, res) => {
 									});
 								}
 							}
+							res.redirect(addedGroup._id + "?admin=true");
 						});
-						res.redirect('/user/' + user.username);
 					}
 				}
 				else{
@@ -108,6 +108,8 @@ router.post('/remove-member', (req, res) => {
 
 		const username = req.body.member;
 		const groupID = req.body.group;
+		console.log(username);
+		console.log(groupID);
 		Group.findOne({_id: groupID}, (err, group) => {
 			const index = group.inGroup.indexOf(username);
 			group.inGroup.splice(index, 1);
@@ -145,10 +147,9 @@ router.post('/add-member', (req, res) => {
 	}
 });
 
-router.get('/:id', (req, res) => {
+router.get('/get/:id', (req, res) => {
 
 	if(req.session.user){
-
 
 		const id = req.params.id;
 		Group.findById(id, (err, group) => {
@@ -161,6 +162,32 @@ router.get('/:id', (req, res) => {
 			}
 		});
 	}else{
+		res.redirect('/user/login');
+	}
+});
+
+router.get('/:id', (req, res) => {
+	if(req.session.user){
+		const id = req.params.id;
+		Group.findById(id, (error, group) => {
+			if(group){
+				const isAdmin = req.query.admin;
+				if(isAdmin == "true"){
+					res.render('group-profile-admin', {group: group});
+				}
+				else if(isAdmin == "false"){
+					if(group.inGroup.length > 0)
+						res.render('group-profile-normal', {group: group, user: req.session.user.username});
+					else
+						res.render('group-profile-normal', {group: group, noMembers: true});
+				}
+			}
+			else{
+				res.redirect('/user/index');
+			}
+		});
+	}
+	else{
 		res.redirect('/user/login');
 	}
 });
