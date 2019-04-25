@@ -41,27 +41,24 @@ router.post('/register', (req, res) => {
 	img.contentType = '/image/png';
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
 	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
-	if(req.body.email == ""){
-		res.render('registration', {error: "No email provided"});
-	}
-	else{
-		User.register(new User(user), req.body.password, function(err, user){
-			if(err){
-				res.render('registration', {error: err.message});
-				// If error, reload page with error message
-			}
-			else{
-				passport.authenticate('local')(req, res, function() {
-					req.session.regenerate((err) => {
-						if(!err){
-							req.session.user = user;
-							res.redirect('/user/index'); // Until User web pages created
-						}
-					});
+
+	User.register(new User(user), req.body.password, function(err, user){
+		if(err){
+			res.send(err)
+			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
+			// If error, reload page with error message
+		}
+		else{
+			passport.authenticate('local')(req, res, function() {
+				req.session.regenerate((err) => {
+					if(!err){
+						req.session.user = user;
+						res.redirect('/user/index'); // Until User web pages created
+					}
 				});
-			}
-		});
-	}
+			});
+		}
+	});
 });
 
 router.get('/login', (req, res) => {
@@ -78,7 +75,8 @@ router.post('/login', (req, res) => {
 
   	passport.authenticate('local', function(err, user){
 		if(!user){
-			res.render('Login', {error: "Error in Username or Password"});
+			res.send("no user found");
+			//res.render('login', {errMessage: "Error processing Login request"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
@@ -180,27 +178,9 @@ router.get('/index', (req, res) => {
 						});
 					}
 					if(notification !== undefined)
-						if(req.query.error == undefined)
-							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
-						else{
-							if(req.query.error == "error1")
-								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "At Least Two Members Needed for a Bill"});
-							if(req.qery.error == "error2")
-								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Bill Portions Should Add Up To Bill Total"});
-							else
-								res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, error: "Error Processing Bill"});
-						}
+						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
 					else
-						if(req.query.error == undefined)
-							res.render('user', {"user": user, "friends": users, "groups": groups});
-						else{
-							if(req.query.error == "error1")
-								res.render('user', {"user": user, "friends": users, "groups": groups, error: "At Least Two Members Needed for a Bill"});
-							if(req.query.error == "error2")
-								res.render('user', {"user": user, "friends": users, "groups": groups, error: "Bill Portions Should Add Up To Bill Total"});
-							else
-								res.render('user', {"user": user, "friends": users, "groups": groups, error: "Error Processing Bill"});
-						}
+						res.render('user', {"user": user, "friends": users, "groups": groups});
 					});	
 					
 			});
@@ -258,59 +238,101 @@ router.get('/:username', (req, res) => {
 
 
 	if(req.session.user){
+
+
 		const user = req.params.username;
 		const sessionUser = req.session.user;
+
 		User.findOne({"username": user}, (err, foundUser) => {
 			if(!foundUser){
 				res.redirect('/user/index');
 			}
 
 			else{
+				//get all groups
 				const groups = [];
 				const adminGroups = [];
 				const allGroups = [];
-				for(let i = 0; i < foundUser.groups.length; i++){
-					Group.findById(foundUser.groups[i], (err, group) => {
-						if(group){
-							if(group.administrator == sessionUser.username)
-								adminGroups.push(group);
-							else
-								groups.push(group);
-							allGroups.push(group);
+				Group.find({"_id":{$in:foundUser.groups}}).exec((err, docs)=>{
+					if(docs){
+						
+						docs.forEach((doc)=>{
+							allGroups.push(doc);
+
+							if (doc.administrator === sessionUser.username){
+								adminGroups.push(doc);
+							}
+							else{
+								groups.push(doc);
+							}
+						});
+					}
+
+				});
+				//get all bills
+				const allBills = []
+				Bill.find({"_id":{$in:foundUser.bills}}).exec((err, docs)=>{
+					//console.log(docs);
+					docs.forEach((doc)=>{allBills.push(doc)});
+
+				});
+
+				//get all transactions
+				const paid = []
+				const unpaid = []
+
+				Transaction.find({"_id":{$in:foundUser.transactions}}).exec((err, docs)=>{
+					docs.forEach((doc)=>{
+						//console.log(doc);
+						if (doc.isPaid){
+							paid.push(doc);
+						}
+						else{
+							unpaid.push(doc);
 						}
 					});
-				}
-				const friendsList = foundUser.friends;
-				if(user == sessionUser.username){
-					User.findOne({username: sessionUser.username}, (err, tempUser) => {
-						if(req.query.error == undefined)
-							res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip});
-						else
-							res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": tempUser.img, "tip":sessionUser.defaultTip
-											,error: "Tip needs to be a number"
-						});			
+
+				});
+
+				if(user === sessionUser.username){
+
+					res.render("session-user-profile", {
+						"user": foundUser.username, 
+						"bills": allBills,
+						"paid":paid,
+						"unpaid":unpaid,
+						"adminGroups":adminGroups, 
+						"groups":groups, 
+						"friends": foundUser.friends, 
+						"image": foundUser.img, 
+						"tip":foundUser.defaultTip
 					});
 				}
 
 				else{
 					let friend = false;
-					User.findOne({"username": sessionUser.username}, (err, tempUser) => {
-						for(let i = 0; i < tempUser.friends.length; i++){
-							if(tempUser.friends[i].user == user)
-								friend = true;
-						}
-						if(friend)
-							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "image": tempUser.img});
-						else
-							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": "Add Friend"
-								, "image": tempUser.img});
-						});
+
+
+					for(let i = 0; i < sessionUser.friends.length; i++){
+						if(sessionUser.friends[i].user == user)
+							friend = true;
+					}
+
+					res.render('user-profile', {
+						"user": user, 
+						"bills":allBills,
+						"groups": allGroups, 
+						"friends": foundUser.friends, 
+						"addFriend": friend,  
+						"image": foundUser.img
+					});
+
 				}
 			}
 		});
 	}
 	else{
-		res.redirect('login');
+		res.redirect('/user/login');
 	}
 
 });
