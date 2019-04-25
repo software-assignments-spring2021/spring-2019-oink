@@ -38,11 +38,7 @@
                         <i class="fas fa-search" onclick="openSearch()"></i>
                         <form method = "GET" action = "/users/search">
                             <input type="text" onfocus="openSearch()" placeholder="" onkeyup="searchOnKeyUp(event)" id="search" name="username">
-                            <div class="search-dropdown">
-                            {{#each allUsers as |u|}}
-                                <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a>
-                            {{/each}}
-                            </div>
+                            
                         </form>
                         
                     </div>
@@ -54,6 +50,10 @@
                 </form>
             </div>
         </header>
+
+        <div class="search-dropdown">
+            
+        </div>
 
         <div class="content">
 
