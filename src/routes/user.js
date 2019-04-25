@@ -264,9 +264,6 @@ router.get('/:username', (req, res) => {
 				console.log(friendsList);
 				if(user === sessionUser.username){
 					res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": sessionUser.img, "tip":sessionUser.defaultTip});
-					// User.findOne({"username": sessionUser.username}, (err, foundUser) => {
-					// 	res.render('session-user-profile', {"user": user, "admin": true, "adminGroups": adminGroups, "groups": groups, "friends": friendsList, "image": foundUser.img, "tip": foundUser.defaultTip});
-					// });
 				}
 
 				else{

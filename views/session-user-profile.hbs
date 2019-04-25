@@ -30,7 +30,7 @@
         {{#each bills as |bill|}}
             <article>
                 <span class="amount">${{ bill.amount }}</span>
-				<span class="date">added</span>
+				<span class="date">{{bill.dateCreated}}</span>
 				<span class="view"><a href="/bill/view/{{bill._id}}">View Bill <i class="fas fa-arrow-right"></i></a></span>
             </article>  
         {{/each}}
@@ -101,12 +101,23 @@
         <div class="user-profile-section">
             <h3>Groups&nbsp;<a href="/group/add"><i class="fas fa-plus"></i></a></h3>
             <section id="groups" class="outline">
-                <ul>
-                	{{#each groups}}
-                    <a href="/group/{{_id}}"><li>{{name}}</li></a>
-                	{{/each}}
+                <section>
+                    <h4>My Groups</h4>
+                    <ul>
+                    	{{#each adminGroups}}
+                        <a href="/group/{{_id}}?admin="true"><li>{{name}}</li></a>
+                    	{{/each}}
+                    </ul>
+                </section>
 
-                </ul>
+                <section>
+                    <h4>Groups I'm In</h4>
+                    <ul>
+                        {{#each groups}}
+                        <a href="/group/{{_id}}?admin="false"><li>{{name}}</li></a>
+                        {{/each}}
+                    </ul>
+                </section>
 
             </section>
         </div>

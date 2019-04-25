@@ -35,6 +35,16 @@ input[type="submit"]{
 
 div.user-profile-header{
     
+    
+    
+    #add-friend{
+        padding:0.5% 1%;
+        
+        i{
+            width:auto;
+        }
+    }
+    
     #change-profile-pic{
         position:fixed;
         top:0;
@@ -104,7 +114,7 @@ div.user-profile-header{
         //object-fit: cover;
         background-color:black;
         
-        &:hover{
+        &#session-user-profile-pic:hover{
             cursor:pointer;
             
             i{
@@ -131,6 +141,12 @@ div.user-profile-content{
     height:70vh;
     @include flex(row, no-wrap, center, flex-start, stretch);
     
+    h4{
+        font-size:1.2em;
+        background-color:$hot-pink;
+        padding:1.2%;
+    }
+    
     h3{
         > a > i{
             //display: inline-block;
@@ -154,19 +170,32 @@ div.user-profile-content{
         
     }
     
-    section#bills, section#transactions{
+    section#transactions, section#bills, section#friends, section#groups{
         height: 100%;
+        
         overflow-y: scroll;
-    }
-    
-    section#friends, section#groups{
-        height: 27vh;
+        
+        
         
         ul{
             height:100%;
-            overflow-y: scroll;
+            //overflow-y: scroll;
+            
+            text-align: center;
+        
+            a:hover li{
+                background-color:$bright-green;
+            }
+
+            li{
+                padding:3% 0;
+                font-size:1.2em;
+
+            }
         }
     }
+    
+    
     
     .outline{
         border: 5px solid black;
@@ -177,16 +206,10 @@ div.user-profile-content{
     .friends-and-groups{
         width:40%;
         
-        text-align: center;
+        section#friends, section#groups{
+        height: 27vh;
         
-        a:hover li{
-            background-color:$bright-green;
-        }
-            
-        li{
-            padding:3% 0;
-            font-size:1.2em;
-
+        
         }
     }
 }
