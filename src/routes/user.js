@@ -238,53 +238,101 @@ router.get('/:username', (req, res) => {
 
 
 	if(req.session.user){
+
+
 		const user = req.params.username;
 		const sessionUser = req.session.user;
+
 		User.findOne({"username": user}, (err, foundUser) => {
 			if(!foundUser){
 				res.redirect('/user/index');
 			}
 
 			else{
+				//get all groups
 				const groups = [];
 				const adminGroups = [];
 				const allGroups = [];
-				for(let i = 0; i < foundUser.groups.length; i++){
-					Group.findById(foundUser.groups[i], (err, group) => {
-						if(group){
-							if(group.administrator == sessionUser.username)
-								adminGroups.push(group);
-							else
-								groups.push(group);
-							allGroups.push(group);
+				Group.find({"_id":{$in:foundUser.groups}}).exec((err, docs)=>{
+					if(docs){
+						
+						docs.forEach((doc)=>{
+							allGroups.push(doc);
+
+							if (doc.administrator === sessionUser.username){
+								adminGroups.push(doc);
+							}
+							else{
+								groups.push(doc);
+							}
+						});
+					}
+
+				});
+				//get all bills
+				const allBills = []
+				Bill.find({"_id":{$in:foundUser.bills}}).exec((err, docs)=>{
+					//console.log(docs);
+					docs.forEach((doc)=>{allBills.push(doc)});
+
+				});
+
+				//get all transactions
+				const paid = []
+				const unpaid = []
+
+				Transaction.find({"_id":{$in:foundUser.transactions}}).exec((err, docs)=>{
+					docs.forEach((doc)=>{
+						//console.log(doc);
+						if (doc.isPaid){
+							paid.push(doc);
+						}
+						else{
+							unpaid.push(doc);
 						}
 					});
-				}
-				const friendsList = foundUser.friends;
-				console.log(friendsList);
+
+				});
+
 				if(user === sessionUser.username){
-					res.render("session-user-profile", {"user": sessionUser.username, "admin":true, "adminGroups":adminGroups, "groups":groups, "friends": friendsList, "image": sessionUser.img, "tip":sessionUser.defaultTip});
+
+					res.render("session-user-profile", {
+						"user": sessionUser.username, 
+						"bills": allBills,
+						"paid":paid,
+						"unpaid":unpaid,
+						"adminGroups":adminGroups, 
+						"groups":groups, 
+						"friends": foundUser.friends, 
+						"image": sessionUser.img, 
+						"tip":sessionUser.defaultTip
+					});
 				}
 
 				else{
 					let friend = false;
-					User.findOne({"username": sessionUser.username}, (err, tempUser) => {
-						for(let i = 0; i < tempUser.friends.length; i++){
-							if(tempUser.friends[i].user == user)
-								friend = true;
-						}
-						if(friend)
-							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "image": tempUser.img});
-						else
-							res.render('user-profile', {"user": user, "groups": allGroups, "friends": friendsList, "addFriend": "Add Friend"
-								, "image": tempUser.img});
-						});
+
+
+					for(let i = 0; i < sessionUser.friends.length; i++){
+						if(sessionUser.friends[i].user == user)
+							friend = true;
+					}
+
+					res.render('user-profile', {
+						"user": user, 
+						"bills":allBills,
+						"groups": allGroups, 
+						"friends": foundUser.friends, 
+						"addFriend": friend,  
+						"image": foundUser.img
+					});
+
 				}
 			}
 		});
 	}
 	else{
-		res.redirect('login');
+		res.redirect('/user/login');
 	}
 
 });
