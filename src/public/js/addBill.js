@@ -13,11 +13,11 @@ function removeUser(username){
 
   div.parentNode.removeChild(div);
   const splitWith = document.getElementById('splitWith');
-  const users = splitWith.split(',');
+  const users = splitWith.value.split(',');
   let newString = "";
-  for(let i = 0; i < user.length; i++){
-    if(user[i] != username)
-      newString += user[i] + ',';
+  for(let i = 0; i < users.length; i++){
+    if(users[i] != username)
+      newString += users[i] + ',';
   }
   splitWith.value = newString;
 }
@@ -184,7 +184,7 @@ function handleAddGroup(req, user){
 function onClickAddGroup(id, user){
   const req = new XMLHttpRequest();
   console.log(user);
-  req.open('get', '/group/' + id, true);
+  req.open('get', '/group/get/' + id, true);
   req.addEventListener('load', () => {handleAddGroup(req, user);});
   req.send();
 }

@@ -1,0 +1,13 @@
+<h3>{{ group.name }}'s Page!</h3>
+{{#if noMembers}}
+	<h3>There are No Members In This Group</h3>
+{{else}}
+	{{#each group.inGroup}}
+		<div id="{{this}}">
+			<input type="text" value="{{this}}" readonly>
+		</div>
+	{{/each}}<br>
+	<button onclick="leaveGroup('{{ user }}','{{group._id}}')">Leave Group</button>
+{{/if}}
+
+<script src="/js/adjust_group.js"></script>

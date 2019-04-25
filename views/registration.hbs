@@ -1,6 +1,10 @@
 <h1>Registration</h1>
 
 <form action="" method="post">
+
+  {{#if error}}
+    <h3>{{ error }}</h3>
+  {{/if}}
   
   Username:<br>
   <input type="text" name="username" >

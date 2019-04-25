@@ -297,15 +297,15 @@ router.get('/:username', (req, res) => {
 				if(user === sessionUser.username){
 
 					res.render("session-user-profile", {
-						"user": sessionUser.username, 
+						"user": foundUser.username, 
 						"bills": allBills,
 						"paid":paid,
 						"unpaid":unpaid,
 						"adminGroups":adminGroups, 
 						"groups":groups, 
 						"friends": foundUser.friends, 
-						"image": sessionUser.img, 
-						"tip":sessionUser.defaultTip
+						"image": foundUser.img, 
+						"tip":foundUser.defaultTip
 					});
 				}
 
