@@ -42,23 +42,28 @@ router.post('/register', (req, res) => {
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
 	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
 
-	User.register(new User(user), req.body.password, function(err, user){
-		if(err){
-			res.send(err)
-			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
-			// If error, reload page with error message
-		}
-		else{
-			passport.authenticate('local')(req, res, function() {
-				req.session.regenerate((err) => {
-					if(!err){
-						req.session.user = user;
-						res.redirect('/user/index'); // Until User web pages created
-					}
+	if(user.email != ""){
+		User.register(new User(user), req.body.password, function(err, user){
+			if(err){
+				console.log(err);
+				res.render('registration', {error: err.message});
+				// If error, reload page with error message
+			}
+			else{
+				passport.authenticate('local')(req, res, function() {
+					req.session.regenerate((err) => {
+						if(!err){
+							req.session.user = user;
+							res.redirect('/user/index'); // Until User web pages created
+						}
+					});
 				});
-			});
-		}
-	});
+			}
+		});
+	}
+	else{
+		res.render('registration', {error: "No Email Provided"});
+	}
 });
 
 router.get('/login', (req, res) => {
@@ -75,8 +80,7 @@ router.post('/login', (req, res) => {
 
   	passport.authenticate('local', function(err, user){
 		if(!user){
-			res.send("no user found");
-			//res.render('login', {errMessage: "Error processing Login request"});
+			res.render('Login', {error: "Error in username or password"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
@@ -174,15 +178,30 @@ router.get('/index', (req, res) => {
 					const groups = [];
 					for(let i = 0; i < user.groups.length; i++){
 						Group.findById(user.groups[i], (err, group) => {
-							groups.push(group);
+							if(group)
+								groups.push(group);
 						});
 					}
-					if(notification !== undefined)
-						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
-					else
-						res.render('user', {"user": user, "friends": users, "groups": groups});
-					});	
-					
+					if(req.query.error == undefined){
+						if(notification !== undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups});
+					}
+					else{
+						let error = "Error Processing Bill";
+						if(req.query.error == "error1")
+							error = "Incorrect Number of Users";
+						else if(req.query.error == "error2")
+							error = "Bill Portions do not add up to total";
+
+						if(notification !== undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, 'error': error});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups, 'error': error});
+
+					}
+				});					
 			});
 		});
 	}
@@ -296,17 +315,33 @@ router.get('/:username', (req, res) => {
 
 				if(user === sessionUser.username){
 
-					res.render("session-user-profile", {
-						"user": foundUser.username, 
-						"bills": allBills,
-						"paid":paid,
-						"unpaid":unpaid,
-						"adminGroups":adminGroups, 
-						"groups":groups, 
-						"friends": foundUser.friends, 
-						"image": foundUser.img, 
-						"tip":foundUser.defaultTip
-					});
+					if(req.query.error == undefined){
+						res.render("session-user-profile", {
+							"user": foundUser.username, 
+							"bills": allBills,
+							"paid":paid,
+							"unpaid":unpaid,
+							"adminGroups":adminGroups, 
+							"groups":groups, 
+							"friends": foundUser.friends, 
+							"image": foundUser.img, 
+							"tip":foundUser.defaultTip
+						});
+					}
+					else{
+						res.render("session-user-profile", {
+							"user": foundUser.username, 
+							"bills": allBills,
+							"paid":paid,
+							"unpaid":unpaid,
+							"adminGroups":adminGroups, 
+							"groups":groups, 
+							"friends": foundUser.friends, 
+							"image": foundUser.img, 
+							"tip":foundUser.defaultTip,
+							error: "Number Needed for Tip"
+						});
+					}
 				}
 
 				else{
@@ -317,7 +352,6 @@ router.get('/:username', (req, res) => {
 						if(sessionUser.friends[i].user == user)
 							friend = true;
 					}
-
 					res.render('user-profile', {
 						"user": user, 
 						"bills":allBills,
@@ -326,7 +360,6 @@ router.get('/:username', (req, res) => {
 						"addFriend": friend,  
 						"image": foundUser.img
 					});
-
 				}
 			}
 		});
