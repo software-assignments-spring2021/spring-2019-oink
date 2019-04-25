@@ -34,6 +34,12 @@ div.user-profile-header {
   justify-content: center;
   padding: 2% 0;
 }
+div.user-profile-header #add-friend {
+  padding: 0.5% 1%;
+}
+div.user-profile-header #add-friend i {
+  width: auto;
+}
 div.user-profile-header #change-profile-pic {
   position: fixed;
   top: 0;
@@ -84,13 +90,13 @@ div.user-profile-header div.profile-pic i {
   left: 40%;
   top: -50%;
 }
-div.user-profile-header div.profile-pic:hover {
+div.user-profile-header div.profile-pic#session-user-profile-pic:hover {
   cursor: pointer;
 }
-div.user-profile-header div.profile-pic:hover i {
+div.user-profile-header div.profile-pic#session-user-profile-pic:hover i {
   display: block;
 }
-div.user-profile-header div.profile-pic:hover img {
+div.user-profile-header div.profile-pic#session-user-profile-pic:hover img {
   opacity: 0.6;
 }
 div.user-profile-header div.profile-pic img {
@@ -105,6 +111,11 @@ div.user-profile-content {
   align-content: center;
   align-items: flex-start;
   justify-content: stretch;
+}
+div.user-profile-content h4 {
+  font-size: 1.2em;
+  background-color: #F92A82;
+  padding: 1.2%;
 }
 div.user-profile-content h3 {
   padding: 1%;
@@ -122,30 +133,29 @@ div.user-profile-content > * {
   width: 50%;
   height: 60vh;
 }
-div.user-profile-content section#bills, div.user-profile-content section#transactions {
+div.user-profile-content section#transactions, div.user-profile-content section#bills, div.user-profile-content section#friends, div.user-profile-content section#groups {
   height: 100%;
   overflow-y: scroll;
 }
-div.user-profile-content section#friends, div.user-profile-content section#groups {
-  height: 27vh;
-}
-div.user-profile-content section#friends ul, div.user-profile-content section#groups ul {
+div.user-profile-content section#transactions ul, div.user-profile-content section#bills ul, div.user-profile-content section#friends ul, div.user-profile-content section#groups ul {
   height: 100%;
-  overflow-y: scroll;
+  text-align: center;
+}
+div.user-profile-content section#transactions ul a:hover li, div.user-profile-content section#bills ul a:hover li, div.user-profile-content section#friends ul a:hover li, div.user-profile-content section#groups ul a:hover li {
+  background-color: #7AC74F;
+}
+div.user-profile-content section#transactions ul li, div.user-profile-content section#bills ul li, div.user-profile-content section#friends ul li, div.user-profile-content section#groups ul li {
+  padding: 3% 0;
+  font-size: 1.2em;
 }
 div.user-profile-content .outline {
   border: 5px solid black;
 }
 div.user-profile-content .friends-and-groups {
   width: 40%;
-  text-align: center;
 }
-div.user-profile-content .friends-and-groups a:hover li {
-  background-color: #7AC74F;
-}
-div.user-profile-content .friends-and-groups li {
-  padding: 3% 0;
-  font-size: 1.2em;
+div.user-profile-content .friends-and-groups section#friends, div.user-profile-content .friends-and-groups section#groups {
+  height: 27vh;
 }
 
 div.container {

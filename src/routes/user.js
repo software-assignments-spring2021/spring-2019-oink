@@ -283,7 +283,7 @@ router.get('/:username', (req, res) => {
 
 				Transaction.find({"_id":{$in:foundUser.transactions}}).exec((err, docs)=>{
 					docs.forEach((doc)=>{
-						console.log(doc);
+						//console.log(doc);
 						if (doc.isPaid){
 							paid.push(doc);
 						}
@@ -295,6 +295,7 @@ router.get('/:username', (req, res) => {
 				});
 
 				if(user === sessionUser.username){
+
 					res.render("session-user-profile", {
 						"user": sessionUser.username, 
 						"bills": allBills,
