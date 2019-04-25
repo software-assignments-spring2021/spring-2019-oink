@@ -33,6 +33,8 @@ input[type="submit"]{
 }
 
 
+
+
 div.user-profile-header{
     
     
@@ -282,6 +284,29 @@ header{
                 //width:0;
                 transition: width ease-in-out 0.5s;
                 font-family:$default;
+            }
+            
+            div.search-dropdown{
+                background-color:white;
+                width:auto;
+                position: absolute;
+                top:90%;
+                
+                box-shadow: 2px 2px 4px grey;
+                
+                ul.search-results{
+                    
+                    
+                    
+                    a li{
+                        padding:2% 30%;
+                    }
+                    
+                    a:hover li{
+                        cursor: pointer;
+                        background-color:$medium-green;
+                    }
+                }
             }
         }
         

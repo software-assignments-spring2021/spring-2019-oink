@@ -236,6 +236,20 @@ header div.right-side-header div.search-bar input#search {
   transition: width ease-in-out 0.5s;
   font-family: "Open Sans", sans-serif;
 }
+header div.right-side-header div.search-bar div.search-dropdown {
+  background-color: white;
+  width: auto;
+  position: absolute;
+  top: 90%;
+  box-shadow: 2px 2px 4px grey;
+}
+header div.right-side-header div.search-bar div.search-dropdown ul.search-results a li {
+  padding: 2% 30%;
+}
+header div.right-side-header div.search-bar div.search-dropdown ul.search-results a:hover li {
+  cursor: pointer;
+  background-color: #7EB77F;
+}
 header div.right-side-header h3.username {
   text-align: right;
   font-family: "Open Sans Condensed", sans-serif;

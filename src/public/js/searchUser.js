@@ -27,8 +27,9 @@ function createElement(elementType, attributes, text){
 function addResultsToDropDown(docs){
   //console.log(docs);
 
-  const list = createElement("ul", {"class": "dropResults"});
-  //const lis = [];
+  const list = document.querySelector("div.search-dropdown ul.search-results");
+  console.log(list);
+
   let a, li;
 
   docs.forEach((doc)=>{
@@ -38,15 +39,17 @@ function addResultsToDropDown(docs){
     a.appendChild(li);
 
     list.appendChild(a);
+
+
   });
 
-  document.querySelector("div.search-dropdown").appendChild(list);
+  //document.querySelector("div.search-dropdown").appendChild(list);
 
 
 }
 
 function searchOnKeyUp(evt){
-  document.querySelector("div.search-dropdown").innerHTML = "" //clear out the dropdown
+  document.querySelector("ul.search-results").innerHTML = "" //clear out the dropdown
 
   const value = evt.target.value;
   console.log(value);
