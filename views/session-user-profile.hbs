@@ -105,7 +105,7 @@
                     <h4>My Groups</h4>
                     <ul>
                     	{{#each adminGroups}}
-                        <a href="/group/{{_id}}?admin="true"><li>{{name}}</li></a>
+                        <a href="/group/{{_id}}?admin=true"><li>{{name}}</li></a>
                     	{{/each}}
                     </ul>
                 </section>
@@ -114,7 +114,7 @@
                     <h4>Groups I'm In</h4>
                     <ul>
                         {{#each groups}}
-                        <a href="/group/{{_id}}?admin="false"><li>{{name}}</li></a>
+                        <a href="/group/{{_id}}?admin=false"><li>{{name}}</li></a>
                         {{/each}}
                     </ul>
                 </section>
