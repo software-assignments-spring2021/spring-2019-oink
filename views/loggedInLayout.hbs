@@ -19,8 +19,6 @@
         <ul>
             <a href="/user/{{sessionUser.username}}"><li>My Profile</li></a>
             <a href="/user/index"><li>Add a bill</li></a>
-            <!-- <a href="/user/my-bills"><li>View My Bills</li></a>
-            <a href="/user/my-transactions"><li>View My Transactions</li></a> -->
             <a href="/user/my-balances"><li>View My Balances</li></a>
             <a href="/group/add"><li>Create A Group</li></a>
         </ul>
@@ -40,9 +38,9 @@
                         <i class="fas fa-search" onclick="openSearch()"></i>
                         <input type="text" placeholder="" onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()">
                         
-                        <div class="dropdown hidden">
+                        <div class="dropdown">
                         {{#each allUsers as |u|}}
-                            <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a><br>
+                            <a class="users" href="/user/{{ u.username }}" hidden>{{ u.username }}</a>
                         {{/each}}
                         </div>
                     </div>

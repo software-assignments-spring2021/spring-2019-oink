@@ -8,9 +8,9 @@
     
     <h2>{{user}} Profile</h2>
 
-    {{#if addFriend}}
-		<button onclick="addFriend('{{ user }}')">Add Friend</button><br>
-	{{/if}}
+    {{#unless addFriend}}
+		<button onclick="addFriend('{{ user }}')"><i class="fas fa-plus"></i>Add Friend</button><br>
+	{{/unless}}
 
 </div>
 

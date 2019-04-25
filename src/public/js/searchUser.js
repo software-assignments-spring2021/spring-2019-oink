@@ -3,6 +3,7 @@ function searchUserFilter() {
   input = document.getElementById("search");
   filter = input.value.toUpperCase();
   div = document.getElementById("usersDropdown");
+  
   a = div.getElementsByTagName("a");
   for (i = 0; i < a.length; i++) {
     txtValue = a[i].textContent || a[i].innerText;
