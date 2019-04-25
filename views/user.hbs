@@ -17,7 +17,7 @@
             <label for="pretip">$</label><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
         </div>
         <div class="tip">
-            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="20"><span class="label">(%)</span>
+            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="{{ user.defaultTip }}"><span class="label">(%)</span>
             <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
         </div>
     </div>
