@@ -88,7 +88,7 @@ router.post('/upload/image', (req, res) => {
 	        sessionUser.img.rawSRC = __dirname + '/../public/images/' + file.name;
 			sessionUser.img.src = '/images/' + file.name;
 			sessionUser.save(() => {
-				res.redirect('/user/'+req.session.user.username);
+				res.redirect('/user/' + req.session.user.username);
 			});
 	    });		
 
@@ -180,11 +180,12 @@ router.post('/change-tip', (req, res) => {
 		User.findOne({"username": user}, (err, foundUser) => {
 			foundUser.defaultTip = parseInt(newTip);
 			foundUser.save();
-			res.redirect('/user/index');
+			res.send('Tip Changed');
 		});
 	}
 	else{
-		res.redirect('/user/'+req.session.user.username + "?error=error");
+		//res.redirect('/user/'+req.session.user.username + "?error=error");
+		res.send("Error");
 	}
 });
 

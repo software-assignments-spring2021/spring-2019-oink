@@ -129,12 +129,10 @@
 
 {{#if tip}}
 {{#if error}}
-    <h3>{{ error }}</h3>
+    <h3 class="error">{{ error }}</h3>
 {{/if}}
- <form action="/api/change-tip" method="post">
-    <h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
-    <input type="submit" value="Change Default">
-</form>
+    <h3>Your Default Tip is: <input type="text" id="tip" name="tip" value="{{ tip }}">%</h3>
+    <button id="changeTip" onclick="onClickChangeTip()">Change Default</button>
 {{/if}}
 
 <script src="/js/add_friend.js"></script>
