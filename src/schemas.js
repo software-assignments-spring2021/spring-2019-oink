@@ -74,4 +74,4 @@ mongoose.model('User', UserSchema);
 
 
 
-mongoose.connect('mongodb://localhost/oink_dev');
+mongoose.connect('mongodb://localhost/oink_dev', { useNewUrlParser: true });
