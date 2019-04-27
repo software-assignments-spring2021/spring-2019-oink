@@ -7,7 +7,7 @@ const Bill = mongoose.model("Bill");
 const Transaction = mongoose.model("Transaction");
 const Friend = mongoose.model("Friend");
 
-const BF = require('../public/js/BillFactory');
+const BF = require('../public/js/server-side/BillFactory');
 
 const dateTime = require('node-datetime');
 
@@ -36,7 +36,12 @@ router.post('/add', (req, res)=>{
 		formattedBody = JSON.parse(JSON.stringify(req.body));
 		const BillFactory = new BF.BillFactory(formattedBody);
 		
-		BillFactory.createBill(formatted, user, req.body.amount, friendsToSplit, req.body.comment, res);		
+		BillFactory.createBill(formatted, user, friendsToSplit, function(ret){
+			if(ret == 'error')
+				res.send('error');
+			else
+				res.redirect(ret);
+		});		
 	}
 
 	else{
@@ -52,40 +57,11 @@ router.post('/add', (req, res)=>{
 router.get('/view/:id', (req, res) => {
 	if(req.session.user){
 		const id = req.params.id;
-		Bill.findById(id, (err, bill)=>{
-			if(!err){
-				Transaction.find({"bill": id}, (err, transactions) => {
-					User.findOne({"username": req.session.user.username}, (err, sessionUser) => {
-						const friends = [];
-						const nonfriends = [];
-						for(let i = 0; i < transactions.length; i++){
-							const user = transactions[i].paidBy;
-							let isFriend = false;
-							for(let j = 0; j < sessionUser.friends.length; j++){
-								if(sessionUser.friends[j].user == user){
-									isFriend = true;
-									friends.push(transactions[i]);
-								}
-							}
-
-							if(user == sessionUser.username)
-								friends.push(transactions[i]);
-
-							else if(!isFriend)
-								nonfriends.push(transactions[i]);
-						}
-						console.log(friends);
-						console.log(nonfriends);
-						res.render('billSummary', {"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-						"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
-						nonfriends});
-					});
-				});
-			}
-			else{
-				console.log(err);
-				res.send('error');
-			}
+		BF.viewBill(id, req.session.user.username, function(ret){
+			if(ret == 'error')
+				res.send(ret);
+			else
+				res.render('billSummary', ret);
 		});
 	}
 	else{
