@@ -7,7 +7,7 @@ const app = require("../src/public/js/server-side/api_helpers.js");
 const User = mongoose.model("User");
 const Transaction = mongoose.model("Transaction");
 
-describe('Oink API Tests', function(){
+describe('Oink API Router Tests', function(){
 
 	const user = new User({
 		username: "test",
