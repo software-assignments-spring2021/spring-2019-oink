@@ -152,7 +152,7 @@ function removeTransaction(id, cb){
 }
 
 function changeTip(tip, user, cb){
-	if(!Number.isNaN(parseInt(tip))){
+	if(!Number.isNaN(parseInt(tip)) && parseInt(tip) >= 0){
 		User.findOne({"username": user}, (err, foundUser) => {
 			foundUser.defaultTip = parseInt(tip);
 			foundUser.save(function(err, doc){

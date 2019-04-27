@@ -45,6 +45,10 @@ router.post('/add', (req, res)=>{
 
 });
 
+// Bill summary page displayed after creation of bill and viewable from user-profile page.
+// Displays all relative fields of bill, including the created transactions, the amount,
+// and the comment. 
+
 router.get('/view/:id', (req, res) => {
 	if(req.session.user){
 		const id = req.params.id;

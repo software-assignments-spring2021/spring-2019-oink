@@ -24,6 +24,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Registration page to create an account accessible from
+// Landing page.
 router.get('/register', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 
@@ -35,6 +37,9 @@ router.get('/register', (req, res) => {
 	}
 });
 
+// Creates new account with user input for username, email, and password.
+// All sensitive information hashed with PassportJS. Default profile picture
+// set.
 router.post('/register', (req, res) => {
 	const img = {};
 	img.src = '/images/no_profile_picture.png';
@@ -66,6 +71,8 @@ router.post('/register', (req, res) => {
 	}
 });
 
+
+// Login page accessible from landing page or registration page.
 router.get('/login', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 	if(req.session.user){
@@ -76,6 +83,9 @@ router.get('/login', (req, res) => {
 	}
 });
 
+// Uses PassportJS to verify inputted passport with hashed/salted password
+// stored in the database. If incorrect, rerenders with error message.
+// Otherwise, takes User to Add-Bill page. 
 router.post('/login', (req, res) => {
 
   	passport.authenticate('local', function(err, user){
@@ -94,7 +104,7 @@ router.post('/login', (req, res) => {
 	})(req, res);
 });
 
-
+// Ends current session of user. Redirects to landing Page.
 router.get('/logout', (req, res) => {
 
   	req.session.destroy(function(err){
@@ -107,6 +117,8 @@ router.get('/logout', (req, res) => {
 	});
 });
 
+// Renders all transactions of a user (both paid and unpaid) with option
+// to "pay" and update balances with another user if friends.
 router.get('/my-transactions', (req, res) => {
 	const user = req.session.user;
 	if(user){
@@ -127,6 +139,8 @@ router.get('/my-transactions', (req, res) => {
 	}
 });
 
+// Will mark transaction as paid in db and update balance
+// between two users if friends.
 router.post('/pay-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	Transaction.findById(id, (err, transaction) => {
@@ -155,6 +169,8 @@ router.post('/pay-transaction/:id', (req, res) => {
 	});
 });
 
+// Add bill page for user, only accessible with account. Notification displays if any unpaid transactions
+// for a session user. 
 router.get('/index', (req, res) => {
 	if(req.session.user){
 		User.find({"username": { $ne: req.session.user.username}}, function(err, users, count){
@@ -210,7 +226,7 @@ router.get('/index', (req, res) => {
 	}
 });
 
-
+// Displays all bills user has created themself. 
 router.get("/my-bills", (req, res)=>{
 	//view all bills added by the user
 	
@@ -233,6 +249,9 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
+// Displays user's list of friends. When clicked, each will display
+// a list of transactions and a total balance between those two users
+// since the start of their friendship.
 router.get('/my-balances', (req, res) => {
 	const user = req.session.user;
 	if(user){
@@ -245,6 +264,7 @@ router.get('/my-balances', (req, res) => {
 	}
 });
 
+// Returns all users in a database besides the requested ones
 router.post('/members', (req, res) => {
 	const usernames = req.body.usernames.split(',');
 	User.find({username: {$nin: usernames}}, (err, users) => {
@@ -252,7 +272,10 @@ router.post('/members', (req, res) => {
 	});
 });
 
-//view a user
+// view a user's profile page. Displays all their transactions, bills,
+// groups. Default tip can be set and new profile picture can be set
+// if session user's profile. If other user's profile, only displays
+// static information.
 router.get('/:username', (req, res) => {
 
 

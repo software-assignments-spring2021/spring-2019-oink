@@ -6,10 +6,10 @@ const TransactionSchema = new Schema({
 	//will be referenced by the bill
 	amount:{type: Number, required:true},
 	paidBy:{type:String, required:true}, //the person that needs to pay that portion of the bill
-	paidTo:{type:String, required:true},
+	paidTo:{type:String, required:true}, // the person that created the referenced Bill
 	isPaid:{type:Boolean},
 	bill:{type: Schema.Types.ObjectId, ref:"Bill"},
-	isFriends:{type:Boolean}
+	isFriends:{type:Boolean} // if paidBy and paidTo are friends or not
 });
 
 const BillSchema = new Schema({
@@ -57,6 +57,10 @@ const UserSchema = new Schema({
 	transactions:[{type:Schema.Types.ObjectId, ref:"Transaction"}],
 	friends:[FriendSchema],
 	img: { src: String, contentType: String, rawSRC: String },
+	// src - relative path with respect to public directory
+			// useful for placement in hbs files
+	// rawSRC - absolute path from root project directory
+			// useful for all other references of file
 	defaultTip: Number
 });
 

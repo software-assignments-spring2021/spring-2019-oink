@@ -11,6 +11,10 @@ const async = require('async');
 
 const api = require('../public/js/server-side/api_helpers');
 
+// response of add-friend buttons on addBill page,
+// creates two friend schemas: one for session user,
+// one for requested user and adds one to each respective
+// user's "friends" array field
 router.post('/add-friend',(req,res)=>{
 	const username = req.body.username; //username of the friend being added
 	api.addFriend(username, req.session.user, function(bool){
@@ -37,6 +41,10 @@ router.post('/is-friend', (req, res) => {
 	});
 });
 
+// handles user input of type file. After upload complete, stores in
+// images sub-directory of public. Stores two paths to this image in
+// user object, one as absolute to root (rawSRC) and other as relative to 
+// public directory (src)
 router.post('/upload/image', (req, res) => {
 	User.findOne({"username": req.session.user.username}, (err,sessionUser) => {
 		console.log(sessionUser);
@@ -62,6 +70,8 @@ router.post('/upload/image', (req, res) => {
 	});
 });
 
+// returns relative path of user's profile picture
+// in project directory for display
 router.post('/image', (req, res) => {
 	const username = req.body.username;
 	api.getImage(username, function(response){
@@ -69,6 +79,9 @@ router.post('/image', (req, res) => {
 	});
 });
 
+// returns the history between session user and requested user.
+// only displays total balance/transactions since they have been
+// established as friends in the database.
 router.post('/history', (req, res) => {
 	const username = req.body.username;
 	const sessionUser = req.session.user;
@@ -80,6 +93,9 @@ router.post('/history', (req, res) => {
 	});
 });
 
+// takes as parameter the object id of a transaction. If
+// it exists, it is removed completely and its reference
+// in the respective user's transactions field is removed
 router.post('/remove-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	api.removeTransaction(id, function(response){
@@ -90,6 +106,9 @@ router.post('/remove-transaction/:id', (req, res) => {
 	});
 });
 
+// takes as parameter a number (percentage) meant to be new default
+// tip that will display automatically on add-bill page for session
+// user.
 router.post('/change-tip', (req, res) => {
 	const newTip = req.body.tip;
 	api.changeTip(newTip, req.session.user.username, function(response){
