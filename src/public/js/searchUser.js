@@ -1,7 +1,11 @@
 function openSearch(){
   document.querySelector(".search-bar #search").style.width = "100%";
-  document.querySelector(".search-bar #search").placeholder = "Search..."
+  document.querySelector(".search-bar #search").placeholder = "Search...";
 
+}
+
+function removeSearchResults(){
+  document.querySelector("div.search-dropdown ul.search-results").innerHTML = "";
 }
 
 function createElement(elementType, attributes, text){
@@ -28,7 +32,7 @@ function addResultsToDropDown(docs){
   //console.log(docs);
 
   const list = document.querySelector("div.search-dropdown ul.search-results");
-  console.log(list);
+  //console.log(list);
 
   let a, li;
 
@@ -52,7 +56,7 @@ function searchOnKeyUp(evt){
   document.querySelector("ul.search-results").innerHTML = "" //clear out the dropdown
 
   const value = evt.target.value;
-  console.log(value);
+  //console.log(value);
 
 
   const req = new XMLHttpRequest();
@@ -75,3 +79,15 @@ function searchOnKeyUp(evt){
 
 
 }
+
+document.addEventListener("click", (evt)=>{
+  console.log(evt.target);
+  //if the parent ul is not the clicked element
+  if (evt.target.parentElement.parentElement.className == "search-results" || evt.target.id == "search" || evt.target.classList.contains("fa-search")){
+    console.log(evt);
+    //closeSearch();
+  }
+  else{
+    removeSearchResults();
+  }
+});
