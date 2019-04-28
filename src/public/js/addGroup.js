@@ -1,4 +1,28 @@
-function onClickAddUserToGroup(){
+function createElement(elementType, attributes, text){
+  const elem = document.createElement(elementType);
+
+  for (let key in attributes){
+    if (attributes.hasOwnProperty(key)) {
+      elem.setAttribute(key, attributes[key])
+    }
+  }
+
+
+  if (text){
+    elem.appendChild(document.createTextNode(text));
+  }
+
+  //console.log(elem);
+
+  return elem;
+
+
+}
+
+function onClickAddUserToGroup(username){
+  
+
+
   // clear user search bar
   const input = document.getElementById("searchUser");
   const username = input.value;
@@ -38,6 +62,7 @@ function onClickAddUserToGroup(){
     splitWith.value = newString;
   }
 } 
+
 
 function addNewUserToGroup(username, id){
   const div = document.createElement("div");

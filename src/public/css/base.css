@@ -354,36 +354,36 @@ div.notification {
   padding: 0.2%;
 }
 
-form.addbill input[type=submit] {
+form.long-add-form input[type=submit] {
   width: auto;
   padding: 1%;
   font-size: 1.3em;
 }
-form.addbill input[type=submit]:hover {
+form.long-add-form input[type=submit]:hover {
   cursor: pointer;
 }
-form.addbill div.comment {
+form.long-add-form div.comment {
   text-align: center;
   font-size: 1em;
   width: 44%;
 }
-form.addbill div.comment textarea {
+form.long-add-form div.comment textarea {
   border-bottom: 3px solid black;
   resize: none;
 }
-form.addbill > * {
+form.long-add-form > * {
   margin: 1% 0;
 }
-form.addbill label {
+form.long-add-form label {
   font-size: 1.2em;
 }
-form.addbill .total {
+form.long-add-form .total {
   width: 100%;
 }
-form.addbill input[type=text] {
+form.long-add-form input[type=text] {
   font-size: 1.2em;
 }
-form.addbill div.pretipAndTip {
+form.long-add-form div.pretipAndTip {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
@@ -391,11 +391,11 @@ form.addbill div.pretipAndTip {
   align-items: center;
   justify-content: space-evenly;
 }
-form.addbill div.pretipAndTip > * {
+form.long-add-form div.pretipAndTip > * {
   font-size: 1.4em;
   width: auto;
 }
-form.addbill div.pretipAndTip .tip {
+form.long-add-form div.pretipAndTip .tip {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
@@ -403,38 +403,38 @@ form.addbill div.pretipAndTip .tip {
   align-items: center;
   justify-content: center;
 }
-form.addbill div.pretipAndTip .tip #tip {
+form.long-add-form div.pretipAndTip .tip #tip {
   text-align: right;
 }
-form.addbill div.pretipAndTip .tip button {
+form.long-add-form div.pretipAndTip .tip button {
   width: 100%;
 }
-form.addbill .userAmounts {
+form.long-add-form .userAmounts {
   text-align: center;
 }
-form.addbill .userAmounts div.userBlock {
+form.long-add-form .userAmounts div.userBlock {
   font-size: 1.3em;
   padding: 0.5% 0;
 }
-form.addbill .userAmounts div.userBlock .hidden {
+form.long-add-form .userAmounts div.userBlock .hidden {
   display: none;
 }
-form.addbill .userAmounts div.userBlock span {
+form.long-add-form .userAmounts div.userBlock span {
   font-size: inherit;
 }
-form.addbill .userAmounts div.userBlock > * {
+form.long-add-form .userAmounts div.userBlock > * {
   display: inline-block;
   width: auto;
 }
-form.addbill .userAmounts div.userBlock h4 {
+form.long-add-form .userAmounts div.userBlock h4 {
   padding: 0 2%;
   font-size: 1.3em;
   font-family: "Open Sans Condensed", sans-serif;
 }
-form.addbill .userAmounts input[type=radio] {
+form.long-add-form .userAmounts input[type=radio] {
   display: none;
 }
-form.addbill .userAmounts input[type=radio]:checked + label {
+form.long-add-form .userAmounts input[type=radio]:checked + label {
   font-weight: bold;
 }
 
