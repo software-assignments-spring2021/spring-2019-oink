@@ -1,4 +1,4 @@
-const chai = require('chai');
+/*const chai = require('chai');
 const expect = chai.expect; 
 const app = require("../test_app.js");
 const api = require("../src/public/js/oink_api.js");
@@ -136,4 +136,4 @@ describe('Oink Adding Tests', function(){
 		});
 	});
 	
-});
+});*/
