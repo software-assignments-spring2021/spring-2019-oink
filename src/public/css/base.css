@@ -222,7 +222,7 @@ header div.right-side-header div.search-bar {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
-  align-content: center;
+  align-content: flex-end;
   align-items: center;
   justify-content: center;
 }
@@ -238,13 +238,14 @@ header div.right-side-header div.search-bar input#search {
 }
 header div.right-side-header div.search-bar div.search-dropdown {
   background-color: white;
-  width: auto;
+  width: 20%;
   position: absolute;
   top: 90%;
   box-shadow: 2px 2px 4px grey;
 }
 header div.right-side-header div.search-bar div.search-dropdown ul.search-results a li {
-  padding: 2% 30%;
+  padding: 2% 0;
+  text-align: center;
 }
 header div.right-side-header div.search-bar div.search-dropdown ul.search-results a:hover li {
   cursor: pointer;

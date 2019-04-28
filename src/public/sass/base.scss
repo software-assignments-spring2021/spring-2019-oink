@@ -269,8 +269,9 @@ header{
         @include flex(row, no-wrap, flex-end, center, flex-end);
         text-align: right;
         
+        
         div.search-bar{
-            @include flex(row, no-wrap, center, center, center);
+            @include flex(row, no-wrap, flex-end, center, center);
             
             
             i{
@@ -288,18 +289,19 @@ header{
             
             div.search-dropdown{
                 background-color:white;
-                width:auto;
+                width:20%;
                 position: absolute;
                 top:90%;
                 
                 box-shadow: 2px 2px 4px grey;
                 
                 ul.search-results{
-                    
+                    //width:100%;
                     
                     
                     a li{
-                        padding:2% 30%;
+                        padding:2% 0;
+                        text-align: center;
                     }
                     
                     a:hover li{
