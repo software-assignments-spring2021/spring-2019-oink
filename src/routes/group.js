@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Group = mongoose.model("Group");
 
-
+// Displays add group page, accessible from sidebar.
+// Includes a form for user to choose group name and members.
 router.get('/add',(req,res)=>{
 	if(req.session.user){
 
@@ -25,6 +26,10 @@ router.get('/add',(req,res)=>{
 		res.redirect('/user/login');
 	}
 });
+
+// Handles form submission from add-group page. Ensures more than 1 member,
+// correct group name (exists and unique). Sets default group percentages as
+// an equal split depending on the number of members in the group.
 
 router.post('/add', (req, res) => {
 	let user = req.session.user;
@@ -85,6 +90,8 @@ router.post('/add', (req, res) => {
 	}
 });
 
+// Deletes group from groups collection and from all relevant user's
+// groups field - cannot be taken back.
 router.post('/delete/:id', (req, res) => {
 
 	if(req.session.user){
@@ -103,6 +110,9 @@ router.post('/delete/:id', (req, res) => {
 	}
 });
 
+// Accessible only to admin member of group. Will remove member of
+// group in group schema as well as reference to group in the selected
+// user's schema.
 router.post('/remove-member', (req, res) => {
 	if (req.session.user){
 
@@ -127,6 +137,8 @@ router.post('/remove-member', (req, res) => {
 	}
 });
 
+// Reverse of remove-member. Adds a member to inGroup field of relevant group.
+// Adds reference to this group's ID in user's groups field.
 router.post('/add-member', (req, res) => {
 	if(req.session.user){
 
@@ -147,6 +159,8 @@ router.post('/add-member', (req, res) => {
 	}
 });
 
+// Returns requested group's information for
+// AJAX requests.
 router.get('/get/:id', (req, res) => {
 
 	if(req.session.user){
@@ -166,6 +180,11 @@ router.get('/get/:id', (req, res) => {
 	}
 });
 
+// Takes as parameter an object ID of a group that, if correct,
+// will display a unique group's profile page. Depending on the session user,
+// the query string isAdmin will be true or false, changing the contents of the page.
+// For an admin, "edit" and "delete" buttons appear. For everyone else, a "leave group"
+// option appears.
 router.get('/:id', (req, res) => {
 	if(req.session.user){
 		const id = req.params.id;
@@ -173,9 +192,12 @@ router.get('/:id', (req, res) => {
 			if(group){
 				const isAdmin = req.query.admin;
 				if(isAdmin == "true"){
-					res.render('group-profile-admin', {group: group});
+					if(group.administrator == req.session.user.username) // Make sure session user is actually the admin
+						res.render('group-profile-admin', {group: group}); // In case path specified directly
+					else
+						res.redirect('id?isAdmin=false'); // If not redirect to isAdmin=false page
 				}
-				else if(isAdmin == "false"){
+				else{ // By default, render isAdmin=false page
 					if(group.inGroup.length > 0)
 						res.render('group-profile-normal', {group: group, user: req.session.user.username});
 					else

@@ -24,6 +24,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Registration page to create an account accessible from
+// Landing page.
 router.get('/register', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 
@@ -35,6 +37,9 @@ router.get('/register', (req, res) => {
 	}
 });
 
+// Creates new account with user input for username, email, and password.
+// All sensitive information hashed with PassportJS. Default profile picture
+// set.
 router.post('/register', (req, res) => {
 	const img = {};
 	img.src = '/images/no_profile_picture.png';
@@ -42,25 +47,32 @@ router.post('/register', (req, res) => {
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
 	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
 
-	User.register(new User(user), req.body.password, function(err, user){
-		if(err){
-			res.send(err)
-			//res.render('register', {errMessage: 'ERROR IN CREATING ACCOUNT'});
-			// If error, reload page with error message
-		}
-		else{
-			passport.authenticate('local')(req, res, function() {
-				req.session.regenerate((err) => {
-					if(!err){
-						req.session.user = user;
-						res.redirect('/user/index'); // Until User web pages created
-					}
+	if(user.email != ""){
+		User.register(new User(user), req.body.password, function(err, user){
+			if(err){
+				console.log(err);
+				res.render('registration', {error: err.message});
+				// If error, reload page with error message
+			}
+			else{
+				passport.authenticate('local')(req, res, function() {
+					req.session.regenerate((err) => {
+						if(!err){
+							req.session.user = user;
+							res.redirect('/user/index'); // Until User web pages created
+						}
+					});
 				});
-			});
-		}
-	});
+			}
+		});
+	}
+	else{
+		res.render('registration', {error: "No Email Provided"});
+	}
 });
 
+
+// Login page accessible from landing page or registration page.
 router.get('/login', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 	if(req.session.user){
@@ -71,12 +83,14 @@ router.get('/login', (req, res) => {
 	}
 });
 
+// Uses PassportJS to verify inputted passport with hashed/salted password
+// stored in the database. If incorrect, rerenders with error message.
+// Otherwise, takes User to Add-Bill page. 
 router.post('/login', (req, res) => {
 
   	passport.authenticate('local', function(err, user){
 		if(!user){
-			res.send("no user found");
-			//res.render('login', {errMessage: "Error processing Login request"});
+			res.render('Login', {error: "Error in username or password"});
 			// RELOAD PAGE WITH ERROR MESSAGE
 		}
 		else{
@@ -90,7 +104,7 @@ router.post('/login', (req, res) => {
 	})(req, res);
 });
 
-
+// Ends current session of user. Redirects to landing Page.
 router.get('/logout', (req, res) => {
 
   	req.session.destroy(function(err){
@@ -103,6 +117,8 @@ router.get('/logout', (req, res) => {
 	});
 });
 
+// Renders all transactions of a user (both paid and unpaid) with option
+// to "pay" and update balances with another user if friends.
 router.get('/my-transactions', (req, res) => {
 	const user = req.session.user;
 	if(user){
@@ -123,6 +139,8 @@ router.get('/my-transactions', (req, res) => {
 	}
 });
 
+// Will mark transaction as paid in db and update balance
+// between two users if friends.
 router.post('/pay-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	Transaction.findById(id, (err, transaction) => {
@@ -151,6 +169,8 @@ router.post('/pay-transaction/:id', (req, res) => {
 	});
 });
 
+// Add bill page for user, only accessible with account. Notification displays if any unpaid transactions
+// for a session user. 
 router.get('/index', (req, res) => {
 	if(req.session.user){
 		User.find({"username": { $ne: req.session.user.username}}, function(err, users, count){
@@ -174,15 +194,30 @@ router.get('/index', (req, res) => {
 					const groups = [];
 					for(let i = 0; i < user.groups.length; i++){
 						Group.findById(user.groups[i], (err, group) => {
-							groups.push(group);
+							if(group)
+								groups.push(group);
 						});
 					}
-					if(notification !== undefined)
-						res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
-					else
-						res.render('user', {"user": user, "friends": users, "groups": groups});
-					});	
-					
+					if(req.query.error == undefined){
+						if(notification !== undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups});
+					}
+					else{
+						let error = "Error Processing Bill";
+						if(req.query.error == "error1")
+							error = "Incorrect Number of Users";
+						else if(req.query.error == "error2")
+							error = "Bill Portions do not add up to total";
+
+						if(notification !== undefined)
+							res.render('user', {"user": user, "friends": users, "groups": groups, "notification": notification, 'error': error});
+						else
+							res.render('user', {"user": user, "friends": users, "groups": groups, 'error': error});
+
+					}
+				});					
 			});
 		});
 	}
@@ -191,7 +226,7 @@ router.get('/index', (req, res) => {
 	}
 });
 
-
+// Displays all bills user has created themself. 
 router.get("/my-bills", (req, res)=>{
 	//view all bills added by the user
 	
@@ -214,6 +249,9 @@ router.get("/my-bills", (req, res)=>{
 	}
 });
 
+// Displays user's list of friends. When clicked, each will display
+// a list of transactions and a total balance between those two users
+// since the start of their friendship.
 router.get('/my-balances', (req, res) => {
 	const user = req.session.user;
 	if(user){
@@ -226,6 +264,7 @@ router.get('/my-balances', (req, res) => {
 	}
 });
 
+// Returns all users in a database besides the requested ones
 router.post('/members', (req, res) => {
 	const usernames = req.body.usernames.split(',');
 	User.find({username: {$nin: usernames}}, (err, users) => {
@@ -233,7 +272,10 @@ router.post('/members', (req, res) => {
 	});
 });
 
-//view a user
+// view a user's profile page. Displays all their transactions, bills,
+// groups. Default tip can be set and new profile picture can be set
+// if session user's profile. If other user's profile, only displays
+// static information.
 router.get('/:username', (req, res) => {
 
 
@@ -296,17 +338,33 @@ router.get('/:username', (req, res) => {
 
 				if(user === sessionUser.username){
 
-					res.render("session-user-profile", {
-						"user": foundUser.username, 
-						"bills": allBills,
-						"paid":paid,
-						"unpaid":unpaid,
-						"adminGroups":adminGroups, 
-						"groups":groups, 
-						"friends": foundUser.friends, 
-						"image": foundUser.img, 
-						"tip":foundUser.defaultTip
-					});
+					if(req.query.error == undefined){
+						res.render("session-user-profile", {
+							"user": foundUser.username, 
+							"bills": allBills,
+							"paid":paid,
+							"unpaid":unpaid,
+							"adminGroups":adminGroups, 
+							"groups":groups, 
+							"friends": foundUser.friends, 
+							"image": foundUser.img, 
+							"tip":foundUser.defaultTip
+						});
+					}
+					else{
+						res.render("session-user-profile", {
+							"user": foundUser.username, 
+							"bills": allBills,
+							"paid":paid,
+							"unpaid":unpaid,
+							"adminGroups":adminGroups, 
+							"groups":groups, 
+							"friends": foundUser.friends, 
+							"image": foundUser.img, 
+							"tip":foundUser.defaultTip,
+							error: "Number Needed for Tip"
+						});
+					}
 				}
 
 				else{
@@ -317,7 +375,6 @@ router.get('/:username', (req, res) => {
 						if(sessionUser.friends[i].user == user)
 							friend = true;
 					}
-
 					res.render('user-profile', {
 						"user": user, 
 						"bills":allBills,
@@ -326,7 +383,6 @@ router.get('/:username', (req, res) => {
 						"addFriend": friend,  
 						"image": foundUser.img
 					});
-
 				}
 			}
 		});

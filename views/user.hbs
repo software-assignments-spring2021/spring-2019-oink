@@ -7,7 +7,7 @@
 <h2>Add a New Bill</h2>
 
 {{#if error}}
-  <h3>{{ error }}</h3>
+  <h3 class="error">{{ error }}</h3>
 {{/if}}
 
 <form class="addbill" action="/bill/add" method="post">
@@ -17,7 +17,7 @@
             <label for="pretip">$</label><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
         </div>
         <div class="tip">
-            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="20"><span class="label">(%)</span>
+            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="{{ user.defaultTip }}"><span class="label">(%)</span>
             <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
         </div>
     </div>
