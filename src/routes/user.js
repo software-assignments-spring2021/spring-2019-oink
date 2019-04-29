@@ -10,6 +10,8 @@ const Bill = mongoose.model("Bill");
 const Friend = mongoose.model("Friend");
 const Transaction = mongoose.model("Transaction");
 
+const usr = require('../public/js/server-side/user_helpers');
+
 const Group = mongoose.model("Group");
 
 const passport = require('passport');
@@ -29,7 +31,7 @@ passport.deserializeUser(User.deserializeUser());
 router.get('/register', (req, res) => {
 	//if the user is already logged in, redirect to the home page
 
-	if(req.session.user){
+	if(usr.inSession(req.session.user)){
 		res.redirect('/user/index');
 	}
 	else{
