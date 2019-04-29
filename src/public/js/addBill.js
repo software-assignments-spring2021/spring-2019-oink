@@ -107,7 +107,7 @@ function addUserToBill(username, defaultPercentage){
     if(req.responseText !== 'friends'){
 
 
-      const addFriendButton = createElement("button", {"id": "addFriend", "type":"button"}, "Add Friend");
+      const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, "Add Friend");
       addFriendButton.addEventListener("click", function(){
         handleAddFriend(username);
         addFriendButton.style.display = "none";

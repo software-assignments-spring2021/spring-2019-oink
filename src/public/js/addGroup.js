@@ -116,7 +116,7 @@ function addNewUserToGroup(username, id){
   req.open('post', '/group/add-member', true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.addEventListener('load', () => {
-    const button = createElement("button", {}, "Remove");
+    const button = createElement("button", {"id": "removeUser"}, "Remove");
     button.insertBefore(minusSign, button.childNodes[0]);
     button.onclick = function(){
       const req = new XMLHttpRequest();
@@ -124,7 +124,7 @@ function addNewUserToGroup(username, id){
       req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       req.send("member=" + username + "&group=" + id);
       
-      div.parentNode.removeChild(div);
+      userBlock.parentNode.removeChild(userBlock);
     }
     userBlock.appendChild(button);
 

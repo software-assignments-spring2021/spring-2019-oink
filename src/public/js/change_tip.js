@@ -4,7 +4,10 @@ function onClickChangeTip(){
 	xml.open('post', '/api/change-tip', true);
 	xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	xml.addEventListener('load', () => {
-    	location.reload();
+		if(xml.responseText === "Tip Changed"){
+			document.getElementById("tip").value = tip;
+		}
+    	//location.reload();
     });
 	xml.send("tip=" + tip);
 }
