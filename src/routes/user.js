@@ -14,17 +14,7 @@ const usr = require('../public/js/server-side/user_helpers');
 
 const Group = mongoose.model("Group");
 
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-
 const IP = require('../public/js/iteratorPattern');
-
-router.use(passport.initialize());
-router.use(passport.session());
-
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
 
 // Registration page to create an account accessible from
 // Landing page.
@@ -43,45 +33,32 @@ router.get('/register', (req, res) => {
 // All sensitive information hashed with PassportJS. Default profile picture
 // set.
 router.post('/register', (req, res) => {
-	const img = {};
-	img.src = '/images/no_profile_picture.png';
-	img.contentType = '/image/png';
-	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
-	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
-
-	if(user.email != ""){
-		User.register(new User(user), req.body.password, function(err, user){
-			if(err){
-				console.log(err);
-				res.render('registration', {error: err.message});
-				// If error, reload page with error message
-			}
-			else{
-				passport.authenticate('local')(req, res, function() {
-					req.session.regenerate((err) => {
-						if(!err){
-							req.session.user = user;
-							res.redirect('/user/index'); // Until User web pages created
-						}
-					});
+	usr.addUser(req, function(ret){
+		if(typeof ret == "string"){
+			passport.authenticate('local')(req, null, function() {
+				req.session.regenerate((err) => {
+					if(!err){
+						req.session.user = user;
+						res.redirect(ret); // Until User web pages created
+					}
 				});
-			}
-		});
-	}
-	else{
-		res.render('registration', {error: "No Email Provided"});
-	}
+			});
+		}
+		else
+			res.render('registration', ret);
+	});
 });
 
 
 // Login page accessible from landing page or registration page.
 router.get('/login', (req, res) => {
 	//if the user is already logged in, redirect to the home page
-	if(req.session.user){
-		res.redirect('/user/index');
+	const ret = usr.getLogin(req.session.user);
+	if(ret.charAt(0) == '/'){
+		res.redirect(ret);
 	}
 	else{
-		res.render('Login');
+		res.render(ret);
 	}
 });
 
