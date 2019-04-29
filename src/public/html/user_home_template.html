@@ -36,6 +36,17 @@
                     <div class="search-bar">
                         <i class="fas fa-search" onclick="openSearch()"></i>
                         <input type="text" placeholder="Search.." onclick="showMainDropDown()" id="search" name="username" onkeyup="searchUserFilter()">
+                        <div class="search-dropdown">
+                            <ul class="search-results">
+                                <a><li>Jess1</li></a>
+                                <a><li>Jess1</li></a>
+                                <a><li>Jess1</li></a>
+                                <a><li>Jess1</li></a>
+                                <a><li>Jess1</li></a>  
+
+                            </ul>
+
+                        </div>
                     </div>
                         <!--
                     {{#each users as |u|}}
@@ -49,6 +60,9 @@
                 </form>
             </div>
         </header>
+        
+        
+        
 
         <div class="content">
             
@@ -63,7 +77,7 @@
                 
                 <h2>Friend 1's Profile</h2>
 
-
+                <button onclick="addFriend('{{ user }}')" id="add-friend"><i class="fas fa-plus"></i>&nbsp;Add Friend</button>
             </div>
             
             
