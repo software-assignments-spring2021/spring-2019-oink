@@ -73,7 +73,10 @@ function addUserToBill(username, defaultPercentage){
   const userh4 = createElement("h4", {}, username);
   const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
 
-  const profilePic = createElement("img", {"width":"16px", "height":"16px"});
+  const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
+  const profilePic = createElement("img", {});
+
+
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
   xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -82,9 +85,11 @@ function addUserToBill(username, defaultPercentage){
   });
   xml.send("username="+username); 
 
+  profilePicDiv.appendChild(profilePic);
+
   const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
 
-  outerDiv.appendChild(profilePic);
+  outerDiv.appendChild(profilePicDiv);
   outerDiv.appendChild(userh4);
   outerDiv.appendChild(spanDollar);
   outerDiv.appendChild(input);

@@ -19,39 +19,63 @@ function createElement(elementType, attributes, text){
 
 }
 
-function onClickAddUserToGroup(username){
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  document.querySelector(`h4#${username}`).remove();
+
+}
+
+function addUserToSelectList(username){
+  document.querySelector("#select-friends div.friends").appendChild(createElement("h4", {"id": username}, username));
+}
+
+
+function addUserToGroup(username){
+
+  /*
+  <div class="userBlock">
+      <div class="small-profile-pic"><img src="../images/no_profile_picture.png" /></div>
+      <h4>Jessica</h4>
+  </div>
+
+  */
+  removeUserFromSelectList(username);
+  document.getElementById("splitWith").value += username + ",";
+  // clear user search bar
+  document.getElementById("searchUser").input.value = "";
+
+
   
 
+  const members = document.querySelector("#groupUsers");
 
-  // clear user search bar
-  const input = document.getElementById("searchUser");
-  const username = input.value;
-  input.textContent = "";
-  // add username to list of Friends to add to a bill
 
-  const div = document.getElementById("members");
+  const userDiv = createElement("div", {"class": "userBlock", "id": `${username}Block`});
+  const userH4 = createElement("h4", {}, username);
+  const minusSign = createElement("i", {"class":"fas fa-minus"});
+  const removeButton = createElement("button", {}, " Remove");
+  removeButton.appendChild(minusSign);
 
-  const userDiv = document.createElement("div");
-  userDiv.setAttribute("id", username + "Block");
 
-  const ul = div.childNodes[2];
+  const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
+  const profilePic = createElement("img", {});
 
-  const li = document.createElement("li");
-  li.textContent = username;
 
-  const txt = username + ',';
-  const splitWith = document.getElementById("splitWith");
-  splitWith.value += txt;
+  const xml = new XMLHttpRequest();
+  xml.open('post', '/api/image', true);
+  xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xml.addEventListener('load', () => {
+      profilePic.src = xml.responseText;
+  });
+  xml.send("username="+username); 
 
-  const button = document.createElement("button");
-  button.textContent = "Remove";
-  li.appendChild(button);
-  userDiv.appendChild(li);
-  ul.appendChild(userDiv);
+  profilePicDiv.appendChild(profilePic);
 
-  button.onclick = function(){
-    while(userDiv.firstChild)
-      userDiv.removeChild(userDiv.firstChild);
+
+  removeButton.onclick = function(){
+    //remove the div
+    document.querySelector(`#${username}Block`)
+    //remove from the split with list
     const users = splitWith.value.split(',');
     console.log(users);
     let newString = "";
@@ -60,7 +84,17 @@ function onClickAddUserToGroup(username){
         newString += users[i] + ',';
     }
     splitWith.value = newString;
+    //add back to the list
+    addUserToSelectList(username);
   }
+
+  userDiv.appendChild(profilePicDiv);
+  userDiv.appendChild(userH4);
+  userDiv.appendChild(removeButton);
+
+  members.appendChild(userDiv);
+
+
 } 
 
 

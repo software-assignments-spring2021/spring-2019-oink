@@ -25,6 +25,10 @@ input[type=submit]:active {
   box-shadow: 2px 2px #729956;
 }
 
+.underline {
+  border-bottom: 3px solid black;
+}
+
 div.user-profile-header {
   display: flex;
   flex-direction: row;
@@ -344,6 +348,9 @@ div.content h2 {
 div.content h3 {
   padding: 0.5% 0;
 }
+div.content i {
+  width: auto;
+}
 
 div.notification {
   width: 100%;
@@ -361,6 +368,10 @@ form.long-add-form input[type=submit] {
 }
 form.long-add-form input[type=submit]:hover {
   cursor: pointer;
+}
+form.long-add-form div.input {
+  width: auto;
+  margin: auto;
 }
 form.long-add-form div.comment {
   text-align: center;
@@ -416,15 +427,20 @@ form.long-add-form .userAmounts div.userBlock {
   font-size: 1.3em;
   padding: 0.5% 0;
 }
+form.long-add-form .userAmounts div.userBlock > * {
+  display: inline-block;
+  width: auto;
+}
+form.long-add-form .userAmounts div.userBlock .small-profile-pic {
+  width: 50px;
+  height: auto;
+  object-fit: cover;
+}
 form.long-add-form .userAmounts div.userBlock .hidden {
   display: none;
 }
 form.long-add-form .userAmounts div.userBlock span {
   font-size: inherit;
-}
-form.long-add-form .userAmounts div.userBlock > * {
-  display: inline-block;
-  width: auto;
 }
 form.long-add-form .userAmounts div.userBlock h4 {
   padding: 0 2%;
