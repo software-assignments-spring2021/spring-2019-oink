@@ -52,34 +52,47 @@
 
         <div class="content">
             
-            <h2>{{ group.name }}'s Page</h2>
+            <h2>Add a Group</h2>
 
-            <div class="view-group" id="groupMembers">
+<!--
+            {{#if error}}
+                <h3>{{ error }}</h3>
+            {{/if}}
+-->
+
+            <form action="" method="post" class="long-add-form">
+                
+                <div class="input">
+                    <input class="underline" id="group-name" type="text" name="name" placeholder="Enter a Group Name">
+                </div>
+              
+
+                
+                <div class="userAmounts" id="groupUsers">
+
+                  <div class="userBlock">
+                      <h4>Jessica</h4>
+                  </div>
+                    
+                </div>
+
+                <input hidden type="text" name="splitWith" id="splitWith">
+                <input type="submit" value="Create Group">
+            </form> 
             
-                <div class="userBlock changeable" id="Jess">
-                    <h4>Jess</h4>
-                    <button>Remove</button>
+            
+            <div class="choose-users">    
+                <div id="select-friends">
+                    <h3>Add a Friend</h3>
+
+                    <div class="friends">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="addUserToBill('{{ f.username }}')">Jess</h4>
+
+
+                    </div>
                 </div>
-                <div class="userBlock changeable" id="Jess">
-                    <h4>Jess</h4>
-<!--                    <input type="text" class="changeableUsers" value="Jess" readonly>-->
-                </div>
-                <div class="userBlock changeable" id="Jess">
-                    <h4>Jess</h4>
-<!--                    <input type="text" class="changeableUsers" value="Jess" readonly>-->
-                </div>
-                
-                <button onclick="editGroup('{{group._id}}')">Edit</button>
-                <button onclick="deleteGroup('{{group._id}}')">Delete</button>
-                
             </div>
-            
-            
-
-             
-            
-            
-            
             
         </div>
 
@@ -100,21 +113,7 @@
     <script>
         
         //if the Nav is open, close it, and vice versa
-//        class OpenSideNav {
-//            changeNav(ControlSideNav sideNav){
-//               sideNav.set_state("close");
-//           }
-//        }
-//        
-//        class CloseSideNav {
-//            changeNav(ControlSideNav sideNav){
-//                sideNav.set_state("open");
-//            }
-//        }
-//        
-//        class ControlSideNav {
-//            
-//        }
+
     
         
         

@@ -116,4 +116,18 @@ router.post('/change-tip', (req, res) => {
 	});
 });
 
+router.get('/search', (req, res)=>{
+	const value = req.query.value;
+
+	User.find({$and:[ {"username": new RegExp(`^${value}`, 'i')}, {"username": {$ne: req.session.user.username}} ]}, (err, docs)=>{
+
+		if(!err){
+			res.send(docs);
+		}
+	});
+	
+
+});
+
 module.exports = router;
+
