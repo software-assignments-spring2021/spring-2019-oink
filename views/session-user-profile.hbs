@@ -50,9 +50,9 @@
 
             	{{#each unpaid as |u|}}
 
-                <article class="unpaid">
+                <article class="unpaid" id="trans-{{ u._id }}">
                     <span class="amount">${{ u.amount }}</span>
-                    <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
+                    <button class="pay" onclick="payTransaction('{{ u._id }}')">Pay</button>
                     <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
                     <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
                 </article>
@@ -135,6 +135,6 @@
     <button id="changeTip" onclick="onClickChangeTip()">Change Default</button>
 {{/if}}
 
-<script src="/js/add_friend.js"></script>
+<script src="/js/my-transactions.js"></script>
 <script src="/js/change_tip.js"></script>
 <script src="/js/change_profile_pic.js"></script>
