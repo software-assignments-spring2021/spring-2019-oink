@@ -491,6 +491,18 @@ div.choose-users h4:hover {
   background-color: #b5d99c;
 }
 
+div.view-group {
+  text-align: center;
+}
+div.view-group div.userBlock > * {
+  display: inline-block;
+  width: auto;
+}
+div.view-group div.userBlock h4 {
+  font-size: 1.2em;
+  padding: 1%;
+}
+
 div.total {
   font-size: 1.4em;
   text-align: center;

@@ -54,7 +54,6 @@ function addUserToGroup(username){
   const userH4 = createElement("h4", {}, username);
   const minusSign = createElement("i", {"class":"fas fa-minus"});
   const removeButton = createElement("button", {}, " Remove");
-  console.log(removeButton)
 
   removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
 
@@ -102,23 +101,23 @@ function addUserToGroup(username){
 
 
 function addNewUserToGroup(username, id){
-  const div = document.createElement("div");
-  div.class = "changeable";
-  div.setAttribute("id", username);
-  const input = document.createElement("input");
-  input.type = "text";
-  input.class = "changeableUsers";
-  input.value = username;
-  input.readonly = true;
+  // <div class="userBlock changeable" id="{{this}}">
+  //     <h4 class="changeableUser">{{this}}</h4>
+  //   </div>
 
-  div.appendChild(input);
+  const userBlock = createElement("div", {"class": "userBlock changeable", "id":username});
+  const h4 = createElement("h4", {"class": "changeableUser"}, username);
+  const minusSign = createElement("i", {"class":"fas fa-minus"});
+
+  userBlock.appendChild(h4);
+
 
   const req = new XMLHttpRequest();
   req.open('post', '/group/add-member', true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.addEventListener('load', () => {
-    const button = document.createElement("button");
-    button.textContent = "Remove";
+    const button = createElement("button", {}, "Remove");
+    button.insertBefore(minusSign, button.childNodes[0]);
     button.onclick = function(){
       const req = new XMLHttpRequest();
       req.open('post', '/group/remove-member', true);
@@ -127,10 +126,10 @@ function addNewUserToGroup(username, id){
       
       div.parentNode.removeChild(div);
     }
-    div.appendChild(button);
+    userBlock.appendChild(button);
 
     const groupMembers = document.getElementById("groupMembers");
-    groupMembers.appendChild(div);
+    groupMembers.insertBefore(userBlock, document.querySelector("#doneButton"));
   });
   req.send("member=" + username + "&group=" + id);
 }
