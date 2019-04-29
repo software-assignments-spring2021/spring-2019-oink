@@ -42,7 +42,7 @@ function addUserToGroup(username){
   removeUserFromSelectList(username);
   document.getElementById("splitWith").value += username + ",";
   // clear user search bar
-  document.getElementById("searchUser").input.value = "";
+  document.getElementById("searchUser").value = "";
 
 
   
@@ -54,7 +54,10 @@ function addUserToGroup(username){
   const userH4 = createElement("h4", {}, username);
   const minusSign = createElement("i", {"class":"fas fa-minus"});
   const removeButton = createElement("button", {}, " Remove");
-  removeButton.appendChild(minusSign);
+  console.log(removeButton)
+
+  removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
+
 
 
   const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
@@ -77,7 +80,7 @@ function addUserToGroup(username){
     document.querySelector(`#${username}Block`)
     //remove from the split with list
     const users = splitWith.value.split(',');
-    console.log(users);
+    //console.log(users);
     let newString = "";
     for(let i = 0; i < users.length; i++){
       if(users[i] != username && users[i] != '')

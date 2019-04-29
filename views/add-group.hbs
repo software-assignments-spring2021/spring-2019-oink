@@ -1,7 +1,7 @@
 <h2>Add a Group</h2>
 
 {{#if error}}
-	<h3>{{ error }}</h3>
+	<h3 class="error">{{ error }}</h3>
 {{/if}}
 
 
@@ -29,54 +29,14 @@
         <h3>Add a Friend</h3>
 
         <div class="friends">
-            <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+            <input type="text" placeholder="Search..." id="searchUser" onkeyup="searchUserFilter()">
             {{#each friends as |f|}}
-            <h4 onclick="addUserToGroup('{{ f.username }}')">{{ f.username }}</h4>
+            <h4 id={{f.username}} onclick="addUserToGroup('{{ f.username }}')">{{ f.username }}</h4>
             {{/each}}
 
         </div>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--
-<form action="" method="post">
-  
-  Group Name:<br>
-  <input type="text" name="name" >
-  <br><br>
-
-  	<div id="friendsDropdown">
-		Add users: <input type="text" placeholder="Search.." id="searchUser" onkeyup="searchUserFilter()"><br>
-		{{#each friends as |f|}}
-			<a onclick="addUserToGroup('{{ f.username }}')">{{ f.username }}</a><br>
-		{{/each}}
-	</div>
-
-	<div id="members">
-	<h3>Members</h3>
-		<ul>
-			<li>{{ user }}</li>
-		</ul>
-	</div>
-
-	<input hidden type="text" name="splitWith" id="splitWith">
-	<input type="submit" value="Add Group">
-</form> 
-
--->
 
 <script src="/js/search.js"></script>
 <script src="/js/addGroup.js"></script>
