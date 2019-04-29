@@ -136,7 +136,7 @@ function addUserToBill(username, defaultPercentage){
 
   });
 
-  outerDiv.insertBefore(delButton, profilePic);
+  outerDiv.insertBefore(delButton, profilePicDiv);
 
   //add the username to the split with field
   document.querySelector("#splitWith").value += `${username},`
@@ -173,17 +173,22 @@ function handleAddFriend(friend){
 
 function handleAddGroup(req, user){
   // clear current users
-  const users = document.getElementById('users');
-  while(users.firstChild){
-    users.removeChild(users.firstChild);
+  const userBlocks = document.querySelectorAll("div.userBlock");
+  for(let i=0; i < userBlocks.length; i++){
+    userBlocks[i].remove();
   }
-  const typeOfPayment = document.getElementById("typeOfPayment");
-  typeOfPayment.value = "%";
+
+  // const users = document.getElementById('users');
+  // while(users.firstChild){
+  //   users.removeChild(users.firstChild);
+  // }
+  //const typeOfPayment = document.getElementById("typeOfPayment");
+  //typeOfPayment.value = "%";
   // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
-    const username = group.inGroup[i];
-    addUserToBill(username, group.defaultPercentages[i]);
+    //const username = group.inGroup[i];
+    addUserToBill(group.inGroup[i], group.defaultPercentages[i]);
   }
 }
 
