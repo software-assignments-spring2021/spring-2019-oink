@@ -348,7 +348,7 @@ router.get('/:username', (req, res) => {
 						"groups":groups, 
 						"friends": foundUser.friends, 
 						"image": foundUser.img, 
-						"tip": req.query.error == undefined ? "Number Needed for Tip" : foundUser.defaultTip
+						"tip": req.query.error == undefined ? foundUser.defaultTip : "Number Needed for Tip"
 					});
 					
 				}
