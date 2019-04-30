@@ -10,13 +10,14 @@ function addFriend(username){
 
 	req.addEventListener('load', ()=>{
 		if(req.responseText === "added"){
+			document.querySelector("button#add-friend").remove();
 			console.log("friend added");
 		}
 		else{
 			console.log("friend not added");
 		}
 	});
-	location.reload();
+	//location.reload();
 	req.send(`username=${username}`);
 
 

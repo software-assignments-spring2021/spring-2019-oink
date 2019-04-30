@@ -1,3 +1,25 @@
+function createElement(elementType, attributes, text){
+  const elem = document.createElement(elementType);
+
+  for (let key in attributes){
+    if (attributes.hasOwnProperty(key)) {
+      elem.setAttribute(key, attributes[key])
+    }
+  }
+
+
+  if (text){
+    elem.appendChild(document.createTextNode(text));
+  }
+
+  //console.log(elem);
+
+  return elem;
+
+
+}
+
+
 function deleteGroup(id){
 	const xml = new XMLHttpRequest();
 	xml.open('post', '/group/delete/'+id, true);
@@ -6,11 +28,19 @@ function deleteGroup(id){
 }
 
 function editGroup(id){
+
+	document.querySelector("#editButton").classList.add("hidden");
+	document.querySelector("#doneButton").classList.remove("hidden");
+
 	const input = document.getElementsByClassName("changeable");
+
+	
 	for(let i = 0; i < input.length; i++){
-		const button = document.createElement("button");
-		button.textContent = "Remove";
-		button.onclick = function(){
+		const minusSign = createElement("i", {"class":"fas fa-minus"});
+		const removeButton = createElement("button", {"id":"removeUser"}, " Remove");
+		removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
+
+		removeButton.onclick = function(){
 			const req = new XMLHttpRequest();
 			req.open('post', '/group/remove-member', true);
 			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -18,43 +48,52 @@ function editGroup(id){
 			
 			input[i].parentNode.removeChild(input[i]);
 		}
-		input[i].appendChild(button);
+
+		input[i].appendChild(removeButton);
 	}
 
-	// add new search-bar to add users
-	const div = document.createElement("div");
-	div.setAttribute("id", "friendsDropdown");
-	const inp = document.createElement("input");
-	inp.type = "text";
-	inp.placeholder = "Add Another User to Group...";
-	inp.setAttribute("id", "searchUser");
-	inp.onkeyup = function(){
-		searchUserFilter();
-	}
+	const chooseUsers = createElement("div", {"class":"choose-users"});
+	const selectFriends = createElement("div", {"id":"select-friends"});
+	const h3 = createElement("h3", {}, "Add A Friend");
+	const friendsDiv = createElement("div", {"class": "friends"});
+	const searchBar = createElement("input", {"type":"text", "placeholder":"Add another user to the group...", "id":"searchUser", "onkeyup": "searchUserFilter()"});
+	friendsDiv.appendChild(searchBar);
+
 
 	const req = new XMLHttpRequest();
 	req.open('post', '/user/members', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	req.addEventListener('load', () => {
-		div.appendChild(inp);
+		//div.appendChild(inp);
 		const users = JSON.parse(req.responseText);
 		for(let i = 0; i < users.length; i++){
-			const h4 = document.createElement("h4");
-			h4.textContent = users[i].username;
+			const h4 = createElement("h4", {"id":users[i].username},users[i].username);
+			// const h4 = document.createElement("h4");
+			// h4.textContent = users[i].username;
 			h4.onclick = function(){
 				addNewUserToGroup(users[i].username, id)
 			}
-			div.appendChild(h4);
+			friendsDiv.appendChild(h4);
 		}
-		const groupMembers = document.getElementById("groupMembers");
-		groupMembers.appendChild(div);
+		
 	});
-	const users = document.getElementsByClassName("changeableUsers");
+
+
+
+	const users = document.getElementsByClassName("changeableUser");
 	let str = "";
-	for(let i = 0; i < users.length; i++)
-		str += users[i].value + ",";
-	console.log(str.substring(0, str.length-1));
+	for(let i = 0; i < users.length; i++){
+		str += users[i].firstChild.nodeValue + ",";
+	}
 	req.send("usernames=" + str.substring(0, str.length-1));
+
+
+	selectFriends.appendChild(h3);
+	selectFriends.appendChild(friendsDiv);
+
+	chooseUsers.appendChild(selectFriends);
+
+	document.getElementById("groupMembers").appendChild(chooseUsers);
 
 }
 
@@ -66,3 +105,21 @@ function leaveGroup(username, id){
 	req.send("member=" + username + "&group=" + id);
 	location.reload();
 }
+
+
+function finishEdit(id){
+	//remove all the "remove buttons"
+
+	const removeButtons = document.querySelectorAll("#removeUser");
+	for (let i = 0; i< removeButtons.length; i++){
+		removeButtons[i].remove();
+	}
+	
+
+	//remove the friends list
+	document.querySelector(".choose-users").remove();
+
+	document.querySelector("#editButton").classList.remove("hidden");
+	document.querySelector("#doneButton").classList.add("hidden");
+
+}	

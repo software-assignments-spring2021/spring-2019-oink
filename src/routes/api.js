@@ -19,9 +19,9 @@ router.post('/add-friend',(req,res)=>{
 	const username = req.body.username; //username of the friend being added
 	api.addFriend(username, req.session.user, function(bool){
 		if(bool)
-			res.send({result: "added"});
+			res.send("added");
 		else
-			res.send({result: "error"});
+			res.send("error");
 	});
 });
 

@@ -338,33 +338,19 @@ router.get('/:username', (req, res) => {
 
 				if(user === sessionUser.username){
 
-					if(req.query.error == undefined){
-						res.render("session-user-profile", {
-							"user": foundUser.username, 
-							"bills": allBills,
-							"paid":paid,
-							"unpaid":unpaid,
-							"adminGroups":adminGroups, 
-							"groups":groups, 
-							"friends": foundUser.friends, 
-							"image": foundUser.img, 
-							"tip":foundUser.defaultTip
-						});
-					}
-					else{
-						res.render("session-user-profile", {
-							"user": foundUser.username, 
-							"bills": allBills,
-							"paid":paid,
-							"unpaid":unpaid,
-							"adminGroups":adminGroups, 
-							"groups":groups, 
-							"friends": foundUser.friends, 
-							"image": foundUser.img, 
-							"tip":foundUser.defaultTip,
-							error: "Number Needed for Tip"
-						});
-					}
+					
+					res.render("session-user-profile", {
+						"user": foundUser.username, 
+						"bills": allBills,
+						"paid":paid,
+						"unpaid":unpaid,
+						"adminGroups":adminGroups, 
+						"groups":groups, 
+						"friends": foundUser.friends, 
+						"image": foundUser.img, 
+						"tip": req.query.error == undefined ? "Number Needed for Tip" : foundUser.defaultTip
+					});
+					
 				}
 
 				else{
@@ -372,6 +358,7 @@ router.get('/:username', (req, res) => {
 
 
 					for(let i = 0; i < sessionUser.friends.length; i++){
+						console.log(sessionUser.friends[i].user)
 						if(sessionUser.friends[i].user == user)
 							friend = true;
 					}
