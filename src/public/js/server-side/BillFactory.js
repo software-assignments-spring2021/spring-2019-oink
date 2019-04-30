@@ -71,7 +71,7 @@ function countTotals(reqBody){
 }
 
 function viewBill(id, username, cb){
-	Bill.findById(id, (err, bill)=>{
+	Bill.findOne({_id: id}, (err, bill)=>{
 		if(bill){
 			Transaction.find({"bill": id}, (err, transactions) => {
 				User.findOne({"username": username}, (err, sessionUser) => {
