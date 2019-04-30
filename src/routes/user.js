@@ -4,6 +4,7 @@ const async = require('async');
 const router = express.Router(); 
 const fs = require('fs');
 require('../schemas'); 
+const path = require('path')
 
 const User = mongoose.model("User");
 const Bill = mongoose.model("Bill");
@@ -79,7 +80,8 @@ router.get('/login', (req, res) => {
 		res.redirect('/user/index');
 	}
 	else{
-		res.render('Login');
+		//res.render('Login');
+		res.sendFile(path.join(__dirname, "..", "public", "html", 'login.html'))
 	}
 });
 
