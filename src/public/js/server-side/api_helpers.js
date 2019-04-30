@@ -19,6 +19,7 @@ function addFriend(username, sessionUser, cb){
 	User.findOne({"username": sessionUser.username},(err, doc)=>{
 		if(doc){
 			doc.friends.push(newFriend);
+			sessionUser.friends.push(newFriend);
 			doc.save((err,saved)=>{
 				if(err){
 					console.log(err);
@@ -32,7 +33,7 @@ function addFriend(username, sessionUser, cb){
 						user.friends.push(secondFriend);
 						
 						user.save();
-						console.log(sessionUser);
+						//console.log(sessionUser);
 						return cb(true);
 					});
 				}
