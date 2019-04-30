@@ -261,9 +261,7 @@ function getUserProfile(req, user, sessionUser, cb){
 						"groups":groups, 
 						"friends": foundUser.friends, 
 						"image": foundUser.img, 
-						//"tip": req.query.error == undefined ? "Number Needed for Tip" : foundUser.defaultTipt
-						tip: foundUser.defaultTip,
-						error: req.query.error == undefined ? '' : "Number Needed for Tip"
+						"tip": req.query.error == undefined ? foundUser.defaultTip : "Number Needed for Tip"
 					}
 				)
 				
