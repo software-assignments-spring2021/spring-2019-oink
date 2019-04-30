@@ -1,15 +1,22 @@
-@import url("https://fonts.googleapis.com/css?family=Open+Sans");
-@import url("https://fonts.googleapis.com/css?family=Oswald");
-@import url("https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300");
-
-div.container {
-    padding: 0;
-    margin: 0;
-    font-family: "Open Sans", sans-serif;
-    box-sizing: border-box;
-
+complete-form {
+    background-color: blue;
+    text-align: center;
+    width: 50%;
+    margin: auto;
 }
 
+div .complete-form {
+    text-align: center;
+    width: 40%;
+    margin: auto;
+}
+
+div.container {
+    font-family: "Open Sans", sans-serif;
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
 input[type=text], select {
     width: 80%;
     padding: 12px 20px;
@@ -18,9 +25,10 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
+    text-align: left;
+  }
   
-input[type=submit] {
+  input[type=submit] {
     width: 100%;
     background-color: #4CAF50;
     color: white;
@@ -32,29 +40,11 @@ input[type=submit] {
     font-size: 24px;
 }
   
-input[type=submit]:hover {
+  input[type=submit]:hover {
     background-color: #45a049;
-    width: 100%;
-}
-  
-.form div {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
 }
 
 label {
     font-size: 20px;
-    background-color: yellow;
-}
-
-.complete-form{
-    background-color: blue;
-    text-align: center;
-    width: 50%;
-    margin: auto;
-}
-
-.complete-form .form field{
-    background-color: pink;
+    width: 100%;
 }
