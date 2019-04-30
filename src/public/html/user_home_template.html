@@ -52,206 +52,47 @@
 
         <div class="content">
             
-            <div class="user-profile-header">
+            <h2>Add a Group</h2>
 
+<!--
+            {{#if error}}
+                <h3>{{ error }}</h3>
+            {{/if}}
+-->
+
+            <form action="" method="post" class="long-add-form">
                 
-                <div class="profile-pic" onclick ="openForm()">
-                    
-                    <img src="../images/no_profile_picture.png" class="profile-pic" alt="Anon">
-<!--                <i class="fas fa-plus"></i>-->
+                <div class="input">
+                    <input class="underline" id="group-name" type="text" name="name" placeholder="Enter a Group Name">
                 </div>
+              
+
                 
-                <h2>Friend 1's Profile</h2>
+                <div class="userAmounts" id="groupUsers">
 
+                  <div class="userBlock">
+                      <h4>Jessica</h4>
+                  </div>
+                    
+                </div>
 
-            </div>
+                <input hidden type="text" name="splitWith" id="splitWith">
+                <input type="submit" value="Create Group">
+            </form> 
             
             
+            <div class="choose-users">    
+                <div id="select-friends">
+                    <h3>Add a Friend</h3>
 
-            <div class="user-profile-content">
-                
-                <div class="user-profile-section">
-                    
-                    <h3>Bills</h3>
-                    <section id="bills" class="outline">
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                        <article>
-                            <span class="amount">$20</span>
-                            <span class="date">4/19/2019</span>
-                            <span class="view"><a href="/bill/view/{{bill._id}}">View <i class="fas fa-arrow-right"></i></a></span>
-                        </article>
-                        
-                    </section>
-                
-                </div>
-                
-                
-                <div class="user-profile-section">
-                    
-                    <h3>Transactions</h3>
-                    <section id="transactions" class="outline">
-                        <h4>Unpaid</h4>
-                        <section id="unpaid-transactions">
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="unpaid">
-                                <span class="amount">${{ u.amount }}</span>
-                                <button class="pay" onclick='payTransaction("{{ u._id }}")'>Pay</button>
-                                <span class="added-by">Added by <a href="/user/{{ u.paidTo }}">{{ u.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ u.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                        </section>
+                    <div class="friends">
+                        <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+                        <h4 onclick="addUserToBill('{{ f.username }}')">Jess</h4>
 
-                        <h4>Paid</h4>
-                        <section id="paid-transactions">
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                            <article class="paid">
-                                <span class="amount">${{ p.amount }}</span>
-                                <span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
-                                <span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
-                            </article>
-                        </section>
 
-                    </section>
-                    
-                </div>
-                
-                <div class="friends-and-groups">
-                
-                    <div class="user-profile-section">
-                        <h3>Friends</h3>
-                        <section id="friends" class="outline">
-                            
-                            <ul>
-
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-                                <a href="/user/{{ f.user }}"><li>Friend</li></a>
-
-                            </ul>
-
-                        </section>
                     </div>
-                
-                    <div class="user-profile-section">
-                        <h3>Groups&nbsp;<a href="#"><i class="fas fa-plus"></i></a></h3>
-                        <section id="groups" class="outline">
-                            
-                            <section>
-                                <h4>My Groups</h4>
-                                <ul>
-
-                                    <a href="/user/{{ f.user }}"><li>Brunch Crew</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Study Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Roommates</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                </ul>
-                            </section>
-                            
-                            <section>
-                                <h4>Groups I'm in</h4>
-                                <ul>
-
-                                    <a href="/user/{{ f.user }}"><li>Brunch Crew</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Study Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Roommates</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                    <a href="/user/{{ f.user }}"><li>Group</li></a>
-                                </ul>
-                            </section>
-
-                        </section>
-                    </div>
-                
                 </div>
-            
             </div>
-            
-            
-             <form action="/api/change-tip" method="post">
-                <h3>Your Default Tip is: <input type="text" name="tip" value="{{ tip }}">%</h3>
-                <input type="submit" value="Change Default">
-            </form>
-            
-            
             
         </div>
 
@@ -272,21 +113,7 @@
     <script>
         
         //if the Nav is open, close it, and vice versa
-//        class OpenSideNav {
-//            changeNav(ControlSideNav sideNav){
-//               sideNav.set_state("close");
-//           }
-//        }
-//        
-//        class CloseSideNav {
-//            changeNav(ControlSideNav sideNav){
-//                sideNav.set_state("open");
-//            }
-//        }
-//        
-//        class ControlSideNav {
-//            
-//        }
+
     
         
         

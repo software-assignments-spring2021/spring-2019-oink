@@ -7,17 +7,17 @@
 <h2>Add a New Bill</h2>
 
 {{#if error}}
-  <h3>{{ error }}</h3>
+  <h3 class="error">{{ error }}</h3>
 {{/if}}
 
-<form class="addbill" action="/bill/add" method="post">
+<form class="long-add-form" action="/bill/add" method="post">
     
     <div class="pretipAndTip">
         <div class="pretip">
             <label for="pretip">$</label><input type="text" name="pretip" onkeyup="calculateTip()" id="pretip" placeholder="0.00"/>
         </div>
         <div class="tip">
-            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="20"><span class="label">(%)</span>
+            <label for="tip">Tip</label><input type="text" onkeyup="calculateTip()" onblur="calculateTip()" name="tip" id ="tip" placeholder="0" value="{{ user.defaultTip }}"><span class="label">(%)</span>
             <button type="button" id="notipbutton" onclick="noTip()">No tip!</button>
         </div>
     </div>
@@ -49,26 +49,26 @@
 <div class="choose-users">
                 
     
-<div id="select-friends">
-        <h3>Add a Friend</h3>
-        
-        <div class="friends">
-            <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
-            {{#each friends as |f|}}
-              <h4 onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
-            {{/each}}
-        </div>
-    </div>
+  <div id="select-friends">
+      <h3>Add a Friend</h3>
+      
+      <div class="friends">
+          <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+          {{#each friends as |f|}}
+            <h4 onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
+          {{/each}}
+      </div>
+  </div>
 
-    <div id="select-groups">
-        <h3>Add a Group</h3>
-        <div class="groups">
-            <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
-            {{#each groups as |g|}}
-              <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">{{ g.name }} - {{ g.inGroup.length }} Members </h4><span hidden>{{ g._id }}</span>
-            {{/each}}
-        </div>
-    </div>
+  <div id="select-groups">
+      <h3>Add a Group</h3>
+      <div class="groups">
+          <input type="text" placeholder="Search..." id="search" onkeyup="searchUserFilter()">
+          {{#each groups as |g|}}
+            <h4 onclick="onClickAddGroup('{{ g._id }}', '{{../user.username}}')">{{ g.name }} - {{ g.inGroup.length }} Members </h4><span hidden>{{ g._id }}</span>
+          {{/each}}
+      </div>
+  </div>
     
 </div>
 

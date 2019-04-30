@@ -1,3 +1,4 @@
+
 function onClickAddUserToBill(){
   // clear user search bar
   const input = document.getElementById("searchUser");
@@ -72,7 +73,10 @@ function addUserToBill(username, defaultPercentage){
   const userh4 = createElement("h4", {}, username);
   const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
 
-  const profilePic = createElement("img", {"width":"16px", "height":"16px"});
+  const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
+  const profilePic = createElement("img", {});
+
+
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
   xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -81,9 +85,11 @@ function addUserToBill(username, defaultPercentage){
   });
   xml.send("username="+username); 
 
+  profilePicDiv.appendChild(profilePic);
+
   const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
 
-  outerDiv.appendChild(profilePic);
+  outerDiv.appendChild(profilePicDiv);
   outerDiv.appendChild(userh4);
   outerDiv.appendChild(spanDollar);
   outerDiv.appendChild(input);
@@ -101,7 +107,7 @@ function addUserToBill(username, defaultPercentage){
     if(req.responseText !== 'friends'){
 
 
-      const addFriendButton = createElement("button", {"id": "addFriend", "type":"button"}, "Add Friend");
+      const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, "Add Friend");
       addFriendButton.addEventListener("click", function(){
         handleAddFriend(username);
         addFriendButton.style.display = "none";
@@ -130,7 +136,7 @@ function addUserToBill(username, defaultPercentage){
 
   });
 
-  outerDiv.insertBefore(delButton, profilePic);
+  outerDiv.insertBefore(delButton, profilePicDiv);
 
   //add the username to the split with field
   document.querySelector("#splitWith").value += `${username},`
@@ -167,17 +173,22 @@ function handleAddFriend(friend){
 
 function handleAddGroup(req, user){
   // clear current users
-  const users = document.getElementById('users');
-  while(users.firstChild){
-    users.removeChild(users.firstChild);
+  const userBlocks = document.querySelectorAll("div.userBlock");
+  for(let i=0; i < userBlocks.length; i++){
+    userBlocks[i].remove();
   }
-  const typeOfPayment = document.getElementById("typeOfPayment");
-  typeOfPayment.value = "%";
+
+  // const users = document.getElementById('users');
+  // while(users.firstChild){
+  //   users.removeChild(users.firstChild);
+  // }
+  //const typeOfPayment = document.getElementById("typeOfPayment");
+  //typeOfPayment.value = "%";
   // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
-    const username = group.inGroup[i];
-    addUserToBill(username, group.defaultPercentages[i]);
+    //const username = group.inGroup[i];
+    addUserToBill(group.inGroup[i], group.defaultPercentages[i]);
   }
 }
 

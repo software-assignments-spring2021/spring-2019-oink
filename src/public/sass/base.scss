@@ -32,6 +32,12 @@ input[type="submit"]{
     }
 }
 
+.underline{
+    border-bottom: 3px solid black;
+}
+
+
+
 
 div.user-profile-header{
     
@@ -267,8 +273,9 @@ header{
         @include flex(row, no-wrap, flex-end, center, flex-end);
         text-align: right;
         
+        
         div.search-bar{
-            @include flex(row, no-wrap, center, center, center);
+            @include flex(row, no-wrap, flex-end, center, center);
             
             
             i{
@@ -282,6 +289,30 @@ header{
                 //width:0;
                 transition: width ease-in-out 0.5s;
                 font-family:$default;
+            }
+            
+            div.search-dropdown{
+                background-color:white;
+                width:20%;
+                position: absolute;
+                top:90%;
+                
+                box-shadow: 2px 2px 4px grey;
+                
+                ul.search-results{
+                    //width:100%;
+                    
+                    
+                    a li{
+                        padding:2% 0;
+                        text-align: center;
+                    }
+                    
+                    a:hover li{
+                        cursor: pointer;
+                        background-color:$medium-green;
+                    }
+                }
             }
         }
         
@@ -419,6 +450,9 @@ div.content{
         padding:0.5% 0;
     }
     
+    i{
+        width:auto;
+    }
 }
 
 div.notification{
@@ -430,7 +464,7 @@ div.notification{
     padding:0.2%;
 }
 
-form.addbill{
+form.long-add-form{
     
     input[type="submit"]{
         width:auto;
@@ -440,6 +474,11 @@ form.addbill{
         &:hover{
             cursor:pointer;
         }
+    }
+    
+    div.input{
+        width:auto;
+        margin:auto;
     }
     
     div.comment{
@@ -505,6 +544,21 @@ form.addbill{
         div.userBlock{
             font-size:1.3em;
             
+            >*{
+                display: inline-block;
+                width:auto;
+                
+            }
+            
+            .small-profile-pic{
+                width:50px;
+                height:auto;
+                object-fit:cover;
+                
+                img{
+                }
+            }
+            
             .hidden{
                 display: none;
             }
@@ -512,11 +566,7 @@ form.addbill{
             span{
                 font-size: inherit;
             }
-            >*{
-                display: inline-block;
-                width:auto;
-                
-            }
+            
             h4{
                 padding:0 2%;
                 font-size:1.3em;
@@ -582,6 +632,24 @@ div.choose-users{
         }
     }
     
+}
+
+div.view-group{
+    div.userBlock{
+        
+        > *{
+            display: inline-block;
+            width:auto;
+        }
+        
+        
+        h4{
+            font-size:1.2em;
+            padding:1%;
+        }
+    }
+    
+    text-align: center;
 }
 
 div.total{
