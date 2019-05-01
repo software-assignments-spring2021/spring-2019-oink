@@ -96,7 +96,7 @@ function viewBill(id, username, cb){
 					console.log(friends);
 					console.log(nonfriends);
 					return cb({"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-					"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
+					"date": bill.dateCreated, "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
 					nonfriends});
 				});
 			});
