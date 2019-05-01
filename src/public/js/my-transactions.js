@@ -6,21 +6,44 @@ function payTransaction(id){
 	req.addEventListener('load', ()=>{
 		if(req.responseText ==="ok"){
 			//remove the div
+			//check if we are on the view bill page or another page
+			let isBillPage = window.location.pathname.split('/')[1] == "bill"; 
 
+			if(isBillPage){
+				onBillPage(id)
+			}
+			else{
+				onOtherPage(id)
+			}
 
-			const fullDiv = document.querySelector(`#trans-${id}`);
-			const amountSpan = fullDiv.querySelector("span.amount");
-			const AddedSpan	= fullDiv.querySelector("span.added-by");
-			const viewBill = fullDiv.querySelector("span.view-bill");
-
-			fullDiv.remove();
-
-			createPaidDiv(amountSpan, AddedSpan, viewBill);
+			
 		}
 
 	});
 
-	//location.reload();
+}
+
+function onBillPage(id){
+	//on the bill page, we remove the pay button and change the class to paid
+	const div = document.querySelector('#userTrans');
+	div.querySelector("button.pay").remove();
+	div.classList.remove('unpaid');
+	div.classList.add('paid');
+
+
+}
+
+function onOtherPage(id){
+	//on my transactions and user profile page, we move the div to the paid section
+	const fullDiv = document.querySelector(`#trans-${id}`);
+	const amountSpan = fullDiv.querySelector("span.amount");
+	const AddedSpan	= fullDiv.querySelector("span.added-by");
+	const viewBill = fullDiv.querySelector("span.view-bill");
+
+	fullDiv.remove();
+
+	createPaidDiv(amountSpan, AddedSpan, viewBill);
+
 }
 
 function createPaidDiv(amountSpan, AddedSpan, viewBill){
