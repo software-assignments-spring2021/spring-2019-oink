@@ -17,7 +17,7 @@ function addUser(req, cb){
 	img.src = '/images/no_profile_picture.png';
 	img.contentType = '/image/png';
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
-	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
+	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20, friends: [], transactions: [], bills: []};
 
 	if(user.email != ""){
 		User.register(new User(user), req.body.password, function(err, user){
@@ -235,7 +235,7 @@ function getUserProfile(req, user, sessionUser, cb){
 				});
 
 			});
-
+			console.log(sessionUser);
 			if(user === sessionUser.username){
 
 				return cb(
