@@ -7,25 +7,20 @@ function payTransaction(id){
 		if(req.responseText ==="ok"){
 			//remove the div
 			//check if we are on the view bill page or another page
-			console.log(window.location.pathname.split('/'));
 			let isBillPage = window.location.pathname.split('/')[1] == "bill"; 
 
 			if(isBillPage){
-				console.log("paying from view bill page")
 				onBillPage(id)
 			}
 			else{
-				console.log("paying from other page");
 				onOtherPage(id)
 			}
-			//console.log(window.location);
 
 			
 		}
 
 	});
 
-	//location.reload();
 }
 
 function onBillPage(id){
