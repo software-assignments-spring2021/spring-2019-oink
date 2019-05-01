@@ -238,19 +238,6 @@ function getUserProfile(req, user, sessionUser, cb){
 
 			if(user === sessionUser.username){
 
-				/*
-				res.render("session-user-profile", {
-					"user": foundUser.username, 
-					"bills": allBills,
-					"paid":paid,
-					"unpaid":unpaid,
-					"adminGroups":adminGroups, 
-					"groups":groups, 
-					"friends": foundUser.friends, 
-					"image": foundUser.img, 
-					"tip": req.query.error == undefined ? "Number Needed for Tip" : foundUser.defaultTip
-				});*/
-
 				return cb(
 					{
 						"user": foundUser.username, 
@@ -268,23 +255,16 @@ function getUserProfile(req, user, sessionUser, cb){
 			}
 
 			else{
-				let friend = false;
 
+
+				let friend = false;
+				console.log(sessionUser);
 
 				for(let i = 0; i < sessionUser.friends.length; i++){
 					console.log(sessionUser.friends[i].user)
 					if(sessionUser.friends[i].user == user)
 						friend = true;
 				}
-				/*
-				res.render('user-profile', {
-					"user": user, 
-					"bills":allBills,
-					"groups": allGroups, 
-					"friends": foundUser.friends, 
-					"addFriend": friend,  
-					"image": foundUser.img
-				});*/
 
 				return cb(
 					{

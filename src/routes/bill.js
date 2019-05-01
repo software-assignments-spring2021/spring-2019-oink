@@ -33,6 +33,7 @@ router.post('/add', (req, res)=>{
 		const formatted = dt.format('m/d/Y');
 
 		let friendsToSplit = req.body.splitWith.split(','); friendsToSplit[friendsToSplit.length-1] = req.session.user.username;
+		console.log(friendsToSplit);
 		formattedBody = JSON.parse(JSON.stringify(req.body));
 		const BillFactory = new BF.BillFactory(formattedBody);
 		

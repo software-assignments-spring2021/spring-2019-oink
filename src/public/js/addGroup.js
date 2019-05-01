@@ -26,7 +26,11 @@ function removeUserFromSelectList(username){
 }
 
 function addUserToSelectList(username){
-  document.querySelector("#select-friends div.friends").appendChild(createElement("h4", {"id": username}, username));
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addUserToGroup(username);
+  }
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
 }
 
 
@@ -54,7 +58,7 @@ function addUserToGroup(username){
   const userH4 = createElement("h4", {}, username);
   const minusSign = createElement("i", {"class":"fas fa-minus"});
   const removeButton = createElement("button", {}, " Remove");
-
+  removeButton.type = "button";
   removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
 
 
@@ -76,7 +80,8 @@ function addUserToGroup(username){
 
   removeButton.onclick = function(){
     //remove the div
-    document.querySelector(`#${username}Block`)
+    const blck = document.querySelector(`#${username}Block`)
+    blck.parentNode.removeChild(blck);
     //remove from the split with list
     const users = splitWith.value.split(',');
     //console.log(users);
