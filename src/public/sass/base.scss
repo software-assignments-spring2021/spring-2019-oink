@@ -196,7 +196,12 @@ div.user-profile-content{
             li{
                 padding:3% 0;
                 font-size:1.2em;
-
+                
+                &:hover{
+                    cursor: pointer;
+                    background-color:$bright-green;
+                    
+                }
             }
         }
     }

@@ -1,14 +1,27 @@
-<h3>My Balances</h3>
+<h2>My Balances</h2>
 
-<h3>Friends:</h3>
-<div id="friendList">
-	{{#each friends as |f|}}
-		<a href="#" onclick="showBalances('{{ f.user }}')">{{ f.user }}</a><br>
-	{{/each}}
+<div class="user-profile-content" id="balances">
+	<div class="user-profile-section" id="pick-friends">
+	    <h3>Friends</h3>
+	    <section id="friends" class="outline">
+
+	        <ul>
+	        {{#each friends as |f|}}
+	            <li onClick ="showBalances('{{ f.user }}')">{{f.user}}</li>
+	        {{/each}}
+	        </ul>
+
+	    </section>
+	</div>
+
+	<div class="user-profile-section" id="transactions">
+		<h3 id="username-balances">Choose a friend</h3>
+	    
+	</div>
+
 </div>
-<br><br>
 
-<h3>Click a Friend to view your balance</h3>
+
 <div id="header">
 </div>
 

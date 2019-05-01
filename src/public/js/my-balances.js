@@ -1,12 +1,12 @@
 function showBalances(username){
 	
-	const header = document.getElementById('header'); // CLEAR THE CURRENT CONTENTS OF THE SCREEN
-	while(header.firstChild){
-		header.removeChild(header.firstChild);
-	}
+	// const header = document.getElementById('header'); // CLEAR THE CURRENT CONTENTS OF THE SCREEN
+	// while(header.firstChild){
+	// 	header.removeChild(header.firstChild);
+	// }
 
-	const title = document.getElementsByTagName('h3')[3];
-	title.textContent = "Your Transactions With " + username;
+	//const title = document.getElementsByTagName('h3')[3];
+	//title.textContent = "Your Transactions With " + username;
 
 	const req = new XMLHttpRequest();
     req.open('post', '/api/history', true);
@@ -58,11 +58,11 @@ function showBalances(username){
 
     const totalBalance = document.createElement("h3");
     if(res.balance == 0)
-	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
+	 		totalBalance.textContent = "Your Overall Balance With " + username + " is " + res.balance + "!";	
 	 	if(res.balance > 0)
-	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
+	 		totalBalance.textContent =  username + " owes you $" + res.balance;
 	 	if(res.balance < 0)
-	 		totalBalance.textContent = "In Total: " + "You owe $" + (-1*res.balance) + " to " + username; 	
+	 		totalBalance.textContent = "You owe $" + (-1*res.balance) + " to " + username; 	
 
       header.append(ul);
       header.append(totalBalance);

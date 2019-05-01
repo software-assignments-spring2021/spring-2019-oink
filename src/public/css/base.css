@@ -152,6 +152,10 @@ div.user-profile-content section#transactions ul li, div.user-profile-content se
   padding: 3% 0;
   font-size: 1.2em;
 }
+div.user-profile-content section#transactions ul li:hover, div.user-profile-content section#bills ul li:hover, div.user-profile-content section#friends ul li:hover, div.user-profile-content section#groups ul li:hover {
+  cursor: pointer;
+  background-color: #7AC74F;
+}
 div.user-profile-content .outline {
   border: 5px solid black;
 }

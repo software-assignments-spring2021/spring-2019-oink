@@ -78,51 +78,107 @@ function getImage(username, cb){
 	});
 }
 
-function getHistory(username, sessionUser, cb){
-	Transaction.find({}, (err, transactions) => {
-		const response = {};
-		const relTransactions = [];
-		const dates = [];
-		for(let i = 0; i < transactions.length; i++){
-			if(transactions[i].paidBy == sessionUser.username && transactions[i].paidTo == username ||
-				transactions[i].paidBy == username && transactions[i].paidTo == sessionUser.username){
+function correctTransactions(value){
 
-				if(transactions[i].isFriends == true)
-					relTransactions.push(transactions[i]);
-			}	
-		}
-		async.forEach(relTransactions, function(item, cb){
-			Bill.findById(item.bill, (err, bill) => {
-				dates.push(bill.dateCreated);
-				cb();
-			});
-		}, function(err){
-			User.findOne({"username": sessionUser.username}, (err, user) => {
-				if(user){
-					for(let i = 0; i < user.friends.length; i++){
-						if(user.friends[i].user == username){
-							response.balance = user.friends[i].balance;
-						}
-					}
-					User.findOne({"username": username}, (err, otherUser) => {
-						if(otherUser){
-							for(let i = 0; i < otherUser.friends.length; i++){
-								if(otherUser.friends[i].user == sessionUser.username){
-									response.balance -= otherUser.friends[i].balance;
-								}
-							}
-							response.transactions = relTransactions;
-							response.dates = dates;
-							return cb(response);
-						}
+}
+
+function getHistory(username, sessionUser, cb){
+	let relTransactions = [];
+	let dates = [];
+	let billId = [];
+	let balance = 0;
+	let response = {};
+
+	User.findOne({'username':username}, (err, friend)=>{
+		if(friend){
+			const allTransactionId = sessionUser.transactions.concat(friend.transactions);
+
+			Transaction.find({'_id':{$in:allTransactionId}}, (err, transactions)=>{
+				if(transactions){
+					relTransactions = transactions.filter((value, index)=>{
+						if ( (value.paidBy == username && value.paidTo == sessionUser.username)
+							|| (value.paidBy == sessionUser.username && value.paidTo == username) )
+							return true;
 						else
-							return cb(undefined);
+							return false
 					});
+
+					billId = relTransactions.map((value)=>{
+						return value.bill;
+					});
+
+
+					Bill.find({"_id":{$in:billId}}, (err, bills)=>{
+						dates = bills.map(bill => bill.dateCreated);
+						console.log(dates);
+						//get the balance from the session user 
+						let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
+						let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
+						balance = friendBal.balance - sessionUserBal.balance;
+						console.log(balance);
+
+						response = {"transactions": relTransactions, "dates": dates, "balance": balance}
+
+						cb(response);
+
+					});
+
+					// async.forEach(relTransactions, function(item, cb){
+					// 	Bill.findById(item.bill, (err, bill) => {
+					// 		dates.push(bill.dateCreated);
+					// 		cb();
+					// 	});
+					// }, function(err){
+					// 	User.findOne({"username": sessionUser.username}, (err, user) => {
+					// 		if(user){
+
+					// 			for(let i = 0; i < user.friends.length; i++){
+					// 				if(user.friends[i].user == username){
+					// 					console.log(user.friends[i]);
+					// 					response.balance = user.friends[i].balance;
+					// 				}
+					// 			}
+					// 			User.findOne({"username": username}, (err, otherUser) => {
+					// 				if(otherUser){
+					// 					for(let i = 0; i < otherUser.friends.length; i++){
+					// 						if(otherUser.friends[i].user == sessionUser.username){
+					// 							console.log(otherUser.friends[i]);
+					// 							response.balance -= otherUser.friends[i].balance;
+					// 						}
+					// 					}
+					// 					response.transactions = relTransactions;
+					// 					response.dates = dates;
+					// 					return cb(response);
+					// 				}
+					// 				else
+					// 					return cb(undefined);
+					// 			});
+					// 		}
+					// 		else
+					// 			return cb(undefined);
+					// 	});
+					// });
+
+
+
+
+
+
+
+
+
+
+
 				}
-				else
-					return cb(undefined);
+
+				else{
+					cb(undefined);
+				}
 			});
-		});
+		}
+		else{
+			cb(undefined);
+		}
 	});
 }
 

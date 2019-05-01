@@ -86,6 +86,7 @@ router.post('/history', (req, res) => {
 	const username = req.body.username;
 	const sessionUser = req.session.user;
 	api.getHistory(username, sessionUser, function(response){
+		console.log(response);
 		if(response != undefined)
 			res.json(response);
 		else
