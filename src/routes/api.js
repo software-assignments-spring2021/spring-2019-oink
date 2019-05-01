@@ -112,7 +112,13 @@ router.post('/remove-transaction/:id', (req, res) => {
 router.post('/change-tip', (req, res) => {
 	const newTip = req.body.tip;
 	api.changeTip(newTip, req.session.user.username, function(response){
-		res.send(response);
+		console.log(response);
+		if(response == 'Tip Changed')
+			res.send(response);
+		else{
+			//res.redirect('/user/'+req.session.user.username + "?error=error");
+			res.send(response);
+		}
 	});
 });
 

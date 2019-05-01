@@ -55,7 +55,7 @@ function appendChildren(parent, ...children){
     return parent;
 }
 
-function addUserToBill(username, defaultPercentage){
+function addUserToBill(username, defaultPercentage, isSessionUser){
 
    /*
     <div class="userBlock">
@@ -139,7 +139,8 @@ function addUserToBill(username, defaultPercentage){
   outerDiv.insertBefore(delButton, profilePicDiv);
 
   //add the username to the split with field
-  document.querySelector("#splitWith").value += `${username},`
+  if(!isSessionUser)
+    document.querySelector("#splitWith").value += `${username},`
 
   parentDiv.appendChild(outerDiv);
 
@@ -178,18 +179,15 @@ function handleAddGroup(req, user){
     userBlocks[i].remove();
   }
 
-  // const users = document.getElementById('users');
-  // while(users.firstChild){
-  //   users.removeChild(users.firstChild);
-  // }
-  //const typeOfPayment = document.getElementById("typeOfPayment");
-  //typeOfPayment.value = "%";
-  // then add members of the group, including session user
   const group = JSON.parse(req.responseText);
   for(let i = 0; i < group.inGroup.length; i++){
     //const username = group.inGroup[i];
-    addUserToBill(group.inGroup[i], group.defaultPercentages[i]);
+    if(user != group.inGroup[i])
+      addUserToBill(group.inGroup[i], 0, false);
+    else
+      addUserToBill(group.inGroup[i], 0, true);
   }
+  //switchSymbol('percent');
 }
 
 function onClickAddGroup(id, user){
@@ -198,24 +196,6 @@ function onClickAddGroup(id, user){
   req.open('get', '/group/get/' + id, true);
   req.addEventListener('load', () => {handleAddGroup(req, user);});
   req.send();
-}
-
-function checkValuesWithSum(){
-  
-  const vals = document.getElementsByClassName("transactionValue");
-  const sum = parseInt(document.getElementById("amount").value);
-  let inc = 0;
-  for(let i = 0; i < vals.length; i++){
-    inc += parseInt(vals[i].value);
-  }
-  const addBill = document.getElementById("addBillButton");
-  if(inc !== sum || sum === 0){
-    addBill.disabled = true;
-  }
-  if(inc === sum && sum !== 0){
-    addBill.disabled = false;
-  }
-
 }
 
 function onClickSplitType(icon) {
@@ -232,17 +212,14 @@ function switchSymbol(sym){
 
   document.querySelectorAll(`div.userBlock span.${sym}`).forEach((span)=>{
     console.log(span);
+    console.log('test2');
     span.classList.remove("hidden");
   });
 
   document.querySelectorAll(`div.userBlock span.${opposite}`).forEach((span)=>{
+    console.log('test3'); 
     span.classList.add("hidden");
   });
 
 
 }
-
-
-
-
-//setInterval(checkValuesWithSum, 30);

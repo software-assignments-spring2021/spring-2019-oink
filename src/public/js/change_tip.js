@@ -7,7 +7,8 @@ function onClickChangeTip(){
 		if(xml.responseText === "Tip Changed"){
 			document.getElementById("tip").value = tip;
 		}
-    	//location.reload();
+		else
+    		window.location.href = window.location.href + "?error=error";
     });
 	xml.send("tip=" + tip);
 }

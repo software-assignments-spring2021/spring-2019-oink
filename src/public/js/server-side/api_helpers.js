@@ -56,6 +56,8 @@ function isFriend(username, user, cb){
 			if(friends){
 				return cb(true);
 			}
+			else if(username == user.username)
+				return cb(true);
 			else{
 				return cb(false);
 			}
