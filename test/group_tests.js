@@ -15,6 +15,7 @@ describe('Group Tests', function(){
 	});
 	const group = new Group({
 		name: 'taken',
+		inGroup: ['charlie']
 	});
 	const secondGroup = new Group({
 		name: 'test',
@@ -43,7 +44,7 @@ describe('Group Tests', function(){
 			user.save(function(err, newUser){
 				const query = {error: 'error2'};
 				app.handleGroupError(newUser, query, function(ret){
-					expect(ret).to.include({error: "Group Name Taken"});
+					expect(ret).to.include({error: "Already In A Group of Same Name"});
 					done();
 				});
 			});

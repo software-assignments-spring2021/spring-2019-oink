@@ -2,15 +2,30 @@ function searchUserFilter() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("searchUser");
   filter = input.value.toUpperCase();
-  div = document.getElementById("friendsDropdown");
-  a = div.getElementsByTagName("a");
-  console.log(a);
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
+  div = document.getElementsByClassName("friends")[0];
+  h4 = div.getElementsByTagName("h4");
+  for (i = 0; i < h4.length; i++) {
+    txtValue = h4[i].textContent || h4[i].innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
+      h4[i].style.display = "";
     } else {
-      a[i].style.display = "none";
+      h4[i].style.display = "none";
+    }
+  }
+}
+
+function searchGroupFilter() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("searchGroup");
+  filter = input.value.toUpperCase();
+  div = document.getElementsByClassName("groups")[0];
+  h4 = div.getElementsByTagName("h4");
+  for (i = 0; i < h4.length; i++) {
+    txtValue = h4[i].textContent || h4[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      h4[i].style.display = "";
+    } else {
+      h4[i].style.display = "none";
     }
   }
 }

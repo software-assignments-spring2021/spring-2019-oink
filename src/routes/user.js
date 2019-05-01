@@ -68,7 +68,8 @@ router.get('/login', (req, res) => {
 		res.redirect(ret);
 	}
 	else{
-		res.sendFile(path.join(__dirname, "..", "public", "html", 'login.html'))
+		//res.sendFile(path.join(__dirname, "..", "public", "html", 'login.html'))
+		res.render('Login');
 	}
 });
 
