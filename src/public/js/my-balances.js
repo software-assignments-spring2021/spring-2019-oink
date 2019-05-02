@@ -55,6 +55,9 @@ function totalText(username, balance){
 }
 
 
+
+
+
 function showBalances(username){
 
 
@@ -96,15 +99,25 @@ function showBalances(username){
 
       if(text.forgive){
         let forgiveButton = createElement("button", {"class":"pay"}, "Forgive");
-        forgiveButton.onClick = function(){
-          console.log("button clicked");
+        forgiveButton.addEventListener("click", function(){
+          //console.log("button clicked");
           const xml = new XMLHttpRequest();
           xml.open('get', '/api/remove-transaction/'+trans._id, true);
           xml.addEventListener("load", ()=>{
             console.log(xml.responseText);
             if(xml.responseText == "removed"){
               console.log('removed');
-              location.reload();
+              //update the balance
+              //paid by will always be the friend, so to update the balance on the page
+              trans.isPaid = true;
+              document.querySelector("h3#totalBalance").textContent = totalText(username, res.balance-trans.amount);
+              //set the article to paid
+              article.classList.add("paid");
+              article.classList.remove("unpaid");
+
+              //remove the forgive button
+              forgiveButton.remove();
+              //location.reload();
 
             }
             else{
@@ -113,7 +126,7 @@ function showBalances(username){
           });
           
           xml.send();
-        } 
+        }); 
 
         article.appendChild(forgiveButton);
       }
@@ -125,7 +138,7 @@ function showBalances(username){
     }
 
     //const totalBalance = document.createElement("h3");
-    const totalBalance = createElement("h3", {}, totalText(username, res.balance));
+    const totalBalance = createElement("h3", {"id":"totalBalance"}, totalText(username, res.balance));
     section.appendChild(totalBalance);
 
   });
