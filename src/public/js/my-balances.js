@@ -101,10 +101,10 @@ function showBalances(username){
         forgiveButton.addEventListener("click", function(){
           //console.log("button clicked");
           const xml = new XMLHttpRequest();
-          xml.open('get', '/api/remove-transaction/'+trans._id, true);
+          xml.open('post', '/user/pay-transaction/'+trans._id, true);
           xml.addEventListener("load", ()=>{
             console.log(xml.responseText);
-            if(xml.responseText == "removed"){
+            if(xml.responseText == "ok"){
               console.log('removed');
               //update the balance
               //paid by will always be the friend, so to update the balance on the page
