@@ -1,4 +1,4 @@
-function showBalances(username){
+ffunction showBalances(username){
 	
 	const header = document.getElementById('header'); // CLEAR THE CURRENT CONTENTS OF THE SCREEN
 	while(header.firstChild){
@@ -38,7 +38,7 @@ function showBalances(username){
           forgive.textContent = "Forgive";
           forgive.onclick = function(){
               const xml = new XMLHttpRequest();
-              xml.open('post', '/api/remove-transaction/'+t._id, true);
+              xml.open('post', '/user/pay-transaction/'+t._id, true);
               xml.send();
               location.reload();
           };
