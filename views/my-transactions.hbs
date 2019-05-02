@@ -16,7 +16,7 @@
 {{#each paid as |p|}}
 	<article class="paid">
 		<span class="amount">${{ p.amount }}</span>
-		<span class="paidOn">${{ p.paidOn }}</span>
+		<span class="paidOn">Paid on {{ p.datePaid }}</span>
 		<span class="added-by">Added by <a href="/user/{{ p.paidTo }}">{{ p.paidTo }}</a></span>
 		<span class="view-bill"><a href="/bill/view/{{ p.bill }}">View <i class="fas fa-arrow-right"></i></a></span>
 	</article>

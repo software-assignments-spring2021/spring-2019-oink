@@ -59,7 +59,7 @@ router.post('/upload/image', (req, res) => {
 	    });
 
 	    form.on('file', function (name, file){
-	        console.log('Uploaded ' + file.name);
+	        //console.log('Uploaded ' + file.name);
 	        sessionUser.img.rawSRC = __dirname + '/../public/images/' + file.name;
 			sessionUser.img.src = '/images/' + file.name;
 			sessionUser.save(() => {
