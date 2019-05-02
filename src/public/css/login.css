@@ -11,6 +11,15 @@ div .complete-form {
     margin: auto;
 }
 
+form div{
+    display:flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    
+}
+
 div.container {
     font-family: "Open Sans", sans-serif;
     box-sizing: border-box;
@@ -18,7 +27,7 @@ div.container {
     margin: 0px;
 }
 input[type=text], input[type=password], select {
-    width: 80%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -48,6 +57,7 @@ input[type=text], input[type=password], select {
 label {
     font-size: 20px;
     width: 100%;
+    bottom: 10px;
 }
 /* .complete-form h4 {
     background-color: yellow;
@@ -60,4 +70,5 @@ label {
     text-align: left;
     width: 100%;
     font-family: Tahoma, Geneva, sans-serif;
+
 }
