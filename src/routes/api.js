@@ -86,7 +86,7 @@ router.post('/history', (req, res) => {
 	const username = req.body.username;
 	const sessionUser = req.session.user;
 	api.getHistory(username, sessionUser, function(response){
-		console.log(response);
+		//console.log(response);
 		if(response != undefined)
 			res.json(response);
 		else
@@ -97,12 +97,13 @@ router.post('/history', (req, res) => {
 // takes as parameter the object id of a transaction. If
 // it exists, it is removed completely and its reference
 // in the respective user's transactions field is removed
-router.post('/remove-transaction/:id', (req, res) => {
+router.get('/remove-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	api.removeTransaction(id, function(response){
-		if(response == 'document removed')
-			res.send('document removed');
-		else
+		console.log(response);
+		if(response == 'document removed'){
+			res.send('removed');
+		}else
 			res.send('error');
 	});
 });
