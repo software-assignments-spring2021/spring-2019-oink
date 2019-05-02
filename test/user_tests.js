@@ -15,19 +15,21 @@ describe('User Tests', function(){
 		amount: 15,
 		paidTo: 'alice',
 		paidBy: 'david',
-		isPaid: false
+		isPaid: false,
+		dateCreated: "5/2/19"
 	});
 	const unpaidTransaction = new Transaction({
 		amount: 10,
 		paidTo: 'alice',
 		paidBy: 'david',
-		isPaid: false
+		isPaid: false,
+		dateCreated: "5/2/19"
 	});
 	const secondUser = new User({
 		username: 'earl',
 		password: 'earl',
 		email: 'earl',
-		transactions: [transaction._id]
+		transactions: [transaction._id],
 	});
 	const group = new Group({
 		name: 'davidGroup'
