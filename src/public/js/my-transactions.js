@@ -24,11 +24,18 @@ function payTransaction(id){
 }
 
 function onBillPage(id){
+	//get the date it was paid
+	const dt = dateTime.create();
+	const formatted = dt.format('m/d/Y');
+
 	//on the bill page, we remove the pay button and change the class to paid
 	const div = document.querySelector('#userTrans');
 	div.querySelector("button.pay").remove();
 	div.classList.remove('unpaid');
 	div.classList.add('paid');
+
+	const paidOn = createElement("span", {"class": "paidOn"}, `Paid on ${formatted}`);
+	div.insertBefore(paidOn, div.querySelector("span.added-by"));
 
 
 }
@@ -47,8 +54,13 @@ function onOtherPage(id){
 }
 
 function createPaidDiv(amountSpan, AddedSpan, viewBill){
+	const dt = dateTime.create();
+	const formatted = dt.format('m/d/Y');
+	const dateSpan = createElement("span", {"class":"paidOn"}, `Paid on ${formatted}`);
 	const paidDiv = createElement("article", {"class": "paid"});
+	
 	paidDiv.appendChild(amountSpan);
+	paidDiv.appendChild(dateSpan)
 	paidDiv.appendChild(AddedSpan);
 	paidDiv.appendChild(viewBill);
 

@@ -7,6 +7,7 @@
 	{{#if userTrans.isPaid}}
 	<article id="userTrans" class="paid">
 		<span class="amount">${{ userTrans.amount }}</span>
+		<span class="paidOn">Paid on userTrans.datePaid</span>
 		<span class="added-by">Paid by <a href="/user/{{ userTrans.paidBy }}">{{ userTrans.paidBy }}</a></span>
 	</article>
 
@@ -24,13 +25,16 @@
 {{#each non-friend-transactions as |t|}}
 	{{#if t.isPaid}}
 	<article class="paid">
+		<span class="amount">${{ t.amount }}</span>
+		<span class="paidOn">Paid on t.datePaid</span>
 		
 	{{else}}
 	<article class="unpaid">
+		<span class="amount">${{ t.amount }}</span>
 
 	{{/if}}
 
-		<span class="amount">${{ t.amount }}</span>
+		
 		<span class="added-by">Being paid by <a href="/user/{{ t.paidBy }}">{{ t.paidBy }}</a></span>
 		<button id="add-friend" onclick="addFriend('{{ t.paidBy }}')">Add Friend</button>
 	</article>
@@ -41,9 +45,12 @@
 {{#each friend-transactions as |t|}}
 	{{#if t.isPaid}}
 	<article class="paid">
+		<span class="amount">${{ t.amount }}</span>
+		<span class="paidOn">Paid on t.datePaid</span>
 		
 	{{else}}
 	<article class="unpaid">
+		<span class="amount">${{ t.amount }}</span>
 
 	{{/if}}
 
