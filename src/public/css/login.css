@@ -6,7 +6,7 @@ complete-form {
 }
 
 div .complete-form {
-    text-align: center;
+    
     width: 40%;
     margin: auto;
 }
@@ -26,6 +26,7 @@ input[type=text], input[type=password], select {
     border-radius: 4px;
     box-sizing: border-box;
     text-align: left;
+    float: right;
   }
   
   input[type=submit] {
@@ -47,4 +48,16 @@ input[type=text], input[type=password], select {
 label {
     font-size: 20px;
     width: 100%;
+}
+/* .complete-form h4 {
+    background-color: yellow;
+    text-align: left;
+    width: 100%;
+
+} */
+
+#already {
+    text-align: left;
+    width: 100%;
+    font-family: Tahoma, Geneva, sans-serif;
 }
