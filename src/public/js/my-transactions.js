@@ -7,7 +7,7 @@ function payTransaction(id){
 		if(req.responseText ==="ok"){
 			//remove the div
 			//check if we are on the view bill page or another page
-			let isBillPage = window.location.pathname.split('/')[1] == "bill"; 
+			let isBillPage = (window.location.pathname.split('/')[1] == "bill" || window.location.pathname.split('/')[2] == "my-transactions"); 
 
 			if(isBillPage){
 				onBillPage(id)
@@ -24,11 +24,26 @@ function payTransaction(id){
 }
 
 function onBillPage(id){
+	//get the date it was paid
+	//const dt = dateTime.create();
+	///const formatted = dt.format('m/d/Y');
+	const today = new Date();
+	const date = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`;
+
+	/*
+	format(todayTime . getMonth() + 1);
+var day = format(todayTime . getDate());
+var year = format(todayTime . getFullYear());
+	*/
+
 	//on the bill page, we remove the pay button and change the class to paid
 	const div = document.querySelector('#userTrans');
 	div.querySelector("button.pay").remove();
 	div.classList.remove('unpaid');
 	div.classList.add('paid');
+
+	const paidOn = createElement("span", {"class": "paidOn"}, `Paid on ${date}`);
+	div.insertBefore(paidOn, div.querySelector("span.added-by"));
 
 
 }
@@ -47,7 +62,10 @@ function onOtherPage(id){
 }
 
 function createPaidDiv(amountSpan, AddedSpan, viewBill){
+
+
 	const paidDiv = createElement("article", {"class": "paid"});
+	
 	paidDiv.appendChild(amountSpan);
 	paidDiv.appendChild(AddedSpan);
 	paidDiv.appendChild(viewBill);

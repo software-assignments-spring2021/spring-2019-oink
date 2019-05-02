@@ -5,6 +5,8 @@ const Group = mongoose.model("Group");
 const Transaction = mongoose.model("Transaction");
 const async = require('async');
 
+const dateTime = require('node-datetime');
+
 function inSession(user){
 	if(user)
 		return true;
@@ -61,9 +63,13 @@ function getTransactions(user, cb){
 }
 
 function payTransaction(id, cb){
+	const dt = dateTime.create();
+	const formatted = dt.format('m/d/Y');
+
 	Transaction.findById(id, (err, transaction) => {
 		if(transaction){
 			transaction.isPaid = true;
+			transaction.datePaid = formatted;
 			transaction.save();
 			console.log("Transaction paid");
 
