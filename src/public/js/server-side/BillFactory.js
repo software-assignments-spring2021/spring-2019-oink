@@ -171,7 +171,9 @@ class BillFactory {
 									paidTo:newFriendsToSplit[newFriendsToSplit.length-1].user,
 									isPaid: false,
 									bill: id,
-									isFriends: isFriends
+									isFriends: isFriends,
+									dateCreated:date,
+									datePaid:null
 								});
 							}
 							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
@@ -181,7 +183,9 @@ class BillFactory {
 									paidTo:newFriendsToSplit[newFriendsToSplit.length-1].user,
 									isPaid: true,
 									bill: id,
-									isFriends: false
+									isFriends: false,
+									dateCreated:date,
+									datePaid:date
 								});
 							}
 
