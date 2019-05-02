@@ -97,6 +97,7 @@ describe('Oink API Router Tests', function(){
 			amount: 5,
 			paidBy: "testUser",
 			paidTo: "test",
+			dateCreated: "5/2/19"
 		});
 		it('returns false if no transaction found', function(done){
 			app.removeTransaction('fakeTransaction', function(res){
