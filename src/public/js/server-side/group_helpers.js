@@ -14,7 +14,7 @@ function handleGroupError(user, query, cb){
 					else{
 						let error = "Error Processing Group";
 						if(query.error == "error2")
-							error = "Group Name Taken";
+							error = "Already In A Group of Same Name";
 						else if(query.error == "error3")
 							error = "At Least 2 Members Needed";
 						//res.render('add-group', {'friends': users, 'user': req.session.user.username, 'error': error});	
@@ -33,7 +33,14 @@ function handleGroupError(user, query, cb){
 function addGroup(user, request, cb){
 	if(request.body.name != ""){
 		Group.findOne({name: request.body.name}, (err, group) => {
-			if(!group){
+			let inGroup = false;
+			if(group){
+				for(let i = 0; i < group.inGroup.length; i++){
+					if(group.inGroup[i] == user.username)
+						inGroup = true;
+				}
+			}
+			if(!inGroup){
 				let groupMembers = request.body.splitWith.split(','); 
 				groupMembers[groupMembers.length-1] = user.username;
 				if(groupMembers.length <= 1){

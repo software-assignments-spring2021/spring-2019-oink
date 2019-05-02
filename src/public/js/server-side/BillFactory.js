@@ -75,6 +75,7 @@ function viewBill(id, username, cb){
 		if(bill){
 			Transaction.find({"bill": id}, (err, transactions) => {
 				User.findOne({"username": username}, (err, sessionUser) => {
+					let userTrans = {}
 					const friends = [];
 					const nonfriends = [];
 					for(let i = 0; i < transactions.length; i++){
@@ -88,7 +89,7 @@ function viewBill(id, username, cb){
 						}
 
 						if(user == sessionUser.username)
-							friends.push(transactions[i]);
+							userTrans = transactions[i];
 
 						else if(!isFriend)
 							nonfriends.push(transactions[i]);
@@ -96,13 +97,13 @@ function viewBill(id, username, cb){
 					console.log(friends);
 					console.log(nonfriends);
 					return cb({"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-					"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
-					nonfriends});
+					"date": bill.dateCreated, "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
+					nonfriends, "userTrans":userTrans});
 				});
 			});
 		}
 		else{
-			console.log(err);
+			//console.log(err);
 			return cb('error');
 		}
 	});
