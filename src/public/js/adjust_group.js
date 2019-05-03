@@ -120,8 +120,10 @@ function leaveGroup(username, id){
 	const req = new XMLHttpRequest();
 	req.open('post', '/group/remove-member', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.addEventListener('load', () => {
+		window.location.href = "/user/" + username;
+	});	
 	req.send("member=" + username + "&group=" + id);
-	location.reload();
 }
 
 

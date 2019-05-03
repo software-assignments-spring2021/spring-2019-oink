@@ -181,6 +181,8 @@ function handleAddGroup(req, user){
     userBlocks[i].remove();
   }
 
+  document.querySelector("#splitWith").value = "";
+
   const group = JSON.parse(req.responseText);
   console.log(group.inGroup);
   for(let i = 0; i < group.inGroup.length; i++){
