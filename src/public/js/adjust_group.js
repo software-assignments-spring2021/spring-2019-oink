@@ -47,6 +47,9 @@ function editGroup(id){
 			req.send("member=" + input[i].id + "&group=" + id);
 			
 			input[i].parentNode.removeChild(input[i]);
+
+			const friendsDiv = document.getElementsByClassName("friends")[0];
+			setSearchUsers(friendsDiv);
 		}
 
 		input[i].appendChild(removeButton);
@@ -59,7 +62,7 @@ function editGroup(id){
 	const searchBar = createElement("input", {"type":"text", "placeholder":"Add another user to the group...", "id":"searchUser", "onkeyup": "searchUserFilter()"});
 	friendsDiv.appendChild(searchBar);
 
-
+	
 	const req = new XMLHttpRequest();
 	req.open('post', '/user/members', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

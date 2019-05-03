@@ -76,7 +76,6 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
   const profilePic = createElement("img", {});
 
-
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
   xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -122,21 +121,22 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   req.send("username="+username);
 
   // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
-  const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+  if(!isSessionUser){
+    const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
 
-  delButton.addEventListener("click", function(){
-    const users = splitWith.value.split(',');
-      let newString = "";
-      for(let i = 0; i < users.length; i++){
-        if(users[i] != username && users[i] != '')
-          newString += users[i] + ',';
-      }
-      splitWith.value = newString;
-      parentDiv.removeChild(outerDiv);
+    delButton.addEventListener("click", function(){
+      const users = splitWith.value.split(',');
+        let newString = "";
+        for(let i = 0; i < users.length; i++){
+          if(users[i] != username && users[i] != '')
+            newString += users[i] + ',';
+        }
+        splitWith.value = newString;
+        parentDiv.removeChild(outerDiv);
+    });
 
-  });
-
-  outerDiv.insertBefore(delButton, profilePicDiv);
+    outerDiv.insertBefore(delButton, profilePicDiv);
+  }
 
   //add the username to the split with field
   if(!isSessionUser)
