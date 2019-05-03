@@ -19,6 +19,20 @@ function createElement(elementType, attributes, text){
 
 }
 
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  document.querySelector(`h4#${username}`).remove();
+
+}
+
+function addUserToSelectList(username, id){
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addNewUserToGroup(username, id);
+  }
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
+}
+
 
 function deleteGroup(id){
 	const xml = new XMLHttpRequest();
@@ -41,6 +55,7 @@ function editGroup(id){
 		removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
 
 		removeButton.onclick = function(){
+			addUserToSelectList(input[i].id, id);
 			const req = new XMLHttpRequest();
 			req.open('post', '/group/remove-member', true);
 			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

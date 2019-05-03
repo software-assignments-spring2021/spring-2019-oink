@@ -8,19 +8,18 @@ function onClickAddUserToBill(){
   addUserToBill(username);
 } 
 
-function removeUser(username){
-  
-  const div = document.getElementById(username + "Block");
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  document.querySelector(`h4#${username}`).remove();
 
-  div.parentNode.removeChild(div);
-  const splitWith = document.getElementById('splitWith');
-  const users = splitWith.value.split(',');
-  let newString = "";
-  for(let i = 0; i < users.length; i++){
-    if(users[i] != username)
-      newString += users[i] + ',';
+}
+
+function addUserToSelectList(username){
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addUserToBill(username, 0);
   }
-  splitWith.value = newString;
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
 }
 
 function createElement(elementType, attributes, text){
@@ -76,6 +75,8 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
   const profilePic = createElement("img", {});
 
+  removeUserFromSelectList(username);
+
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
   xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -125,7 +126,8 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
     const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
 
     delButton.addEventListener("click", function(){
-      const users = splitWith.value.split(',');
+        addUserToSelectList(username);
+        const users = splitWith.value.split(',');
         let newString = "";
         for(let i = 0; i < users.length; i++){
           if(users[i] != username && users[i] != '')
