@@ -10,8 +10,8 @@ function onClickAddUserToBill(){
 
 function removeUserFromSelectList(username){
   //remove the name from the full list so it can't be added twice
-  document.querySelector(`h4#${username}`).remove();
-
+  if(document.querySelector(`h4#${username}`))
+    document.querySelector(`h4#${username}`).remove();
 }
 
 function addUserToSelectList(username){
@@ -182,6 +182,7 @@ function handleAddGroup(req, user){
   }
 
   const group = JSON.parse(req.responseText);
+  console.log(group.inGroup);
   for(let i = 0; i < group.inGroup.length; i++){
     //const username = group.inGroup[i];
     if(user != group.inGroup[i])
