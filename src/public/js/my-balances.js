@@ -1,4 +1,3 @@
-
 function createElement(elementType, attributes, text){
   const elem = document.createElement(elementType);
 
@@ -68,7 +67,7 @@ function showBalances(username){
 
 
 
-	const req = new XMLHttpRequest();
+  const req = new XMLHttpRequest();
   req.open('post', '/api/history', true);
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.addEventListener('load', () => {
@@ -102,10 +101,10 @@ function showBalances(username){
         forgiveButton.addEventListener("click", function(){
           //console.log("button clicked");
           const xml = new XMLHttpRequest();
-          xml.open('get', '/api/remove-transaction/'+trans._id, true);
+          xml.open('post', '/user/pay-transaction/'+trans._id, true);
           xml.addEventListener("load", ()=>{
             console.log(xml.responseText);
-            if(xml.responseText == "removed"){
+            if(xml.responseText == "ok"){
               console.log('removed');
               //update the balance
               //paid by will always be the friend, so to update the balance on the page
@@ -144,5 +143,3 @@ function showBalances(username){
   });
   req.send("username="+username);
 }
-
-

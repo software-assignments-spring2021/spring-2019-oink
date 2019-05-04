@@ -55,7 +55,7 @@
       <div class="friends">
           <input type="text" placeholder="Search..." id="searchUser" onkeyup="searchUserFilter()">
           {{#each friends as |f|}}
-            <h4 onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
+            <h4 id="{{ f.username }}" onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
           {{/each}}
       </div>
   </div>

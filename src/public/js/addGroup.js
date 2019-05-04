@@ -116,6 +116,7 @@ function addNewUserToGroup(username, id){
 
   userBlock.appendChild(h4);
 
+  removeUserFromSelectList(username);
 
   const req = new XMLHttpRequest();
   req.open('post', '/group/add-member', true);
@@ -124,6 +125,7 @@ function addNewUserToGroup(username, id){
     const button = createElement("button", {"id": "removeUser"}, "Remove");
     button.insertBefore(minusSign, button.childNodes[0]);
     button.onclick = function(){
+      addUserToSelectList(username, id);
       const req = new XMLHttpRequest();
       req.open('post', '/group/remove-member', true);
       req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
