@@ -94,8 +94,8 @@ function viewBill(id, username, cb){
 						else if(!isFriend)
 							nonfriends.push(transactions[i]);
 					}
-					console.log(friends);
-					console.log(nonfriends);
+					//console.log(friends);
+					//console.log(nonfriends);
 					return cb({"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
 					"date": bill.dateCreated, "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
 					nonfriends, "userTrans":userTrans});
