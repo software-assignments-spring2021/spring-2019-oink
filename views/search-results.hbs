@@ -1,0 +1,22 @@
+<h2>Search Results for "{{ query }}"</h2>
+
+{{#if results}}
+	
+	<div class="view-group">
+	{{#each results as |r|}}
+		<div class="userBlock" id="{{ r.username }}">
+			<div class = "small-profile-pic">
+				<img src="{{ r.img.src }}" />
+			</div>
+			<h4><a href="/user/{{ r.username }}">{{ r.username }}</h4>
+		</div>
+
+	{{/each}}
+	</div>
+
+
+{{else}}
+
+<h3>There are no users with that username</h3>
+
+{{/if}}

@@ -36,9 +36,9 @@
                 <div id="usersDropdown">
                     <div class="search-bar">
                         <i class="fas fa-search" onclick="openSearch()"></i>
-                        <form method = "GET" action = "/users/search">
-                            <input type="text" onfocus="openSearch()" placeholder="" onkeyup="searchOnKeyUp(event)" id="search" name="username">
-                            
+
+                        <form id="search-form" method ="get" action ="/user/search">
+                            <input type="text" onfocus="openSearch()" placeholder="" onkeyup="checkEnter(event)" id="search" name="username">
                         </form>
 
                         <div class="search-dropdown">
@@ -62,7 +62,7 @@
 
         <div class="content">
 
-            {{{body}}} <!-- think of body as a variable as the other hbs files--> 
+            {{{body}}}
 
         </div>
 

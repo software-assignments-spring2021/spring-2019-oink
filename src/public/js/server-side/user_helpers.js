@@ -287,6 +287,22 @@ function getUserProfile(req, user, sessionUser, cb){
 	});
 }
 
+function searchUsers(query, sessionUsername, cb){
+	//return user that have usernames that match the query
+	
+	User.find({$and:[ {"username": new RegExp(`${query}`, 'i')}, {"username": {$ne: req.session.user.username}} ]}, (err, docs)=>{
+
+		if(docs){
+
+			cb(docs);
+		}
+		else{
+			cb("error");
+		}
+	});
+
+}
+
 module.exports = {
 	inSession: inSession,
 	addUser: addUser,
@@ -297,5 +313,6 @@ module.exports = {
 	myBills: myBills,
 	myBalances: myBalances,
 	getAllUsers: getAllUsers,
-	getUserProfile: getUserProfile
+	getUserProfile: getUserProfile,
+	searchUsers:searchUsers
 }

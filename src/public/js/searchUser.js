@@ -52,7 +52,19 @@ function addResultsToDropDown(docs){
 
 }
 
+function checkEnter(evt){
+
+  if(evt.keyCode == 13){
+    console.log("enter key")
+    document.querySelector("form.search-form").submit();
+  }
+  else{
+    searchOnKeyUp(evt);
+  }
+}
+
 function searchOnKeyUp(evt){
+
   document.querySelector("ul.search-results").innerHTML = "" //clear out the dropdown
 
   const value = evt.target.value;
@@ -75,7 +87,7 @@ function searchOnKeyUp(evt){
   });
 
   req.send();
-
+  
 
 
 }

@@ -210,4 +210,26 @@ router.get('/:username', (req, res) => {
 
 });
 
+router.get('/search', (req, res)=>{
+	console.log("search results");
+	const value = req.query.username;
+	console.log(value);
+
+
+	console.log("session user");
+
+	usr.searchUsers(value, req.sessionUser.username, function(results){
+		console.log(results);
+
+		if(results != "error"){
+			res.render("search-results", {"query": value, "results": results});
+		}
+		else{
+			console.log(error);
+		}
+
+	});
+
+});
+
 module.exports = router;

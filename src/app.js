@@ -46,16 +46,17 @@ app.use(session({
 app.use((req, res, next) => {
 	if(req.session.user){
 		res.locals.sessionUser = req.session.user;
-		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-			res.locals.allUsers = users;
-		});
+		//User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
+		//	res.locals.allUsers = users;
+		//});
 		app.set('view options', { layout: 'loggedInLayout' });
-		next();
 	}
 	else{
 		app.set('view options', { layout: 'layout' });
-		next();
+		
 	}
+
+	next();
 });
 
 //for debugging
