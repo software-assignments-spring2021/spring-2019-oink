@@ -2,8 +2,11 @@
 
 <div class="view-group" id="groupMembers">
 	{{#each group.inGroup}}
-		<div class="userBlock changeable" id="{{this}}">
-			<h4 class="changeableUser">{{this}}</h4>
+		<div class="userBlock changeable" id="{{name}}">
+			<div class="small-profile-pic">
+				<img src = "{{profilePic}}" />
+			</div>
+			<h4 class="changeableUser">{{name}}</h4>
 		</div>
 	{{/each}}
 	<button id="doneButton" class="hidden" onclick="finishEdit()">Done</button>
