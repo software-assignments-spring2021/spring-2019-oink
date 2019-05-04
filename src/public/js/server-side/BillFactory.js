@@ -208,7 +208,13 @@ class BillFactory {
 
 						for(let i = 0; i < newFriendsToSplit.length-1; i++){
 							const friendName = newFriendsToSplit[i].user;
-							const updateBalance = newFriendsToSplit[i].amount; // negative of amount to pay
+
+							let amount = newFriendsToSplit[i].amount;
+							if (reqBody.typeOfPayment=="%"){
+								amount = amount * .01 * reqBody.amount;
+							}
+
+							const updateBalance = amount; // negative of amount to pay
 
 							User.findOne({"username": user.username}, (err, sessionUser) => {
 								for(let j = 0; j < sessionUser.friends.length; j++){

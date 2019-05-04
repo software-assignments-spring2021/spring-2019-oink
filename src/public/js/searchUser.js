@@ -56,7 +56,7 @@ function searchOnKeyUp(evt){
   document.querySelector("ul.search-results").innerHTML = "" //clear out the dropdown
 
   const value = evt.target.value;
-  //console.log(value);
+  console.log(value);
 
   if(value){
     const req = new XMLHttpRequest();
