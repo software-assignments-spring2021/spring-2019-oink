@@ -84,8 +84,7 @@ function correctTransactions(value){
 
 function getHistory(username, sessionUser, cb){
 	let relTransactions = [];
-	let dates = [];
-	let billId = [];
+
 	let balance = 0;
 	let response = {};
 
@@ -95,37 +94,24 @@ function getHistory(username, sessionUser, cb){
 
 			Transaction.find({'_id':{$in:allTransactionId}}, (err, transactions)=>{
 				if(transactions){
+
 					relTransactions = transactions.filter((value, index)=>{
 						
 						if (( (value.paidBy == username && value.paidTo == sessionUser.username)|| (value.paidBy == sessionUser.username && value.paidTo == username) ) && value.isFriends){ 
-							//console.log(value)
 							return true;
 						}
 						else
 							return false;
 					});
 
-					console.log(relTransactions)
+					let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
+					let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
 
-					billId = relTransactions.map((value)=>{
-						return value.bill;
-					});
+					balance = friendBal.balance - sessionUserBal.balance;
 
+					response = {"transactions": relTransactions, "balance": balance}
 
-					Bill.find({"_id":{$in:billId}}, (err, bills)=>{
-						dates = bills.map(bill => bill.dateCreated);
-						//get the balance from the session user 
-
-						let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
-						let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
-
-						balance = friendBal.balance - sessionUserBal.balance;
-
-						response = {"transactions": relTransactions, "dates": dates, "balance": balance}
-
-						cb(response);
-
-					});
+					cb(response);
 				}
 
 				else{

@@ -20,23 +20,23 @@ function createElement(elementType, attributes, text){
 
 }
 
-function transactionText(t, username, date){
+function transactionText(t, username){
   let text = ""
   let forgive = false
   if(t.paidBy != username && t.isPaid == true){
     //if the transaction is paid by the session user and they have paid it
-    text = "You paid " + t.amount + " to " + t.paidTo + ' on ' + date;
+    text = "You paid " + t.amount + " to " + t.paidTo + ' on ' + t.datePaid;
   }
   else if(t.paidBy != username && t.isPaid == false){
     //if the transaction is paid by the session user, and they have NOT paid it
-    text = t.paidTo + " requested " + t.amount + " from you on " + date;
+    text = t.paidTo + " requested " + t.amount + " from you on " + t.dateCreated;
   }
   else if(t.paidBy == username && t.isPaid == true){
     //if the transaction is paid by the friend and it is paid
-    text = t.paidBy + " paid you " + t.amount + " on " + date;
+    text = t.paidBy + " paid you " + t.amount + " on " + t.datePaid;
   }
   else if(t.paidBy == username && t.isPaid == false){
-    text = "You requested " + t.amount + " from " + t.paidBy + ' on ' + date;
+    text = "You requested " + t.amount + " from " + t.paidBy + ' on ' + t.dateCreated;
     forgive = true;
   }
 
@@ -83,7 +83,7 @@ function showBalances(username){
     for(let i = 0; i < res.transactions.length; i++){
       let trans = res.transactions[i];
 
-      let text = transactionText(trans, username, res.dates[i]);
+      let text = transactionText(trans, username);
 
       let article = createElement("article", {"class":trans.isPaid ? "paid" : "unpaid"});
       let amount = createElement("span", {"class":"amount"}, text.text);
