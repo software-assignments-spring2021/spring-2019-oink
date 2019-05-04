@@ -67,8 +67,18 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
 
   const parentDiv = document.querySelector("#userAmounts");
 
-  const spanDollar = createElement("span", {"class":"dollar"}, "$");
-  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  let spanDollar;
+  let spanPercent;
+
+  if(document.querySelector('div.userBlock span.percent').classList.contains("hidden")){
+      spanDollar = createElement("span", {"class":"dollar"}, "$");
+      spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  }
+  else{
+      spanDollar = createElement("span", {"class":"dollar hidden"}, "$");
+      spanPercent = createElement("span", {"class": "percent"}, "%");
+  }
+
   const userh4 = createElement("h4", {}, username);
   const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
 
