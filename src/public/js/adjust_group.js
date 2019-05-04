@@ -19,6 +19,20 @@ function createElement(elementType, attributes, text){
 
 }
 
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  document.querySelector(`h4#${username}`).remove();
+
+}
+
+function addUserToSelectList(username, id){
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addNewUserToGroup(username, id);
+  }
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
+}
+
 
 function deleteGroup(id){
 	const xml = new XMLHttpRequest();
@@ -41,12 +55,16 @@ function editGroup(id){
 		removeButton.insertBefore(minusSign, removeButton.childNodes[0]);
 
 		removeButton.onclick = function(){
+			addUserToSelectList(input[i].id, id);
 			const req = new XMLHttpRequest();
 			req.open('post', '/group/remove-member', true);
 			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			req.send("member=" + input[i].id + "&group=" + id);
 			
 			input[i].parentNode.removeChild(input[i]);
+
+			const friendsDiv = document.getElementsByClassName("friends")[0];
+			setSearchUsers(friendsDiv);
 		}
 
 		input[i].appendChild(removeButton);
@@ -59,7 +77,7 @@ function editGroup(id){
 	const searchBar = createElement("input", {"type":"text", "placeholder":"Add another user to the group...", "id":"searchUser", "onkeyup": "searchUserFilter()"});
 	friendsDiv.appendChild(searchBar);
 
-
+	
 	const req = new XMLHttpRequest();
 	req.open('post', '/user/members', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -102,8 +120,10 @@ function leaveGroup(username, id){
 	const req = new XMLHttpRequest();
 	req.open('post', '/group/remove-member', true);
 	req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.addEventListener('load', () => {
+		window.location.href = "/user/" + username;
+	});	
 	req.send("member=" + username + "&group=" + id);
-	location.reload();
 }
 
 
