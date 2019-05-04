@@ -108,6 +108,9 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
 
 
       const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, "Add Friend");
+      const plusSign = createElement("i", {"class": "fa fas-plus"});
+      addFriendButton.insertBefore(plusSign, addFriendButton.childNodes[0]);
+
       addFriendButton.addEventListener("click", function(){
         handleAddFriend(username);
         addFriendButton.style.display = "none";
@@ -124,6 +127,8 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
   if(!isSessionUser){
     const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+    const minusSign = createElement("i", {"class": "fa fas-minus"});
+    delButton.insertBefore(minusSign, delButton.childNodes[0]);
 
     delButton.addEventListener("click", function(){
         addUserToSelectList(username);
