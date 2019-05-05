@@ -82,46 +82,48 @@ function correctTransactions(value){
 
 }
 
-function getHistory(username, sessionUser, cb){
+function getHistory(username, user, cb){
 	let relTransactions = [];
 
 	let balance = 0;
 	let response = {};
 
 	User.findOne({'username':username}, (err, friend)=>{
-		if(friend){
-			const allTransactionId = sessionUser.transactions.concat(friend.transactions);
+		User.findOne({'username': user.username}, (error, sessionUser) => {
+				if(friend){
+				const allTransactionId = sessionUser.transactions.concat(friend.transactions);
 
-			Transaction.find({'_id':{$in:allTransactionId}}, (err, transactions)=>{
-				if(transactions){
+				Transaction.find({'_id':{$in:allTransactionId}}, (err, transactions)=>{
+					if(transactions){
 
-					relTransactions = transactions.filter((value, index)=>{
-						
-						if (( (value.paidBy == username && value.paidTo == sessionUser.username)|| (value.paidBy == sessionUser.username && value.paidTo == username) ) && value.isFriends){ 
-							return true;
-						}
-						else
-							return false;
-					});
+						relTransactions = transactions.filter((value, index)=>{
+							
+							if (( (value.paidBy == username && value.paidTo == sessionUser.username)|| (value.paidBy == sessionUser.username && value.paidTo == username) ) && value.isFriends){ 
+								return true;
+							}
+							else
+								return false;
+						});
 
-					let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
-					let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
+						let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
+						let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
 
-					balance = friendBal.balance - sessionUserBal.balance;
+						balance = friendBal.balance - sessionUserBal.balance;
 
-					response = {"transactions": relTransactions, "balance": balance}
+						response = {"transactions": relTransactions, "balance": balance}
 
-					cb(response);
-				}
+						cb(response);
+					}
 
-				else{
-					cb(undefined);
-				}
-			});
-		}
-		else{
-			cb(undefined);
-		}
+					else{
+						cb(undefined);
+					}
+				});
+			}
+			else{
+				cb(undefined);
+			}
+		});
 	});
 }
 

@@ -181,6 +181,7 @@ function groupProfile(id, user, isAdmin, cb){
 	Group.findById(id, (error, group) => {
 		if(group){
 			groupInfo["name"] = group.name;
+			groupInfo["_id"] = group._id;
 
 			User.find({"username": {$in: group.inGroup}}, (err, users)=>{
 
