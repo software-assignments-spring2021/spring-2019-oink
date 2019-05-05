@@ -70,7 +70,7 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   let spanDollar;
   let spanPercent;
 
-  if(document.querySelector('div.userBlock span.percent').classList.contains("hidden")){
+  if(!document.querySelector('div.userBlock') || document.querySelector('div.userBlock span.percent').classList.contains("hidden")){
       spanDollar = createElement("span", {"class":"dollar"}, "$");
       spanPercent = createElement("span", {"class": "percent hidden"}, "%");
   }
