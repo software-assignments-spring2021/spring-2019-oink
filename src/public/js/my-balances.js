@@ -109,9 +109,8 @@ function showBalances(username){
               //update the balance
               //paid by will always be the friend, so to update the balance on the page
               trans.isPaid = true;
-              console.log('res.balance: ', res.balance);
-              console.log('trans.amount: ', trans.amount);
               document.querySelector("h3#totalBalance").textContent = totalText(username, res.balance-trans.amount);
+              res.balance -= trans.amount;
               //set the article to paid
               article.classList.add("paid");
               article.classList.remove("unpaid");
@@ -119,7 +118,7 @@ function showBalances(username){
               //remove the forgive button
               forgiveButton.remove();
               //location.reload();
-              showBalances(username);
+              //showBalances(username);
 
             }
             else{
