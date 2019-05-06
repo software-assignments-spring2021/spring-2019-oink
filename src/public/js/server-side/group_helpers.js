@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Group = mongoose.model("Group");
+const async = require('async');
 
 function handleGroupError(user, query, cb){
 	User.findOne({username: user.username}, (err, searchUser) => {
@@ -163,7 +164,8 @@ function addMember(req, cb){
 function getGroup(id, cb){
 	Group.findById(id, (err, group) => {
 		if(group){
-			//res.json(group);
+			//res.json(group);			
+
 			return cb(group);
 		}
 		else{
@@ -175,28 +177,48 @@ function getGroup(id, cb){
 }
 
 function groupProfile(id, user, isAdmin, cb){
+	let groupInfo = {inGroup:[]}
 	Group.findById(id, (error, group) => {
 		if(group){
-			if(isAdmin){
-				if(group.administrator == user.username){ // Make sure session user is actually the admin
-					//res.render('group-profile-admin', {group: group}); // In case path specified directly
-					return cb({group: group});
+			groupInfo["name"] = group.name;
+			groupInfo["_id"] = group._id;
+
+			User.find({"username": {$in: group.inGroup}}, (err, users)=>{
+
+
+				for (let i = 0; i < users.length; i++){
+					groupInfo.inGroup.push({"name": users[i].username, "profilePic":users[i].img.src});
 				}
-				else{
-					//res.redirect('id?isAdmin=false'); // If not redirect to isAdmin=false page
-					return cb('id?isAdmin=false');
+
+
+
+
+				if(isAdmin){
+					if(group.administrator == user.username){ // Make sure session user is actually the admin
+						//res.render('group-profile-admin', {group: group}); // In case path specified directly
+						console.log(groupInfo);
+						return cb({group: groupInfo});
+					}
+					else{
+						//res.redirect('id?isAdmin=false'); // If not redirect to isAdmin=false page
+						return cb('id?isAdmin=false');
+					}
 				}
-			}
-			else{ // By default, render isAdmin=false page
-				if(group.inGroup.length > 0){
-					//res.render('group-profile-normal', {group: group, user: req.session.user.username});
-					return cb({group: group, user: user.username});
+				else{ // By default, render isAdmin=false page
+					if(group.inGroup.length > 0){
+						//res.render('group-profile-normal', {group: group, user: req.session.user.username});
+						return cb({group: groupInfo, user: user.username});
+					}
+					else{
+						//res.render('group-profile-normal', {group: group, noMembers: true});
+						return cb({group: groupInfo, noMembers: true});
+					}
 				}
-				else{
-					//res.render('group-profile-normal', {group: group, noMembers: true});
-					return cb({group: group, noMembers: true});
-				}
-			}
+
+			});
+
+
+			
 		}
 		else{
 			//res.redirect('/user/index');

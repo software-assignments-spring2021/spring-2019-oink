@@ -19,6 +19,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const IP = require('../public/js/iteratorPattern');
 const usr = require('../public/js/server-side/user_helpers');
 
+
+
 router.use(passport.initialize());
 router.use(passport.session());
 

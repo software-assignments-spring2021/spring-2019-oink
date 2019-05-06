@@ -36,7 +36,10 @@
       <input type="radio" name="typeOfPayment" id="mon" onclick="switchSymbol('dollar')" checked="checked" value="$"/><label for="mon">By Amount</label>
     
       <div class="userBlock">
-          <h4>{{ user.username }}</h4><span class="dollar">$</span><input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0"><span class="percent hidden">%</span>
+          <h4>{{ user.username }}</h4>
+          <span class="dollar">$</span>
+          <input type="text" name='{{ user.username }}' class="transactionValue" value="0" placeholder="0">
+          <span class="percent hidden">%</span>
       </div>
     </div>
 
@@ -55,7 +58,7 @@
       <div class="friends">
           <input type="text" placeholder="Search..." id="searchUser" onkeyup="searchUserFilter()">
           {{#each friends as |f|}}
-            <h4 onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
+            <h4 id="{{ f.username }}" onclick="addUserToBill('{{ f.username }}')">{{ f.username }}</h4>
           {{/each}}
       </div>
   </div>

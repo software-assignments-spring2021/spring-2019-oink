@@ -27,7 +27,7 @@ function addFriend(username, sessionUser, cb){
 				}
 				else{
 					//add the friend so it's immediatly accessible
-					console.log(doc)
+					//console.log(doc)
 					//req.session.user.friends.push(newFriend);
 					User.findOne({"username": username},(err, user)=>{
 						user.friends.push(secondFriend);
@@ -78,50 +78,51 @@ function getImage(username, cb){
 	});
 }
 
-function getHistory(username, sessionUser, cb){
-	Transaction.find({}, (err, transactions) => {
-		const response = {};
-		const relTransactions = [];
-		const dates = [];
-		for(let i = 0; i < transactions.length; i++){
-			if(transactions[i].paidBy == sessionUser.username && transactions[i].paidTo == username ||
-				transactions[i].paidBy == username && transactions[i].paidTo == sessionUser.username){
+function correctTransactions(value){
 
-				if(transactions[i].isFriends == true)
-					relTransactions.push(transactions[i]);
-			}	
-		}
-		async.forEach(relTransactions, function(item, cb){
-			Bill.findById(item.bill, (err, bill) => {
-				dates.push(bill.dateCreated);
-				cb();
-			});
-		}, function(err){
-			User.findOne({"username": sessionUser.username}, (err, user) => {
-				if(user){
-					for(let i = 0; i < user.friends.length; i++){
-						if(user.friends[i].user == username){
-							response.balance = user.friends[i].balance;
-						}
-					}
-					User.findOne({"username": username}, (err, otherUser) => {
-						if(otherUser){
-							for(let i = 0; i < otherUser.friends.length; i++){
-								if(otherUser.friends[i].user == sessionUser.username){
-									response.balance -= otherUser.friends[i].balance;
-								}
+}
+
+function getHistory(username, user, cb){
+	let relTransactions = [];
+
+	let balance = 0;
+	let response = {};
+
+	User.findOne({'username':username}, (err, friend)=>{
+		User.findOne({'username': user.username}, (error, sessionUser) => {
+				if(friend){
+				const allTransactionId = sessionUser.transactions.concat(friend.transactions);
+
+				Transaction.find({'_id':{$in:allTransactionId}}, (err, transactions)=>{
+					if(transactions){
+
+						relTransactions = transactions.filter((value, index)=>{
+							
+							if (( (value.paidBy == username && value.paidTo == sessionUser.username)|| (value.paidBy == sessionUser.username && value.paidTo == username) ) && value.isFriends){ 
+								return true;
 							}
-							response.transactions = relTransactions;
-							response.dates = dates;
-							return cb(response);
-						}
-						else
-							return cb(undefined);
-					});
-				}
-				else
-					return cb(undefined);
-			});
+							else
+								return false;
+						});
+
+						let friendBal = sessionUser.friends.find(curFriend => curFriend.user == username)
+						let sessionUserBal = friend.friends.find(curFriend => curFriend.user == sessionUser.username);
+
+						balance = friendBal.balance - sessionUserBal.balance;
+
+						response = {"transactions": relTransactions, "balance": balance}
+
+						cb(response);
+					}
+
+					else{
+						cb(undefined);
+					}
+				});
+			}
+			else{
+				cb(undefined);
+			}
 		});
 	});
 }

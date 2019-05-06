@@ -95,6 +95,7 @@ router.get('/get/:id', (req, res) => {
 			if(ret == 'error')
 				res.send(ret);
 			else
+
 				res.json(ret);
 		});
 	}else{
@@ -118,6 +119,7 @@ router.get('/:id', (req, res) => {
 			if(typeof ret === 'string')
 				res.redirect(ret);
 			else{
+				console.log(ret);
 				if(isAdmin)
 					res.render('group-profile-admin', ret);
 				else

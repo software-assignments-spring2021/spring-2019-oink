@@ -6,9 +6,8 @@
 
 <div class="view-group" id="groupMembers">
 	{{#each group.inGroup as |p|}}
-		<div class="userBlock" id="{{this}}">
-			<h4>{{this}}</h4>
-			<!--<input type="text" class="changeableUsers" value="{{this}}" readonly>-->
+		<div class="userBlock" id="{{p.name}}">
+			<h4>{{p.name}}</h4>
 		</div>
 	{{/each}}
 	<button onclick="leaveGroup('{{ user }}','{{group._id}}')">Leave Group</button>

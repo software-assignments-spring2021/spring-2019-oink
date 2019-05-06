@@ -8,19 +8,18 @@ function onClickAddUserToBill(){
   addUserToBill(username);
 } 
 
-function removeUser(username){
-  
-  const div = document.getElementById(username + "Block");
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  if(document.querySelector(`h4#${username}`))
+    document.querySelector(`h4#${username}`).remove();
+}
 
-  div.parentNode.removeChild(div);
-  const splitWith = document.getElementById('splitWith');
-  const users = splitWith.value.split(',');
-  let newString = "";
-  for(let i = 0; i < users.length; i++){
-    if(users[i] != username)
-      newString += users[i] + ',';
+function addUserToSelectList(username){
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addUserToBill(username, 0);
   }
-  splitWith.value = newString;
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
 }
 
 function createElement(elementType, attributes, text){
@@ -68,14 +67,25 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
 
   const parentDiv = document.querySelector("#userAmounts");
 
-  const spanDollar = createElement("span", {"class":"dollar"}, "$");
-  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  let spanDollar;
+  let spanPercent;
+
+  if(!document.querySelector('div.userBlock') || document.querySelector('div.userBlock span.percent').classList.contains("hidden")){
+      spanDollar = createElement("span", {"class":"dollar"}, "$");
+      spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  }
+  else{
+      spanDollar = createElement("span", {"class":"dollar hidden"}, "$");
+      spanPercent = createElement("span", {"class": "percent"}, "%");
+  }
+
   const userh4 = createElement("h4", {}, username);
   const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
 
   const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
   const profilePic = createElement("img", {});
 
+  removeUserFromSelectList(username);
 
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
@@ -107,7 +117,11 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
     if(req.responseText !== 'friends'){
 
 
-      const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, "Add Friend");
+      const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, " Add Friend");
+      const plusSign = createElement("i", {"class": "fas fa-plus"});
+      addFriendButton.insertBefore(plusSign, addFriendButton.childNodes[0]);
+      console.log(addFriendButton);
+
       addFriendButton.addEventListener("click", function(){
         handleAddFriend(username);
         addFriendButton.style.display = "none";
@@ -122,21 +136,25 @@ function addUserToBill(username, defaultPercentage, isSessionUser){
   req.send("username="+username);
 
   // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
-  const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+  if(!isSessionUser){
+    const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, " Remove");
+    const minusSign = createElement("i", {"class": "fas fa-minus"});
+    delButton.insertBefore(minusSign, delButton.childNodes[0]);
 
-  delButton.addEventListener("click", function(){
-    const users = splitWith.value.split(',');
-      let newString = "";
-      for(let i = 0; i < users.length; i++){
-        if(users[i] != username && users[i] != '')
-          newString += users[i] + ',';
-      }
-      splitWith.value = newString;
-      parentDiv.removeChild(outerDiv);
+    delButton.addEventListener("click", function(){
+        addUserToSelectList(username);
+        const users = splitWith.value.split(',');
+        let newString = "";
+        for(let i = 0; i < users.length; i++){
+          if(users[i] != username && users[i] != '')
+            newString += users[i] + ',';
+        }
+        splitWith.value = newString;
+        parentDiv.removeChild(outerDiv);
+    });
 
-  });
-
-  outerDiv.insertBefore(delButton, profilePicDiv);
+    outerDiv.insertBefore(delButton, profilePicDiv);
+  }
 
   //add the username to the split with field
   if(!isSessionUser)
@@ -179,7 +197,10 @@ function handleAddGroup(req, user){
     userBlocks[i].remove();
   }
 
+  document.querySelector("#splitWith").value = "";
+
   const group = JSON.parse(req.responseText);
+  console.log(group.inGroup);
   for(let i = 0; i < group.inGroup.length; i++){
     //const username = group.inGroup[i];
     if(user != group.inGroup[i])
