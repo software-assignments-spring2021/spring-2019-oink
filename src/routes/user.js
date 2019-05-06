@@ -37,7 +37,7 @@ router.get('/register', (req, res) => {
 		res.redirect('/user/index');
 	}
 	else{
-		res.render('registration');
+		res.render('signup');
 	}
 });
 

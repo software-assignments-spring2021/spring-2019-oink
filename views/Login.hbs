@@ -25,19 +25,23 @@
     <div class="complete-form">
         <form action="/user/login" method = "post">
             <div>
-                <label for="fname">Username :</label>
+                <label for="fname">Username:</label>
                 <field>
                     <input type="text" id="#" name="username" placeholder="Enter your username ...">
                 </field>
-            </div>  
+            </div>
             <div>
-                <label for="lname">Password :</label>
+                <label for="lname">Password:</label>
                 <input type="password" id="#" name="password" placeholder="Enter your password ...">
             </div>       
-            <div>         
-                <input type="submit" value="L O G   I N">
-                <h4>Don't Have an Account Yet?<a href="/user/register"> Sign-Up Here!</a></h4>
-            </div>
+                     
+            <input type="submit" value="L O G   I N">
+            
+             <h4 id="already">
+                        
+            Don't have an account? <a href="/user/register">Sign up here .</a>
+                        
+            </h4>
         </form>
     </div>
     </div>
