@@ -62,9 +62,9 @@ app.use((req, res, next) => {
 app.use(function(req, res, next){
 
 	console.log(`request made to ${req.path}`);
-	if(req.session.user){
-		console.log(req.session.user);
-	}
+	// if(req.session.user){
+	// 	console.log(req.session.user);
+	// }
 	next();
 });
 

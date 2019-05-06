@@ -3,140 +3,131 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
 const Group = mongoose.model("Group");
+const gr = require('../public/js/server-side/group_helpers');
 
-
+// Displays add group page, accessible from sidebar.
+// Includes a form for user to choose group name and members.
 router.get('/add',(req,res)=>{
 	if(req.session.user){
-
-		User.find({"username": { $ne: req.session.user.username}}, (err, users) => {
-
-			res.render('add-group', {'friends': users, 'user': req.session.user});
+		gr.handleGroupError(req.session.user, req.query, function(ret){
+			if(ret == 'error')
+				res.send('error');
+			else{
+				res.render('add-group', ret);
+			}
 		});
+		
 	}
 	else{
 		res.redirect('/user/login');
 	}
 });
+
+// Handles form submission from add-group page. Ensures more than 1 member,
+// correct group name (exists and unique). Sets default group percentages as
+// an equal split depending on the number of members in the group.
 
 router.post('/add', (req, res) => {
 	let user = req.session.user;
 	if(user){
-		let groupMembers = req.body.splitWith.split(','); 
-		groupMembers[groupMembers.length-1] = user.username;
-		const defaultPercentage = Math.floor(100 / groupMembers.length); //default even split
-		const defaultPercentages = new Array(groupMembers.length).fill(defaultPercentage);
-
-		// make sure percentages add up to 100
-		let sum = 0;
-		for(let i = 0;i < defaultPercentages.length; i++){
-			sum += defaultPercentages[i];
-		}
-
-		defaultPercentages[defaultPercentages.length-1] += (100 - sum);
-
-		const group = new Group({
-			name: req.body.name,
-			inGroup: groupMembers,
-			defaultPercentages: defaultPercentages,
-			administrator: req.session.user.username
+		gr.addGroup(user, req, function(ret){
+			if(ret == 'Error adding Group')
+				res.send(ret);
+			else
+				res.redirect(ret);
 		});
-		group.save((err, addedGroup) => {
-			if (err){
-				console.log(err);
-				res.send("Error adding Group");
-			}
-			else{
-				for(let i = 0; i < groupMembers.length; i++){
-					User.findOne({"username": groupMembers[i]}, (err, user) => {
-						user.groups.push(addedGroup._id);
-						user.save();
-					});
-				}
-			}
-		});
-		res.redirect('/user/' + user.username);
 	}
 	else{
 		res.redirect('/user/login');
 	}
 });
 
+// Deletes group from groups collection and from all relevant user's
+// groups field - cannot be taken back.
 router.post('/delete/:id', (req, res) => {
 
 	if(req.session.user){
 		const id = req.params.id;
-
-		Group.deleteOne({_id: id}, (err) => {
-			if(err)
-				res.json(err);
-			else{
-				res.send("group removed");
-			}
+		gr.deleteGroup(id, function(ret){
+			res.send(ret);
 		});
-
-	}else{
+	}
+	else{
 		res.redirect('/user/login');
 	}
 });
+
+// Accessible only to admin member of group. Will remove member of
+// group in group schema as well as reference to group in the selected
+// user's schema.
 
 router.post('/remove-member', (req, res) => {
 	if (req.session.user){
-
-		const username = req.body.member;
-		const groupID = req.body.group;
-		Group.findOne({_id: groupID}, (err, group) => {
-			const index = group.inGroup.indexOf(username);
-			group.inGroup.splice(index, 1);
-			group.save(function(){
-				User.findOne({username: username}, (error, user) => {
-					const i = user.groups.indexOf(group._id);
-					user.groups.splice(i, 1);
-					user.save();
-					res.send("member removed");
-				});
-			});
+		gr.removeMember(req, function(ret){
+			res.send(ret);
 		});
 	}else{
 		res.redirect('/user/login');
 	}
 });
 
+// Reverse of remove-member. Adds a member to inGroup field of relevant group.
+// Adds reference to this group's ID in user's groups field.
 router.post('/add-member', (req, res) => {
 	if(req.session.user){
-
-		const username = req.body.member;
-		const groupID = req.body.group;
-		Group.findOne({_id: groupID}, (err, group) => {
-			group.inGroup.push(username);
-			group.save(function(){
-				User.findOne({username: username}, (error, user) => {
-					user.groups.push(groupID);
-					user.save();
-					res.send("member added");
-				});
-			});
+		gr.addMember(req, function(ret){
+			res.send(ret);
 		});
 	}else{
 		res.redirect('/user/login');
 	}
 });
 
-router.get('/:id', (req, res) => {
+
+// Returns requested group's information for
+// AJAX requests.
+router.get('/get/:id', (req, res) => {
 
 	if(req.session.user){
 
-
 		const id = req.params.id;
-		Group.findById(id, (err, group) => {
-			if(group){
-				res.json(group);
-			}
-			else{
-				res.send(err);
-				console.log(err);
-			}
+		gr.getGroup(id, function(ret){
+			if(ret == 'error')
+				res.send(ret);
+			else
+
+				res.json(ret);
 		});
 	}else{
+		res.redirect('/user/login');
+	}
+});
+
+
+// Takes as parameter an object ID of a group that, if correct,
+// will display a unique group's profile page. Depending on the session user,
+// the query string isAdmin will be true or false, changing the contents of the page.
+// For an admin, "edit" and "delete" buttons appear. For everyone else, a "leave group"
+// option appears.
+router.get('/:id', (req, res) => {
+	if(req.session.user){
+		const id = req.params.id;
+		let isAdmin = false;
+		if(req.query.admin == 'true')
+			isAdmin = true;
+		gr.groupProfile(id, req.session.user, isAdmin, function(ret){
+			if(typeof ret === 'string')
+				res.redirect(ret);
+			else{
+				console.log(ret);
+				if(isAdmin)
+					res.render('group-profile-admin', ret);
+				else
+					res.render('group-profile-normal', ret);
+			}
+		});
+	}
+	else{
 		res.redirect('/user/login');
 	}
 });
