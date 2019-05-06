@@ -42,7 +42,7 @@ function deleteGroup(id){
 }
 
 function editGroup(id){
-
+	console.log(id);
 	document.querySelector("#editButton").classList.add("hidden");
 	document.querySelector("#doneButton").classList.remove("hidden");
 
@@ -59,12 +59,17 @@ function editGroup(id){
 			const req = new XMLHttpRequest();
 			req.open('post', '/group/remove-member', true);
 			req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			req.addEventListener('load', () => {
+				res = req.responseText;
+				console.log(res);
+			});
+			console.log("member=" + input[i].id + "&group=" + id);
 			req.send("member=" + input[i].id + "&group=" + id);
 			
 			input[i].parentNode.removeChild(input[i]);
 
-			const friendsDiv = document.getElementsByClassName("friends")[0];
-			setSearchUsers(friendsDiv);
+			//const friendsDiv = document.getElementsByClassName("friends")[0];
+			//setSearchUsers(friendsDiv);
 		}
 
 		input[i].appendChild(removeButton);

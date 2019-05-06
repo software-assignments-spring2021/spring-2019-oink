@@ -76,7 +76,7 @@ function payTransaction(id, cb){
 			// UPDATE BALANCES
 			User.findOne({"username": transaction.paidBy}, (error, user) => {
 				for(let i = 0; i < user.friends.length; i++){
-					if(user.friends[i].user === transaction.paidTo){
+					if(user.friends[i].user === transaction.paidTo && transaction.isFriends){
 						user.friends[i].balance += transaction.amount;
 						user.markModified('friends');
 						user.save();
