@@ -57,7 +57,7 @@ router.post('/register', (req, res) => {
 			});
 		}
 		else
-			res.render('registration', ret);
+			res.render('signup', ret);
 	});
 });
 
