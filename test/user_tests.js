@@ -4,14 +4,58 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 require('../src/schemas');
 const User = mongoose.model("User");
+<<<<<<< HEAD
+=======
+const Transaction = mongoose.model("Transaction");
+const Group = mongoose.model("Group");
+const Bill = mongoose.model("Bill");
+>>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 
 const app = require("../src/public/js/server-side/user_helpers");
 
 describe('User Tests', function(){
+<<<<<<< HEAD
 	const user = new User({
 		username: 'david',
 		password: 'david',
 		email: 'david'
+=======
+	const transaction = new Transaction({
+		amount: 15,
+		paidTo: 'alice',
+		paidBy: 'david',
+		isPaid: false,
+		dateCreated: "5/2/19"
+	});
+	const unpaidTransaction = new Transaction({
+		amount: 10,
+		paidTo: 'alice',
+		paidBy: 'david',
+		isPaid: false,
+		dateCreated: "5/2/19"
+	});
+	const secondUser = new User({
+		username: 'earl',
+		password: 'earl',
+		email: 'earl',
+		transactions: [transaction._id],
+	});
+	const group = new Group({
+		name: 'davidGroup'
+	});
+	const bill = new Bill({
+		amount: 50,
+		splitWith: ['david'],
+		dateCreated: '1/2/03'
+	});
+	const user = new User({
+		username: 'david',
+		password: 'david',
+		email: 'david',
+		transactions: [unpaidTransaction._id],
+		bills: [bill._id],
+		groups: [group._id]
+>>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 	});
 	describe('inSession', function(){
 		it('returns true if session user exists', function(done){
@@ -68,4 +112,136 @@ describe('User Tests', function(){
 			done();
 		})
 	});
+<<<<<<< HEAD
+=======
+	describe('getTransactions', function(){
+		it('returns paid and unpaid transactions', function(done){
+			app.getTransactions(user, function(ret){
+				const paid = ret.hasOwnProperty('paid');
+				const unpaid = ret.hasOwnProperty('unpaid');
+				expect(paid && unpaid).to.be.true;
+				done();
+			});
+		});
+	});
+	describe('payTransaction', function(){
+		it('returns ok if transaction updated', function(done){
+			transaction.save(function(){
+				app.payTransaction(transaction._id, function(ret){
+					expect(ret).to.equal("ok");
+					done();
+				});
+			});
+		});
+		it('returns error if transaction does not exist', function(done){
+			app.payTransaction('41224d776a326fb40f000001', function(ret){
+				expect(ret).to.equal('error');
+				done();
+			});
+		});
+	});
+	describe('getIndex', function(){
+		it('returns object with notification if unpaid transaction', function(done){
+			unpaidTransaction.save(function(){
+				const req = {};
+				req.query = {};
+				app.getIndex(user, req, function(ret){
+					expect(ret.hasOwnProperty('notification')).to.be.true;
+					done();
+				});
+			});
+		});
+		it('returns object with no notification if paid transaction', function(done){
+			secondUser.save(function(){
+				const req = {};
+				req.query = {};
+				app.getIndex(secondUser, req, function(ret){
+					expect(ret.hasOwnProperty('notification')).to.be.false;
+					done();
+				});
+			});
+		});
+		it('returns object with error message if error but no notification', function(done){
+			const req = {};
+			req.query = {};
+			req.query.error = "error";
+			app.getIndex(secondUser, req, function(ret){
+				expect(ret.hasOwnProperty('notification') && ret.hasOwnProperty('error')).to.be.false;
+				done();
+			});
+		});
+		it('returns object with error message if error and notification', function(done){
+			const req = {};
+			req.query = {};
+			req.query.error = "error";
+			app.getIndex(user, req, function(ret){
+				expect(ret.hasOwnProperty('notification') && ret.hasOwnProperty('error')).to.be.true;
+				done();
+			});
+		});
+	});
+	describe('myBills', function(){
+		it('returns object with all user bills', function(done){
+			app.myBills('david', function(ret){
+				expect(ret.hasOwnProperty('bills')).to.be.true;
+				done();
+			});
+		});
+		it('returns error if user not found', function(done){
+			app.myBills('fakeUser', function(ret){
+				expect(ret).to.equal('error');
+				done();
+			});
+		});
+	});
+	describe('myBalances', function(){
+		it('returns object with all user friends', function(done){
+			app.myBalances(user, function(ret){
+				expect(ret.hasOwnProperty('friends')).to.be.true;
+				done();
+			});
+		});
+		it('returns error if user does not exist', function(done){
+			const fakeUser = {username: 'fakeUser'};
+			app.myBalances(fakeUser, function(ret){
+				expect(ret).to.equal('error');
+				done();
+			});
+		});
+	});
+	describe('getAllUsers', function(){
+		it('returns all users besides requested ones', function(done){
+			app.getAllUsers(['david'], function(ret){
+				expect(ret.length > 1).to.be.true;
+				done();
+			});
+		});
+	});
+	describe('getUserProfile', function(){
+		it('redirects if user does not exist', function(done){
+			group.save(function(){
+				bill.save(function(){
+					app.getUserProfile({}, 'fakeUser', user, function(ret){
+						expect(ret).to.equal('/user/index');
+						done();	
+					});
+				});
+			});
+		});
+		it('renders session profile if requested user is in session', function(done){
+			const req = {};
+			req.query = {};
+			app.getUserProfile(req, 'david', user, function(ret){
+				expect(ret.hasOwnProperty('tip')).to.be.true;
+				done();	
+			});
+		});
+		it('renders normal profile if requested user not in session', function(done){
+			app.getUserProfile({}, 'alice', user, function(ret){
+				expect(ret.hasOwnProperty('tip')).to.be.false;
+				done();	
+			});
+		});
+	});
+>>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 });

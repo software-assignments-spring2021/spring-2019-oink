@@ -71,10 +71,11 @@ function countTotals(reqBody){
 }
 
 function viewBill(id, username, cb){
-	Bill.findById(id, (err, bill)=>{
+	Bill.findOne({_id: id}, (err, bill)=>{
 		if(bill){
 			Transaction.find({"bill": id}, (err, transactions) => {
 				User.findOne({"username": username}, (err, sessionUser) => {
+					let userTrans = {}
 					const friends = [];
 					const nonfriends = [];
 					for(let i = 0; i < transactions.length; i++){
@@ -88,21 +89,21 @@ function viewBill(id, username, cb){
 						}
 
 						if(user == sessionUser.username)
-							friends.push(transactions[i]);
+							userTrans = transactions[i];
 
 						else if(!isFriend)
 							nonfriends.push(transactions[i]);
 					}
-					console.log(friends);
-					console.log(nonfriends);
+					//console.log(friends);
+					//console.log(nonfriends);
 					return cb({"amount": bill.amount, "username": bill.splitWith[bill.splitWith.length-1], 
-					"date": bill._id.getTimestamp(), "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
-					nonfriends});
+					"date": bill.dateCreated, "text": bill.comment, "friend-transactions": friends, "non-friend-transactions": 
+					nonfriends, "userTrans":userTrans});
 				});
 			});
 		}
 		else{
-			console.log(err);
+			//console.log(err);
 			return cb('error');
 		}
 	});
@@ -132,7 +133,8 @@ class BillFactory {
 					doc.bills.push(mongoose.Types.ObjectId(addedBill._id));
 					id = addedBill._id;
 					doc.save(function(){
-						friendsToSplit = [];
+						let newFriendsToSplit = [];
+						/*
 						for(let key in reqBody){
 							if(reqBody.hasOwnProperty(key)){
 								if(key !== "splitWith" && key !== "comment" && key !== 'pretip' && key !== 'tip' &&
@@ -143,37 +145,47 @@ class BillFactory {
 									friendsToSplit.unshift(a);
 								}
 							}
+						}*/
+						for(let i = 0; i < friendsToSplit.length; i++){
+							const a = {};
+							a.user = friendsToSplit[i];
+							a.amount = reqBody[friendsToSplit[i]];
+							newFriendsToSplit.push(a);
 						}
-						for(let i = 0; i < friendsToSplit.length; i ++){
+						for(let i = 0; i < newFriendsToSplit.length; i ++){
 							let transaction;
-							let amount = friendsToSplit[i].amount;
+							let amount = newFriendsToSplit[i].amount;
 							if (reqBody.typeOfPayment=="%"){
 								amount = amount * .01 * reqBody.amount;
 							}
-							if(i !== friendsToSplit.length-1){
+							if(i !== newFriendsToSplit.length-1){
 								let isFriends = false;
 								for(let j = 0; j < doc.friends.length; j++){
-									if(doc.friends[j].user == friendsToSplit[i].user)
+									if(doc.friends[j].user == newFriendsToSplit[i].user)
 										isFriends = true;
 								}								
 								
 								transaction = new Transaction({
 									amount:amount,
-									paidBy:friendsToSplit[i].user,
-									paidTo:friendsToSplit[friendsToSplit.length-1].user,
+									paidBy:newFriendsToSplit[i].user,
+									paidTo:newFriendsToSplit[newFriendsToSplit.length-1].user,
 									isPaid: false,
 									bill: id,
-									isFriends: isFriends
+									isFriends: isFriends,
+									dateCreated:date,
+									datePaid:null
 								});
 							}
 							else{ // ASSUMES USER CREATING BILL PAYS FOR IT
 								transaction = new Transaction({
 									amount:amount,
-									paidBy:friendsToSplit[i].user,
-									paidTo:friendsToSplit[friendsToSplit.length-1].user,
+									paidBy:newFriendsToSplit[i].user,
+									paidTo:newFriendsToSplit[newFriendsToSplit.length-1].user,
 									isPaid: true,
 									bill: id,
-									isFriends: false
+									isFriends: false,
+									dateCreated:date,
+									datePaid:date
 								});
 							}
 
@@ -183,7 +195,7 @@ class BillFactory {
 									return cb('error');								
 								}
 								else{
-									User.findOne({username: friendsToSplit[i].user}, (err, doc)=>{
+									User.findOne({username: newFriendsToSplit[i].user}, (err, doc)=>{
 										doc.transactions.push(mongoose.Types.ObjectId(addedTransaction._id));
 										doc.save();
 									});
@@ -194,9 +206,15 @@ class BillFactory {
 						// SEE IF ANY USERS ARE FRIENDS OF BILL CREATOR
 							// IF YES, UPDATE BALANCES
 
-						for(let i = 0; i < friendsToSplit.length-1; i++){
-							const friendName = friendsToSplit[i].user;
-							const updateBalance = friendsToSplit[i].amount; // negative of amount to pay
+						for(let i = 0; i < newFriendsToSplit.length-1; i++){
+							const friendName = newFriendsToSplit[i].user;
+
+							let amount = newFriendsToSplit[i].amount;
+							if (reqBody.typeOfPayment=="%"){
+								amount = amount * .01 * reqBody.amount;
+							}
+
+							const updateBalance = amount; // negative of amount to pay
 
 							User.findOne({"username": user.username}, (err, sessionUser) => {
 								for(let j = 0; j < sessionUser.friends.length; j++){

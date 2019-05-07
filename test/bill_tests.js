@@ -132,7 +132,7 @@ describe('Bill Router Tests', function(){
 			dateCreated: '1/2/3'
 		});
 		it('returns false if bill does not exist', function(done){
-			app.viewBill('fakeBill', 'alice', function(ret){
+			app.viewBill('41224d776a326fb40f000001', 'alice', function(ret){
 				expect(ret).to.equal('error');
 				done();
 			});

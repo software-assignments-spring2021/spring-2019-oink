@@ -1,71 +1,147 @@
+function createElement(elementType, attributes, text){
+  const elem = document.createElement(elementType);
+
+  for (let key in attributes){
+    if (attributes.hasOwnProperty(key)) {
+      elem.setAttribute(key, attributes[key])
+    }
+  }
+
+
+  if (text){
+    elem.appendChild(document.createTextNode(text));
+  }
+
+  //console.log(elem);
+
+  return elem;
+
+
+}
+
+function transactionText(t, username){
+  let text = ""
+  let forgive = false
+  if(t.paidBy != username && t.isPaid == true){
+    //if the transaction is paid by the session user and they have paid it
+    text = "You paid " + t.amount + " to " + t.paidTo + ' on ' + t.datePaid;
+  }
+  else if(t.paidBy != username && t.isPaid == false){
+    //if the transaction is paid by the session user, and they have NOT paid it
+    text = t.paidTo + " requested " + t.amount + " from you on " + t.dateCreated;
+  }
+  else if(t.paidBy == username && t.isPaid == true){
+    //if the transaction is paid by the friend and it is paid
+    text = t.paidBy + " paid you " + t.amount + " on " + t.datePaid;
+  }
+  else if(t.paidBy == username && t.isPaid == false){
+    text = "You requested " + t.amount + " from " + t.paidBy + ' on ' + t.dateCreated;
+    forgive = true;
+  }
+
+  return {"text":text, "forgive":forgive};
+}
+
+function totalText(username, balance){
+
+  if(balance == 0)
+    return `You and ${username} are even!`;  
+  if(balance > 0)
+    return  username + " owes you $" + balance;
+  if(balance < 0)
+    return "You owe $" + (-1*balance) + " to " + username;
+
+}
+
+
+
+
+
 function showBalances(username){
-	
-	const header = document.getElementById('header'); // CLEAR THE CURRENT CONTENTS OF THE SCREEN
-	while(header.firstChild){
-		header.removeChild(header.firstChild);
-	}
 
-	const title = document.getElementsByTagName('h3')[3];
-	title.textContent = "Your Transactions With " + username;
 
-	const req = new XMLHttpRequest();
-    req.open('post', '/api/history', true);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.addEventListener('load', () => {
-      const res = JSON.parse(req.responseText);
-      const ul = document.createElement("ul");
-      for(let i = 0; i < res.transactions.length; i++){
-      	const t = res.transactions[i]
-      	const li = document.createElement("li");
-      	const a = document.createElement("a");
-        let forgive;
-      	a.textContent = "View Bill";
-        a.href = "/fake/link";
-      	if(t.paidBy != username && t.isPaid == true){
-      		li.textContent = "You paid " + t.amount + " to " + t.paidTo + ' on ' + res.dates[i];
-      	}
-      	else if(t.paidBy != username && t.isPaid == false){
-      		li.textContent = t.paidTo + " loaned you " + t.amount + " on " + res.dates[i];
-      		a.href = "/bill/view/" + t.bill;
-      	}
-      	else if(t.paidBy == username && t.isPaid == true){
-      		li.textContent = t.paidBy + " paid you " + t.amount + " on " + res.dates[i];
-      	}
-      	else if(t.paidBy == username && t.isPaid == false){
-      		li.textContent = "You loaned " + t.amount + " to " + t.paidBy + ' on ' + res.dates[i];
-      		a.href = "/bill/view/" + t.bill;
-          forgive = document.createElement("button");
-          forgive.textContent = "Forgive";
-          forgive.onclick = function(){
-              const xml = new XMLHttpRequest();
-              xml.open('post', '/api/remove-transaction/'+t._id, true);
-              xml.send();
-              location.reload();
-          };
-      	}
-      	
-      	ul.appendChild(li);
-      	if(a.href != "http://localhost:3000/fake/link"){
-      		ul.appendChild(a);
-      	}
-        if(forgive !== undefined){
-          const br = document.createElement("br");
-          ul.appendChild(br);
-          console.log('test');
-          ul.appendChild(forgive);
-        }
+  //change out the text in the header 
+  document.querySelector("h3#username-balances").textContent = `Transactions with ${username}`;
+  //remove the previous transactions from the screen
+  document.querySelector('section#transactions').innerHTML = '';
+
+
+
+  const req = new XMLHttpRequest();
+  req.open('post', '/api/history', true);
+  req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  req.addEventListener('load', () => {
+    const res = JSON.parse(req.responseText);
+    //for each transaction
+
+
+    const section = document.querySelector("section#transactions");
+    
+
+    const ul = document.createElement("ul");
+    for(let i = 0; i < res.transactions.length; i++){
+      let trans = res.transactions[i];
+
+      let text = transactionText(trans, username);
+
+      let article = createElement("article", {"class":trans.isPaid ? "paid" : "unpaid"});
+      let amount = createElement("span", {"class":"amount"}, text.text);
+      let viewBill = createElement("span", {"class":"view-bill"});
+      let linkToBill = createElement("a", {"href": `/bill/view/${trans.bill}`}, "View ");
+      let arrow = createElement("i", {"class": "fas fa-arrow-right"});
+
+      linkToBill.appendChild(arrow);
+      viewBill.appendChild(linkToBill);
+
+      article.appendChild(amount);
+
+
+      if(text.forgive){
+        let forgiveButton = createElement("button", {"class":"pay"}, "Forgive");
+        forgiveButton.addEventListener("click", function(){
+          //console.log("button clicked");
+          const xml = new XMLHttpRequest();
+          xml.open('post', '/user/pay-transaction/'+trans._id, true);
+          xml.addEventListener("load", ()=>{
+            console.log(xml.responseText);
+            if(xml.responseText == "ok"){
+              console.log('removed');
+              //update the balance
+              //paid by will always be the friend, so to update the balance on the page
+              trans.isPaid = true;
+              document.querySelector("h3#totalBalance").textContent = totalText(username, res.balance-trans.amount);
+              res.balance -= trans.amount;
+              //set the article to paid
+              article.classList.add("paid");
+              article.classList.remove("unpaid");
+
+              //remove the forgive button
+              forgiveButton.remove();
+              //location.reload();
+              //showBalances(username);
+
+            }
+            else{
+              console.log("error");
+            }
+          });
+          
+          xml.send();
+        }); 
+
+        article.appendChild(forgiveButton);
       }
 
-    const totalBalance = document.createElement("h3");
-    if(res.balance == 0)
-	 		totalBalance.textContent = "In Total: " + "Your Overall Balance With " + username + " is: " + res.balance + "!";	
-	 	if(res.balance > 0)
-	 		totalBalance.textContent = "In Total: " + username + " owes you " + "$" + res.balance;
-	 	if(res.balance < 0)
-	 		totalBalance.textContent = "In Total: " + "You owe $" + (-1*res.balance) + " to " + username; 	
+      article.appendChild(viewBill)
 
-      header.append(ul);
-      header.append(totalBalance);
-    });
-    req.send("username="+username);
+      section.appendChild(article);
+
+    }
+
+    //const totalBalance = document.createElement("h3");
+    const totalBalance = createElement("h3", {"id":"totalBalance"}, totalText(username, res.balance));
+    section.appendChild(totalBalance);
+
+  });
+  req.send("username="+username);
 }

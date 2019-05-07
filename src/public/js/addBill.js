@@ -8,19 +8,18 @@ function onClickAddUserToBill(){
   addUserToBill(username);
 } 
 
-function removeUser(username){
-  
-  const div = document.getElementById(username + "Block");
+function removeUserFromSelectList(username){
+  //remove the name from the full list so it can't be added twice
+  if(document.querySelector(`h4#${username}`))
+    document.querySelector(`h4#${username}`).remove();
+}
 
-  div.parentNode.removeChild(div);
-  const splitWith = document.getElementById('splitWith');
-  const users = splitWith.value.split(',');
-  let newString = "";
-  for(let i = 0; i < users.length; i++){
-    if(users[i] != username)
-      newString += users[i] + ',';
+function addUserToSelectList(username){
+  const userHeader = createElement("h4", {"id": username}, username);
+  userHeader.onclick = function(){
+    addUserToBill(username, 0);
   }
-  splitWith.value = newString;
+  document.querySelector("#select-friends div.friends").appendChild(userHeader);
 }
 
 function createElement(elementType, attributes, text){
@@ -55,7 +54,7 @@ function appendChildren(parent, ...children){
     return parent;
 }
 
-function addUserToBill(username, defaultPercentage){
+function addUserToBill(username, defaultPercentage, isSessionUser){
 
    /*
     <div class="userBlock">
@@ -68,12 +67,26 @@ function addUserToBill(username, defaultPercentage){
 
   const parentDiv = document.querySelector("#userAmounts");
 
-  const spanDollar = createElement("span", {"class":"dollar"}, "$");
-  const spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  let spanDollar;
+  let spanPercent;
+
+  if(!document.querySelector('div.userBlock') || document.querySelector('div.userBlock span.percent').classList.contains("hidden")){
+      spanDollar = createElement("span", {"class":"dollar"}, "$");
+      spanPercent = createElement("span", {"class": "percent hidden"}, "%");
+  }
+  else{
+      spanDollar = createElement("span", {"class":"dollar hidden"}, "$");
+      spanPercent = createElement("span", {"class": "percent"}, "%");
+  }
+
   const userh4 = createElement("h4", {}, username);
   const input = createElement("input", {"type":"text", "name":username, "class":"transactionValue", "value":defaultPercentage ? defaultPercentage : "0", "placeholder": "0"});
 
-  const profilePic = createElement("img", {"width":"16px", "height":"16px"});
+  const profilePicDiv = createElement("div", {"class": "small-profile-pic"});
+  const profilePic = createElement("img", {});
+
+  removeUserFromSelectList(username);
+
   const xml = new XMLHttpRequest();
   xml.open('post', '/api/image', true);
   xml.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -82,9 +95,11 @@ function addUserToBill(username, defaultPercentage){
   });
   xml.send("username="+username); 
 
+  profilePicDiv.appendChild(profilePic);
+
   const outerDiv = createElement("div", {"id":`${username}Block`, "class":"userBlock"});
 
-  outerDiv.appendChild(profilePic);
+  outerDiv.appendChild(profilePicDiv);
   outerDiv.appendChild(userh4);
   outerDiv.appendChild(spanDollar);
   outerDiv.appendChild(input);
@@ -102,7 +117,11 @@ function addUserToBill(username, defaultPercentage){
     if(req.responseText !== 'friends'){
 
 
-      const addFriendButton = createElement("button", {"id": "addFriend", "type":"button"}, "Add Friend");
+      const addFriendButton = createElement("button", {"id": "add-friend", "type":"button"}, " Add Friend");
+      const plusSign = createElement("i", {"class": "fas fa-plus"});
+      addFriendButton.insertBefore(plusSign, addFriendButton.childNodes[0]);
+      console.log(addFriendButton);
+
       addFriendButton.addEventListener("click", function(){
         handleAddFriend(username);
         addFriendButton.style.display = "none";
@@ -117,24 +136,29 @@ function addUserToBill(username, defaultPercentage){
   req.send("username="+username);
 
   // CREATE DELETE BUTTON TO REMOVE USER FROM BILL BEFORE ITS CREATED
-  const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, "Remove");
+  if(!isSessionUser){
+    const delButton = createElement("button", {"id":"deleteUser", "type":"button"}, " Remove");
+    const minusSign = createElement("i", {"class": "fas fa-minus"});
+    delButton.insertBefore(minusSign, delButton.childNodes[0]);
 
-  delButton.addEventListener("click", function(){
-    const users = splitWith.value.split(',');
-      let newString = "";
-      for(let i = 0; i < users.length; i++){
-        if(users[i] != username && users[i] != '')
-          newString += users[i] + ',';
-      }
-      splitWith.value = newString;
-      parentDiv.removeChild(outerDiv);
+    delButton.addEventListener("click", function(){
+        addUserToSelectList(username);
+        const users = splitWith.value.split(',');
+        let newString = "";
+        for(let i = 0; i < users.length; i++){
+          if(users[i] != username && users[i] != '')
+            newString += users[i] + ',';
+        }
+        splitWith.value = newString;
+        parentDiv.removeChild(outerDiv);
+    });
 
-  });
-
-  outerDiv.insertBefore(delButton, profilePic);
+    outerDiv.insertBefore(delButton, profilePicDiv);
+  }
 
   //add the username to the split with field
-  document.querySelector("#splitWith").value += `${username},`
+  if(!isSessionUser)
+    document.querySelector("#splitWith").value += `${username},`
 
   parentDiv.appendChild(outerDiv);
 
@@ -168,18 +192,23 @@ function handleAddFriend(friend){
 
 function handleAddGroup(req, user){
   // clear current users
-  const users = document.getElementById('users');
-  while(users.firstChild){
-    users.removeChild(users.firstChild);
+  const userBlocks = document.querySelectorAll("div.userBlock");
+  for(let i=0; i < userBlocks.length; i++){
+    userBlocks[i].remove();
   }
-  const typeOfPayment = document.getElementById("typeOfPayment");
-  typeOfPayment.value = "%";
-  // then add members of the group, including session user
+
+  document.querySelector("#splitWith").value = "";
+
   const group = JSON.parse(req.responseText);
+  console.log(group.inGroup);
   for(let i = 0; i < group.inGroup.length; i++){
-    const username = group.inGroup[i];
-    addUserToBill(username, group.defaultPercentages[i]);
+    //const username = group.inGroup[i];
+    if(user != group.inGroup[i])
+      addUserToBill(group.inGroup[i], 0, false);
+    else
+      addUserToBill(group.inGroup[i], 0, true);
   }
+  //switchSymbol('percent');
 }
 
 function onClickAddGroup(id, user){
@@ -188,24 +217,6 @@ function onClickAddGroup(id, user){
   req.open('get', '/group/get/' + id, true);
   req.addEventListener('load', () => {handleAddGroup(req, user);});
   req.send();
-}
-
-function checkValuesWithSum(){
-  
-  const vals = document.getElementsByClassName("transactionValue");
-  const sum = parseInt(document.getElementById("amount").value);
-  let inc = 0;
-  for(let i = 0; i < vals.length; i++){
-    inc += parseInt(vals[i].value);
-  }
-  const addBill = document.getElementById("addBillButton");
-  if(inc !== sum || sum === 0){
-    addBill.disabled = true;
-  }
-  if(inc === sum && sum !== 0){
-    addBill.disabled = false;
-  }
-
 }
 
 function onClickSplitType(icon) {
@@ -222,17 +233,14 @@ function switchSymbol(sym){
 
   document.querySelectorAll(`div.userBlock span.${sym}`).forEach((span)=>{
     console.log(span);
+    console.log('test2');
     span.classList.remove("hidden");
   });
 
   document.querySelectorAll(`div.userBlock span.${opposite}`).forEach((span)=>{
+    console.log('test3'); 
     span.classList.add("hidden");
   });
 
 
 }
-
-
-
-
-//setInterval(checkValuesWithSum, 30);

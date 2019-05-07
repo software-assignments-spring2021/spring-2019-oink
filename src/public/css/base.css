@@ -25,6 +25,10 @@ input[type=submit]:active {
   box-shadow: 2px 2px #729956;
 }
 
+.underline {
+  border-bottom: 3px solid black;
+}
+
 div.user-profile-header {
   display: flex;
   flex-direction: row;
@@ -82,6 +86,11 @@ div.user-profile-header div.profile-pic {
   height: 150px;
   background-color: black;
 }
+div.user-profile-header div.profile-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 div.user-profile-header div.profile-pic i {
   display: none;
   color: white;
@@ -98,9 +107,6 @@ div.user-profile-header div.profile-pic#session-user-profile-pic:hover i {
 }
 div.user-profile-header div.profile-pic#session-user-profile-pic:hover img {
   opacity: 0.6;
-}
-div.user-profile-header div.profile-pic img {
-  object-fit: cover;
 }
 
 div.user-profile-content {
@@ -147,6 +153,10 @@ div.user-profile-content section#transactions ul a:hover li, div.user-profile-co
 div.user-profile-content section#transactions ul li, div.user-profile-content section#bills ul li, div.user-profile-content section#friends ul li, div.user-profile-content section#groups ul li {
   padding: 3% 0;
   font-size: 1.2em;
+}
+div.user-profile-content section#transactions ul li:hover, div.user-profile-content section#bills ul li:hover, div.user-profile-content section#friends ul li:hover, div.user-profile-content section#groups ul li:hover {
+  cursor: pointer;
+  background-color: #7AC74F;
 }
 div.user-profile-content .outline {
   border: 5px solid black;
@@ -358,6 +368,10 @@ div.content h2 {
 }
 div.content h3 {
   padding: 0.5% 0;
+  font-size: 1.3em;
+}
+div.content i {
+  width: auto;
 }
 
 div.notification {
@@ -369,36 +383,40 @@ div.notification {
   padding: 0.2%;
 }
 
-form.addbill input[type=submit] {
+form.long-add-form input[type=submit] {
   width: auto;
   padding: 1%;
   font-size: 1.3em;
 }
-form.addbill input[type=submit]:hover {
+form.long-add-form input[type=submit]:hover {
   cursor: pointer;
 }
-form.addbill div.comment {
+form.long-add-form div.input {
+  width: auto;
+  margin: auto;
+}
+form.long-add-form div.comment {
   text-align: center;
   font-size: 1em;
   width: 44%;
 }
-form.addbill div.comment textarea {
+form.long-add-form div.comment textarea {
   border-bottom: 3px solid black;
   resize: none;
 }
-form.addbill > * {
+form.long-add-form > * {
   margin: 1% 0;
 }
-form.addbill label {
+form.long-add-form label {
   font-size: 1.2em;
 }
-form.addbill .total {
+form.long-add-form .total {
   width: 100%;
 }
-form.addbill input[type=text] {
+form.long-add-form input[type=text] {
   font-size: 1.2em;
 }
-form.addbill div.pretipAndTip {
+form.long-add-form div.pretipAndTip {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
@@ -406,11 +424,11 @@ form.addbill div.pretipAndTip {
   align-items: center;
   justify-content: space-evenly;
 }
-form.addbill div.pretipAndTip > * {
+form.long-add-form div.pretipAndTip > * {
   font-size: 1.4em;
   width: auto;
 }
-form.addbill div.pretipAndTip .tip {
+form.long-add-form div.pretipAndTip .tip {
   display: flex;
   flex-direction: row;
   flex-wrap: no-wrap;
@@ -418,38 +436,38 @@ form.addbill div.pretipAndTip .tip {
   align-items: center;
   justify-content: center;
 }
-form.addbill div.pretipAndTip .tip #tip {
+form.long-add-form div.pretipAndTip .tip #tip {
   text-align: right;
 }
-form.addbill div.pretipAndTip .tip button {
+form.long-add-form div.pretipAndTip .tip button {
   width: 100%;
 }
-form.addbill .userAmounts {
+form.long-add-form .userAmounts {
   text-align: center;
 }
-form.addbill .userAmounts div.userBlock {
+form.long-add-form .userAmounts div.userBlock {
   font-size: 1.3em;
   padding: 0.5% 0;
 }
-form.addbill .userAmounts div.userBlock .hidden {
-  display: none;
-}
-form.addbill .userAmounts div.userBlock span {
-  font-size: inherit;
-}
-form.addbill .userAmounts div.userBlock > * {
+form.long-add-form .userAmounts div.userBlock > button, form.long-add-form .userAmounts div.userBlock > h4, form.long-add-form .userAmounts div.userBlock > span, form.long-add-form .userAmounts div.userBlock > input {
   display: inline-block;
   width: auto;
 }
-form.addbill .userAmounts div.userBlock h4 {
+form.long-add-form .userAmounts div.userBlock .hidden {
+  display: none;
+}
+form.long-add-form .userAmounts div.userBlock span {
+  font-size: inherit;
+}
+form.long-add-form .userAmounts div.userBlock h4 {
   padding: 0 2%;
   font-size: 1.3em;
   font-family: "Open Sans Condensed", sans-serif;
 }
-form.addbill .userAmounts input[type=radio] {
+form.long-add-form .userAmounts input[type=radio] {
   display: none;
 }
-form.addbill .userAmounts input[type=radio]:checked + label {
+form.long-add-form .userAmounts input[type=radio]:checked + label {
   font-weight: bold;
 }
 
@@ -490,6 +508,18 @@ div.choose-users h4:hover {
   background-color: #b5d99c;
 }
 
+div.view-group {
+  text-align: center;
+}
+div.view-group div.userBlock > * {
+  display: inline-block;
+}
+div.view-group div.userBlock h4 {
+  width: auto;
+  font-size: 1.2em;
+  padding: 1%;
+}
+
 div.total {
   font-size: 1.4em;
   text-align: center;
@@ -501,6 +531,7 @@ button:hover {
 
 button {
   padding: 0 3%;
+  margin: 0 4%;
   background-color: #7AC74F;
   box-shadow: 3px 3px 2px #729956;
   transition: translate 2s ease-in-out;
@@ -517,6 +548,17 @@ button.pay {
 a {
   font-family: inherit;
   font-size: inherit;
+}
+
+div.small-profile-pic {
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+}
+div.small-profile-pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /*# sourceMappingURL=base.css.map */

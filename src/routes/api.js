@@ -19,9 +19,9 @@ router.post('/add-friend',(req,res)=>{
 	const username = req.body.username; //username of the friend being added
 	api.addFriend(username, req.session.user, function(bool){
 		if(bool)
-			res.send({result: "added"});
+			res.send("added");
 		else
-			res.send({result: "error"});
+			res.send("error");
 	});
 });
 
@@ -59,7 +59,7 @@ router.post('/upload/image', (req, res) => {
 	    });
 
 	    form.on('file', function (name, file){
-	        console.log('Uploaded ' + file.name);
+	        //console.log('Uploaded ' + file.name);
 	        sessionUser.img.rawSRC = __dirname + '/../public/images/' + file.name;
 			sessionUser.img.src = '/images/' + file.name;
 			sessionUser.save(() => {
@@ -86,6 +86,7 @@ router.post('/history', (req, res) => {
 	const username = req.body.username;
 	const sessionUser = req.session.user;
 	api.getHistory(username, sessionUser, function(response){
+		//console.log(response);
 		if(response != undefined)
 			res.json(response);
 		else
@@ -96,12 +97,13 @@ router.post('/history', (req, res) => {
 // takes as parameter the object id of a transaction. If
 // it exists, it is removed completely and its reference
 // in the respective user's transactions field is removed
-router.post('/remove-transaction/:id', (req, res) => {
+router.get('/remove-transaction/:id', (req, res) => {
 	const id = req.params.id;
 	api.removeTransaction(id, function(response){
-		if(response == 'document removed')
-			res.send('document removed');
-		else
+		console.log(response);
+		if(response == 'document removed'){
+			res.send('removed');
+		}else
 			res.send('error');
 	});
 });
@@ -112,7 +114,13 @@ router.post('/remove-transaction/:id', (req, res) => {
 router.post('/change-tip', (req, res) => {
 	const newTip = req.body.tip;
 	api.changeTip(newTip, req.session.user.username, function(response){
-		res.send(response);
+		console.log(response);
+		if(response == 'Tip Changed')
+			res.send(response);
+		else{
+			//res.redirect('/user/'+req.session.user.username + "?error=error");
+			res.send(response);
+		}
 	});
 });
 

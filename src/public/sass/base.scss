@@ -32,6 +32,10 @@ input[type="submit"]{
     }
 }
 
+.underline{
+    border-bottom: 3px solid black;
+}
+
 
 
 
@@ -101,6 +105,18 @@ div.user-profile-header{
     div.profile-pic{
         //background-color:red;
         
+        width:150px;
+        height:150px;
+        //object-fit: cover;
+        background-color:black;
+        
+        
+        img{
+            width:100%;
+            height: 100%;
+            object-fit: cover;            
+        }
+        
         i{
             display: none;
             color:white;
@@ -111,10 +127,7 @@ div.user-profile-header{
             
         }
         
-        width:150px;
-        height:150px;
-        //object-fit: cover;
-        background-color:black;
+        
         
         &#session-user-profile-pic:hover{
             cursor:pointer;
@@ -129,10 +142,7 @@ div.user-profile-header{
         }
         
         
-        img{
-            
-            object-fit: cover;            
-        }
+        
     
     }
 
@@ -192,7 +202,12 @@ div.user-profile-content{
             li{
                 padding:3% 0;
                 font-size:1.2em;
-
+                
+                &:hover{
+                    cursor: pointer;
+                    background-color:$bright-green;
+                    
+                }
             }
         }
     }
@@ -444,8 +459,12 @@ div.content{
     
     h3{
         padding:0.5% 0;
+        font-size:1.3em;
     }
     
+    i{
+        width:auto;
+    }
 }
 
 div.notification{
@@ -457,7 +476,7 @@ div.notification{
     padding:0.2%;
 }
 
-form.addbill{
+form.long-add-form{
     
     input[type="submit"]{
         width:auto;
@@ -467,6 +486,11 @@ form.addbill{
         &:hover{
             cursor:pointer;
         }
+    }
+    
+    div.input{
+        width:auto;
+        margin:auto;
     }
     
     div.comment{
@@ -532,6 +556,15 @@ form.addbill{
         div.userBlock{
             font-size:1.3em;
             
+            
+            > button, > h4, > span, > input{
+                display: inline-block;
+                width:auto;
+                
+            }
+            
+            
+            
             .hidden{
                 display: none;
             }
@@ -539,11 +572,7 @@ form.addbill{
             span{
                 font-size: inherit;
             }
-            >*{
-                display: inline-block;
-                width:auto;
-                
-            }
+            
             h4{
                 padding:0 2%;
                 font-size:1.3em;
@@ -611,6 +640,25 @@ div.choose-users{
     
 }
 
+div.view-group{
+    div.userBlock{
+        
+        > *{
+            display: inline-block;
+            //width:auto;
+        }
+        
+        
+        h4{
+            width:auto;
+            font-size:1.2em;
+            padding:1%;
+        }
+    }
+    
+    text-align: center;
+}
+
 div.total{
     font-size:1.4em;
     text-align: center;
@@ -624,6 +672,7 @@ button:hover{
 
 button{
     padding:0 3%;
+    margin: 0 4%;
     
     background-color:$bright-green;
 //    border: solid medium $medium-green;
@@ -648,6 +697,20 @@ button{
 a{
     font-family: inherit;
     font-size: inherit;
+}
+
+
+div.small-profile-pic{
+    width:50px;
+    height:50px;
+    display: inline-block;
+    
+    
+    img{
+        width:100%;
+        height: 100%;
+        object-fit:contain;
+    }
 }
 
 

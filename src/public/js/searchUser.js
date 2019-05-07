@@ -56,32 +56,31 @@ function searchOnKeyUp(evt){
   document.querySelector("ul.search-results").innerHTML = "" //clear out the dropdown
 
   const value = evt.target.value;
-  //console.log(value);
+  console.log(value);
 
+  if(value){
+    const req = new XMLHttpRequest();
+    req.open('get', `/api/search?value=${value}`, true);
 
-  const req = new XMLHttpRequest();
-  req.open('get', `/api/search?value=${value}`, true);
+    let names = []
 
-  let names = []
+    req.addEventListener("load", ()=>{
+      docs = JSON.parse(req.responseText)
 
-  req.addEventListener("load", ()=>{
-    docs = JSON.parse(req.responseText)
+      docs.forEach((doc)=>{
+        names.push(doc.username);
+      });
 
-    docs.forEach((doc)=>{
-      names.push(doc.username);
+      addResultsToDropDown(names);
     });
 
-    addResultsToDropDown(names);
-  });
-
-  req.send();
-
-
+    req.send();
+  }
 
 }
 
 document.addEventListener("click", (evt)=>{
-  console.log(evt.target);
+  //console.log(evt.target);
   //if the parent ul is not the clicked element
   if (evt.target.parentElement.parentElement.className == "search-results" || evt.target.id == "search" || evt.target.classList.contains("fa-search")){
     console.log(evt);

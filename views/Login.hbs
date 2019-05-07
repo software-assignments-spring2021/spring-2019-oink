@@ -1,17 +1,52 @@
-<h1>Login Page</h1>
+<div class="container">
+        <header>
+                <div class="left-side-header">
+                    <h1><a href="/">Oink</a></h1>
+                </div>
+                <div class="right-side-header">
+                    <h3 class="link"><a href="#"></a></h3>
+                    <h3 class="link"><a href="#"></a></h3>
+                </div>
+            </header>
+    <footer>
+    <div class="content">
 
-<form method="post">
+    <div>
+    <br><br>
+    <h1>User Login</h1>
+    <br><br>
+    {{#if error}}
+        <h3 class="error">{{ error }}</h3>
+    {{/if}}
+    <h2>( ´ <span class="green">$</span> (oo) <span class="green">$</span>｀)</h2>
+    </div>
 
-	{{#if error}}
-		<h3 class="error">{{ error }}</h3>
-	{{/if}}
+    <div>
+    <div class="complete-form">
+        <form action="/user/login" method = "post">
+            <div>
+                <label for="fname">Username:</label>
+                <field>
+                    <input type="text" id="#" name="username" placeholder="Enter your username ...">
+                </field>
+            </div>
+            <div>
+                <label for="lname">Password:</label>
+                <input type="password" id="#" name="password" placeholder="Enter your password ...">
+            </div>       
+                     
+            <input type="submit" value="L O G   I N">
+            
+             <h4 id="already">
+                        
+            Don't have an account? <a href="/user/register">Sign up here .</a>
+                        
+            </h4>
+        </form>
+    </div>
+    </div>
+    </div></footer>
+    
 
-	Username: <input type="text" name="username">
-	<br>
 
-	Password: <input type="password" name="password">
-	<br><br>
-	<input type="submit" value="Submit">
-</form>
-
-Don't have an account? <a href="register">Register Today!</a>
+</div>

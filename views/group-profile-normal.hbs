@@ -1,13 +1,17 @@
-<h3>{{ group.name }}'s Page!</h3>
+<h2>{{ group.name }}'s Page</h2>
+
 {{#if noMembers}}
 	<h3>There are No Members In This Group</h3>
 {{else}}
-	{{#each group.inGroup}}
-		<div id="{{this}}">
-			<input type="text" value="{{this}}" readonly>
+
+<div class="view-group" id="groupMembers">
+	{{#each group.inGroup as |p|}}
+		<div class="userBlock" id="{{p.name}}">
+			<h4>{{p.name}}</h4>
 		</div>
-	{{/each}}<br>
+	{{/each}}
 	<button onclick="leaveGroup('{{ user }}','{{group._id}}')">Leave Group</button>
+</div>
 {{/if}}
 
 <script src="/js/adjust_group.js"></script>

@@ -9,7 +9,9 @@ const TransactionSchema = new Schema({
 	paidTo:{type:String, required:true}, // the person that created the referenced Bill
 	isPaid:{type:Boolean},
 	bill:{type: Schema.Types.ObjectId, ref:"Bill"},
-	isFriends:{type:Boolean} // if paidBy and paidTo are friends or not
+	isFriends:{type:Boolean}, // if paidBy and paidTo are friends or not
+	dateCreated:{type:String, required: true},
+	datePaid:{type:String}
 });
 
 const BillSchema = new Schema({

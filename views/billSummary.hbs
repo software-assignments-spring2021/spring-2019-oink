@@ -1,31 +1,71 @@
-<h2>Amount: {{ amount }}</h2>
+<h2>${{ amount }}</h2>
 
-<h3>Added by: {{ username }} on {{ date }}</h3>
-<h3>About: {{ text }}</h3>
+<h3>Added by {{ username }} on {{ date }}</h3>
+<h3>{{ text }}</h3>
 
-<h3>On this bill: </h3>
+<section id="all-transactions">
+	{{#if userTrans}}
+		{{#if userTrans.isPaid}}
+		<article id="userTrans" class="paid">
+			<span class="amount">${{ userTrans.amount }}</span>
+			<span class="paidOn">Paid on {{ userTrans.datePaid }}</span>
+			<span class="added-by">Paid by <a href="/user/{{ userTrans.paidBy }}">{{ userTrans.paidBy }}</a></span>
+		</article>
+
+		{{else}}
+		<article id="userTrans" class="unpaid">
+			<span class="amount">${{ userTrans.amount }}</span>
+	        <button class="pay" onclick="payTransaction('{{ userTrans._id }}')">Pay</button>
+	        <span class="added-by">Paid by <a href="/user/{{ userTrans.paidBy }}">{{ userTrans.paidBy }}</a></span>
+	    </article>
+
+		{{/if}}
+	{{/if}}
+
+
+
 {{#each non-friend-transactions as |t|}}
-	<div>
-		{{ t.amount }} - {{ t.paidBy }} - 
-		<form action="/api/add-friend" method="post">
-			<input type="text" name="username" value="{{ t.paidBy }}" hidden>
-			<input type="submit" value="Add friend">
-		</form>
-	</div>
+	{{#if t.isPaid}}
+	<article class="paid">
+		<span class="amount">${{ t.amount }}</span>
+		<span class="paidOn">Paid on {{ t.datePaid }}</span>
+		
+	{{else}}
+	<article class="unpaid">
+		<span class="amount">${{ t.amount }}</span>
+
+	{{/if}}
+
+		
+		<span class="added-by">Being paid by <a href="/user/{{ t.paidBy }}">{{ t.paidBy }}</a></span>
+		<button id="add-friend" onclick="addFriend('{{ t.paidBy }}')"><i class="fas fa-plus"></i> Add Friend</button>
+	</article>
+	
 {{/each}}
+
+
 {{#each friend-transactions as |t|}}
-	<div>
-		{{ t.amount }} - {{ t.paidBy }}
-	</div>
+	{{#if t.isPaid}}
+	<article class="paid">
+		<span class="amount">${{ t.amount }}</span>
+		<span class="paidOn">Paid on {{ t.datePaid }}</span>
+		
+	{{else}}
+	<article class="unpaid">
+		<span class="amount">${{ t.amount }}</span>
+
+	{{/if}}
+
+		<span class="added-by">Being paid by <a href="/user/{{ t.paidBy }}">{{ t.paidBy }}</a></span>
+	</article>
 {{/each}}
+
+</section>
 
 <a href="/user/my-bills"><h4>View all bills</h4></a>
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+<script src="/js/add_friend.js"></script>
+<script src="/js/my-transactions.js"></script>
+
+
+
