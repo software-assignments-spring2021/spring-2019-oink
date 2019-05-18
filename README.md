@@ -39,6 +39,8 @@ A link to the requirements of this project can be found in our [REQUIREMENTS.md]
 
 Once forking and then cloning this repo (or rather, the forked repo) run the command "npm install" in the directory of the oink folder to install all of the project dependencies listed in package.json. NPM must already be instsalled for this command to work.
 
+Additionally, rather than forking the repo, download the zip file of the oink master branch and run the same command on the EXTRACTED folder.
+
 To run the project locally, use the command "npm start" and navigate to "localhost:3000/" to view the Oink home page. Testing the code
 can similarly be done with "npm run test-with-coverage" which also indicates the code coverage from the created unit tests. 
 
