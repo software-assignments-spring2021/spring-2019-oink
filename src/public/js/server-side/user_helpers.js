@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 const User = mongoose.model("User");
-<<<<<<< HEAD
-=======
 const Bill = mongoose.model("Bill");
 const Group = mongoose.model("Group");
 const Transaction = mongoose.model("Transaction");
 const async = require('async');
 
 const dateTime = require('node-datetime');
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 
 function inSession(user){
 	if(user)
@@ -22,11 +19,7 @@ function addUser(req, cb){
 	img.src = '/images/no_profile_picture.png';
 	img.contentType = '/image/png';
 	img.rawSRC = __dirname + '/../public/images/no_profile_picture.png';
-<<<<<<< HEAD
-	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20};
-=======
 	user = {username: req.body.username, email: req.body.email, 'img': img, 'defaultTip': 20, friends: [], transactions: [], bills: []};
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 
 	if(user.email != ""){
 		User.register(new User(user), req.body.password, function(err, user){
@@ -54,10 +47,6 @@ function getLogin(user){
 		return 'Login';
 }
 
-<<<<<<< HEAD
-function getTransactions(){
-	
-=======
 function getTransactions(user, cb){
 	Transaction.find({"paidBy": user.username}, (err, transactions) => {
 		const unpaid = [];
@@ -296,15 +285,11 @@ function getUserProfile(req, user, sessionUser, cb){
 			}
 		}
 	});
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 }
 
 module.exports = {
 	inSession: inSession,
 	addUser: addUser,
-<<<<<<< HEAD
-	getLogin: getLogin
-=======
 	getLogin: getLogin,
 	getTransactions: getTransactions,
 	payTransaction: payTransaction,
@@ -313,5 +298,4 @@ module.exports = {
 	myBalances: myBalances,
 	getAllUsers: getAllUsers,
 	getUserProfile: getUserProfile
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 }
