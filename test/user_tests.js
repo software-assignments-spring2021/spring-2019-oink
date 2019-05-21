@@ -4,22 +4,13 @@ const expect = chai.expect;
 const mongoose = require('mongoose');
 require('../src/schemas');
 const User = mongoose.model("User");
-<<<<<<< HEAD
-=======
 const Transaction = mongoose.model("Transaction");
 const Group = mongoose.model("Group");
 const Bill = mongoose.model("Bill");
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 
 const app = require("../src/public/js/server-side/user_helpers");
 
 describe('User Tests', function(){
-<<<<<<< HEAD
-	const user = new User({
-		username: 'david',
-		password: 'david',
-		email: 'david'
-=======
 	const transaction = new Transaction({
 		amount: 15,
 		paidTo: 'alice',
@@ -55,7 +46,6 @@ describe('User Tests', function(){
 		transactions: [unpaidTransaction._id],
 		bills: [bill._id],
 		groups: [group._id]
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 	});
 	describe('inSession', function(){
 		it('returns true if session user exists', function(done){
@@ -112,8 +102,6 @@ describe('User Tests', function(){
 			done();
 		})
 	});
-<<<<<<< HEAD
-=======
 	describe('getTransactions', function(){
 		it('returns paid and unpaid transactions', function(done){
 			app.getTransactions(user, function(ret){
@@ -243,5 +231,4 @@ describe('User Tests', function(){
 			});
 		});
 	});
->>>>>>> 27c9704f77952775563d7f369a6eb9abf259bc4b
 });
